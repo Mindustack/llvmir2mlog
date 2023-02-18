@@ -37,7 +37,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
     public MB2() throws IOException {
 
-        var file = "E:\\WORKSPACE\\llvmir-reader\\src\\main\\resources\\test2.ll";
+        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test2.ll";
 
         // lexer
         LLVMIRLexer irLexer = new LLVMIRLexer(CharStreams.fromStream(new FileInputStream(new File(file))));
