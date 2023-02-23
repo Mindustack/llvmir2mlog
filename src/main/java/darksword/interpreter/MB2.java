@@ -285,7 +285,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitBasicBlock(LLVMIRParser.BasicBlockContext ctx) {
-        IRBlock block = new IRBlock(ctx.LabelIdent().getText(), null);//todo long name
+        IRBlock block = new IRBlock(ctx.LabelIdent().getText().replaceAll(":", ""), null);//todo long name
 
         setNewValue(block.name, block);
         blockCtx.put(block, ctx);
@@ -335,7 +335,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
     private void deepToInst(LLVMIRParser.BasicBlockContext ctx, HashSet<IRBlock> visited) {
-        IRBlock block = (IRBlock) valueMap.get(ctx.LabelIdent().getText());//todo long
+        IRBlock block = (IRBlock) valueMap.get(ctx.LabelIdent().getText().replaceAll(":", ""));//todo long
 
         if (visited.contains(block)) return;
         visited.add(block);
@@ -547,6 +547,9 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 //
 
         }
+        if (ctx.LocalIdent() != null) {
+            return regToValue(ctx);
+        }
         return null;
 
     }
@@ -625,10 +628,11 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         return null;
     }
 
+
     @Override
     public Value visitRetTerm(LLVMIRParser.RetTermContext ctx) {
         if (ctx.value() != null) {
-            return new IRRetInst(visit(ctx.concreteType()), null);
+            return new IRRetInst(visit(ctx.value()), null);
         }
 //        System.out.println(ctx.concreteType());
 //        System.out.println(ctx.value());
@@ -760,7 +764,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitLabel(LLVMIRParser.LabelContext ctx) {
-        String name = ctx.LocalIdent().getSymbol().getText();
+        String name = ctx.LocalIdent().getSymbol().getText().replaceAll(":", "");
         if (valueMap.get(name) != null) {
             return valueMap.get(name);
         }

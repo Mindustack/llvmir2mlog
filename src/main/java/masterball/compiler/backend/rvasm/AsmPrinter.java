@@ -26,8 +26,8 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
     public void runOnModule(AsmModule module) {
         Log.info("Asm Printer Start Sucess");
 
-        ps.println("# fileName: " + irFileName + TAB + " compiled by @Masterball.");
-        ps.println(TAB + ".text");
+//        ps.println("# fileName: " + irFileName + TAB + " compiled by @Masterball.");
+//        ps.println(TAB + ".text");
         module.functions.forEach(this::runOnFunc);
         module.globalVarSeg.forEach(globalVar -> {
             AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
@@ -43,15 +43,15 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
     public void runOnFunc(AsmFunction function) {
         // some invalid print in ravel
 
-        AsmFormatter.functionHeaderFormat(function).forEach(ps::println);
-        ps.println(function.identifier + ":");
-        // ps.println(TAB + ".cfi_startproc");
+//        AsmFormatter.functionHeaderFormat(function).forEach(ps::println);
+//        ps.println(function.identifier + ":");
+//        // ps.println(TAB + ".cfi_startproc");
         function.blocks.forEach(this::runOnBlock);
-        // ps.println(".Lfunc_end" + funcEndCounter + ":");
-        ps.println(TAB + ".size" + TAB + function + ", .-" + function);
+//        // ps.println(".Lfunc_end" + funcEndCounter + ":");
+//        ps.println(TAB + ".size" + TAB + function + ", .-" + function);
         funcEndCounter++;
         // ps.println(TAB + ".cfi_endproc");
-        ps.println("                                        # -- End function");
+//        ps.println("                                        # -- End function");
     }
 
     @Override

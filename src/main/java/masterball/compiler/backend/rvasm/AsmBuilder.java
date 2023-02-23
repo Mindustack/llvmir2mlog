@@ -29,10 +29,11 @@ import java.util.ArrayList;
 
 import static java.lang.Integer.max;
 
-// implements @IRVisitor and @InstVisitor
-
-// notice: the order of register created.
-// use cur.toReg to avoid this problem
+/*
+ implements @IRVisitor and @InstVisitor
+ notice: the order of register created.
+ use cur.toReg to avoid this problem
+*/
 
 public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVisitor {
 

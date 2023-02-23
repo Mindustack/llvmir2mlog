@@ -3,7 +3,6 @@ package masterball.compiler.backend.rvasm;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.inst.AsmBaseInst;
 import masterball.compiler.backend.rvasm.operand.GlobalReg;
-import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
 
 import java.util.ArrayList;
 
@@ -12,6 +11,7 @@ public class AsmFormatter {
     public final static String TAB = "\t";
 
     public static ArrayList<String> stringConstFormat(GlobalReg globalReg) {
+
         /*
         	.type	.Lanon.strconst,@object # @anon.strconst
             .section	.rodata.str1.1,"aMS",@progbits,1

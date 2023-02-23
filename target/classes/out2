@@ -1,18 +1,10 @@
 # fileName: E:\WORKSPACE\llvmir2mlog\src\main\resources\out2	 compiled by @Masterball.
 	.text
-	.globl	f
+	.globl	main
 	.p2align	1
-	.type	f,@function
-f:
-0::
-	addi	t0, zero, 0
+	.type	main,@function
+main:
+1:
 	ret
-	.size	f, .-f
+	.size	main, .-main
                                         # -- End function
-	.type	seed,@object
-	.section	.bss
-	.globl	seed
-seed:
-	.word	0
-	.size	seed, 4
-

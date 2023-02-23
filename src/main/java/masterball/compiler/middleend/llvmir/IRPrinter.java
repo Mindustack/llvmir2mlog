@@ -5,7 +5,6 @@ import masterball.compiler.middleend.llvmir.constant.StringConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
-import masterball.compiler.middleend.llvmir.hierarchy.TargetInfo;
 import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
 import masterball.compiler.share.pass.IRBlockPass;
 import masterball.compiler.share.pass.IRFuncPass;
@@ -52,10 +51,10 @@ public class IRPrinter implements IRModulePass, IRFuncPass, IRBlockPass {
 
     @Override
     public void runOnModule(IRModule module) {
-        ps.printf("; ModuleID = '%s'%n", mxFileName);
-        ps.printf("source_filename = \"%s\"%n", mxFileName);
-        ps.println(TargetInfo.dataLayout);
-        ps.println(TargetInfo.triple + "\n");
+//        ps.printf("; ModuleID = '%s'%n", mxFileName);
+//        ps.printf("source_filename = \"%s\"%n", mxFileName);
+//        ps.println(TargetInfo.dataLayout);
+//        ps.println(TargetInfo.triple + "\n");
 
         for (IRFunction func : module.builtinFunctions) ps.println(IRFormatter.funcDeclFormat(func));
         ps.print('\n');

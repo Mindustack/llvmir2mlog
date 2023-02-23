@@ -4,11 +4,10 @@ target datalayout = "e-m:e-p:32:32-i64:64-n32-S128"
 target triple = "riscv32"
 
 
-define void @f() {
+define i64 @main() {
 
-0::                                                ; preds = 
-  %0 = alloca [4 x i64], align 8
-  ret void
+1:                                                ; preds = 
+  ret i64 -2
 
 }
 
