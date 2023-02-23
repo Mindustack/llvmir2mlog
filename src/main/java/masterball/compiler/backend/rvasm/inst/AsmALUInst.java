@@ -38,6 +38,8 @@ public class AsmALUInst extends AsmBaseInst {
     public String format() {
         // add rd, rs1, rs2
         // addi rd, rs1, imm
+
+
         if (this.imm != null) // I-Type
             return String.format("%s\t%s, %s, %s", op + RV32I.ITypeSuffix, rd, rs1, imm);
         else if (this.rs2 != null) // R-Type
