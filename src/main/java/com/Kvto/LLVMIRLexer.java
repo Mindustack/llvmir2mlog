@@ -4024,7 +4024,7 @@ public class LLVMIRLexer extends Lexer {
                 "Sign", "FracLit", "SciLit", "FloatHexLit", "GlobalName", "GlobalId",
                 "LocalName", "LocalId", "QuotedString", "Comment", "WhiteSpace", "IntLit",
                 "FloatLit", "StringLit", "GlobalIdent", "LocalIdent", "LabelIdent", "AttrGroupId",
-                "ComdatName", "MetadataName", "MetadataId", "IntType", "DwarfTag", "DwarfAttEncoding",
+                "ComdatName", "MetadataName", "MetadataId", "NumType", "DwarfTag", "DwarfAttEncoding",
                 "DiFlag", "DispFlag", "DwarfLang", "DwarfCc", "ChecksumKind", "DwarfVirtuality",
                 "DwarfMacinfo", "DwarfOp"
         };
@@ -4173,7 +4173,7 @@ public class LLVMIRLexer extends Lexer {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, "Comment", "WhiteSpace", "IntLit",
                 "FloatLit", "StringLit", "GlobalIdent", "LocalIdent", "LabelIdent", "AttrGroupId",
-                "ComdatName", "MetadataName", "MetadataId", "IntType", "DwarfTag", "DwarfAttEncoding",
+                "ComdatName", "MetadataName", "MetadataId", "NumType", "DwarfTag", "DwarfAttEncoding",
                 "DiFlag", "DispFlag", "DwarfLang", "DwarfCc", "ChecksumKind", "DwarfVirtuality",
                 "DwarfMacinfo", "DwarfOp"
         };

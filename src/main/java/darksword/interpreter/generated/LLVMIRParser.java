@@ -248,7 +248,7 @@ public class LLVMIRParser extends Parser {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, "IntType", "VoidType", "LabelType", "GlobalReg",
+                null, null, null, null, "NumType", "VoidType", "LabelType", "GlobalReg",
                 "LocalReg", "NullptrConstant", "BoolConstant", "StringConstant", "LinkageType",
                 "PreemptionSpecifiers", "VisibilityStyles", "GlobalWord", "UnnamedAddr",
                 "FuncAttr", "ParaAttr", "IntegerLiteral", "Identifier", "WhitespaceEater",

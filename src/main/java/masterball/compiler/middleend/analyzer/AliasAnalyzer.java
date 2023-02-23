@@ -1,8 +1,7 @@
 package masterball.compiler.middleend.analyzer;
 
 import masterball.compiler.middleend.llvmir.Value;
-import masterball.compiler.middleend.llvmir.constant.IntConst;
-import masterball.compiler.middleend.llvmir.constant.StringConst;
+import masterball.compiler.middleend.llvmir.constant.NumConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
@@ -44,8 +43,8 @@ import java.util.HashSet;
 
 public class AliasAnalyzer implements IRFuncPass {
 
-    private HashSet<Value> certain = new HashSet<>();
-    private UnionSet<Value> bitcastUnion = new UnionSet<>();
+    private final HashSet<Value> certain = new HashSet<>();
+    private final UnionSet<Value> bitcastUnion = new UnionSet<>();
 
     @Override
     public void runOnFunc(IRFunction function) {
@@ -87,7 +86,7 @@ public class AliasAnalyzer implements IRFuncPass {
                     Value index1 = ((IRGetElementPtrInst) addr1).ptrMoveIndex();
                     Value index2 = ((IRGetElementPtrInst) addr2).ptrMoveIndex();
 
-                    if (index1 instanceof IntConst && index2 instanceof IntConst && ((IntConst) index1).constData != ((IntConst) index2).constData) {
+                    if (index1 instanceof NumConst && index2 instanceof NumConst && ((NumConst) index1).constData != ((NumConst) index2).constData) {
                         return false;
                     }
                 }

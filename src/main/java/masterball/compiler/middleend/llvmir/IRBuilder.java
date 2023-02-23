@@ -1,26 +1,29 @@
 package masterball.compiler.middleend.llvmir;
 
 import masterball.compiler.frontend.ast.node.*;
-import masterball.compiler.frontend.ast.node.stmtnode.*;
 import masterball.compiler.frontend.ast.node.expnode.*;
+import masterball.compiler.frontend.ast.node.stmtnode.*;
 import masterball.compiler.frontend.info.InfoManager;
 import masterball.compiler.frontend.info.StringBuiltinMethods;
 import masterball.compiler.frontend.info.registry.ClassRegistry;
 import masterball.compiler.frontend.info.registry.FuncRegistry;
 import masterball.compiler.frontend.info.registry.VarRegistry;
-import masterball.compiler.frontend.info.type.MxFuncType;
 import masterball.compiler.frontend.info.type.MxBaseType;
+import masterball.compiler.frontend.info.type.MxFuncType;
 import masterball.compiler.frontend.info.type.VarType;
-import masterball.compiler.middleend.llvmir.constant.*;
+import masterball.compiler.middleend.llvmir.constant.BoolConst;
+import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
+import masterball.compiler.middleend.llvmir.constant.NullptrConst;
+import masterball.compiler.middleend.llvmir.constant.NumConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.*;
 import masterball.compiler.middleend.llvmir.type.*;
 import masterball.compiler.share.error.codegen.InternalError;
+import masterball.compiler.share.error.codegen.UnimplementedError;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.lang.MxStar;
-import masterball.compiler.share.error.codegen.UnimplementedError;
 import masterball.compiler.share.misc.Pair;
 import masterball.compiler.share.pass.ASTVisitor;
 import masterball.debug.Log;
@@ -107,7 +110,7 @@ public class IRBuilder implements ASTVisitor {
             // call init
             // push to block in GLo2Loc
             new IRCallInst((IRFunction) infoManager.queryFuncInStack(LLVM.InitFuncName).value, cur.block, new ArrayList<>());
-            memStore(cur.func.retValPtr, new IntConst(0));
+            memStore(cur.func.retValPtr, new NumConst(0));
         }
 
         for (int i = 0; i < cur.func.getArgNum(); i++) {
@@ -160,7 +163,7 @@ public class IRBuilder implements ASTVisitor {
             node.initExpNode.accept(this);
             memStore(allocaPtr, node.initExpNode.value);
 
-            if (allocaPtr instanceof GlobalVariable && (node.initExpNode.value instanceof IntConst || node.initExpNode.value instanceof BoolConst))
+            if (allocaPtr instanceof GlobalVariable && (node.initExpNode.value instanceof NumConst || node.initExpNode.value instanceof BoolConst))
                 ((GlobalVariable) allocaPtr).initValue = node.initExpNode.value;
         } else if (node.varRegistry.type.match(MxBaseType.BuiltinType.CLASS) || node.varRegistry.type.isArray()) {
             // array type & class should be initialized with null
@@ -169,7 +172,7 @@ public class IRBuilder implements ASTVisitor {
         } else {
             if (allocaPtr instanceof GlobalVariable) {
                 if (((GlobalVariable) allocaPtr).pointedType().match(IRTranslator.i32Type))
-                    ((GlobalVariable) allocaPtr).initValue = new IntConst(0);
+                    ((GlobalVariable) allocaPtr).initValue = new NumConst(0);
                 else if (((GlobalVariable) allocaPtr).pointedType().match(IRTranslator.boolType))
                     ((GlobalVariable) allocaPtr).initValue = new BoolConst(false);
             }
@@ -441,7 +444,7 @@ public class IRBuilder implements ASTVisitor {
             // array
             Value castPtr = new IRBitCastInst(node.superExpNode.value, IRTranslator.i32PointerType, cur.block);
             // one step back
-            node.value = memLoad(new IRGetElementPtrInst(castPtr, IRTranslator.i32PointerType, cur.block, new IntConst(-1)), cur.block);
+            node.value = memLoad(new IRGetElementPtrInst(castPtr, IRTranslator.i32PointerType, cur.block, new NumConst(-1)), cur.block);
         } else if (node.superExpNode.type.match(MxBaseType.BuiltinType.STRING)) {
             // string
             node.value = StringBuiltinMethods.scope.queryFunc(node.memberName).value;
@@ -454,7 +457,7 @@ public class IRBuilder implements ASTVisitor {
                 VarRegistry varRegistry = classRegistry.scope.queryVar(node.memberName);
                 Value varAddr = new IRGetElementPtrInst(node.memberName, node.superExpNode.value,
                         new PointerType(translator.translateAllocaType(varRegistry.type)),
-                        cur.block, new IntConst(0), new IntConst(classRegistry.getMemberVarIndex(varRegistry.name)));
+                        cur.block, new NumConst(0), new NumConst(classRegistry.getMemberVarIndex(varRegistry.name)));
                 node.value = memLoad(varAddr, cur.block);
             } else if (node.type instanceof MxFuncType) {
                 node.value = classRegistry.scope.queryFunc(node.memberName).value;
@@ -489,10 +492,10 @@ public class IRBuilder implements ASTVisitor {
         Value calculated = null, storePtr = node.selfExpNode.value.resolveFrom;
         switch (node.op) {
             case MxStar.IncrementOp:
-                calculated = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, node.selfExpNode.value, new IntConst(1), cur.block);
+                calculated = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, node.selfExpNode.value, new NumConst(1), cur.block);
                 break;
             case MxStar.DecrementOp:
-                calculated = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, node.selfExpNode.value, new IntConst(1), cur.block);
+                calculated = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, node.selfExpNode.value, new NumConst(1), cur.block);
                 break;
             default:
                 throw new InternalError("unknown postfix op");
@@ -508,10 +511,10 @@ public class IRBuilder implements ASTVisitor {
 
         switch (node.op) {
             case MxStar.IncrementOp:
-                calculated = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, node.selfExpNode.value, new IntConst(1), cur.block);
+                calculated = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, node.selfExpNode.value, new NumConst(1), cur.block);
                 break;
             case MxStar.DecrementOp:
-                calculated = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, node.selfExpNode.value, new IntConst(1), cur.block);
+                calculated = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, node.selfExpNode.value, new NumConst(1), cur.block);
                 break;
             default:
                 throw new InternalError("unknown prefix op");
@@ -529,13 +532,13 @@ public class IRBuilder implements ASTVisitor {
                 node.value = node.selfExpNode.value;
                 break;
             case MxStar.SubOp:
-                node.value = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, new IntConst(0), node.selfExpNode.value, cur.block);
+                node.value = new IRBinaryInst(LLVM.SubInst, IRTranslator.i32Type, new NumConst(0), node.selfExpNode.value, cur.block);
                 break;
             case MxStar.LogicNotOp:
                 node.value = new IRBinaryInst(LLVM.XorInst, IRTranslator.boolType, node.selfExpNode.value, new BoolConst(true), cur.block);
                 break;
             case MxStar.BitNotOp:
-                node.value = new IRBinaryInst(LLVM.XorInst, IRTranslator.i32Type, node.selfExpNode.value, new IntConst(-1), cur.block);
+                node.value = new IRBinaryInst(LLVM.XorInst, IRTranslator.i32Type, node.selfExpNode.value, new NumConst(-1), cur.block);
                 break;
             default:
                 throw new InternalError("unknown unary op");
@@ -550,12 +553,12 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(AtomExpNode node) {
         if (node.ctx.IntegerConstant() != null)
-            node.value = new IntConst(Integer.parseInt(node.ctx.IntegerConstant().toString()));
+            node.value = new NumConst(Integer.parseInt(node.ctx.IntegerConstant().toString()));
         else if (node.ctx.TrueConstant() != null) node.value = new BoolConst(true);
         else if (node.ctx.FalseConstant() != null) node.value = new BoolConst(false);
         else if (node.ctx.StringConstant() != null)
             node.value = new IRGetElementPtrInst(module.getStringConst(node.getStringLiteral()),
-                    IRTranslator.stringType, cur.block, new IntConst(0), new IntConst(0));
+                    IRTranslator.stringType, cur.block, new NumConst(0), new NumConst(0));
         else if (node.ctx.NullConstant() != null) node.value = new NullptrConst();
         else if (node.ctx.ThisPointer() != null) node.value = cur.getThis();
         else if (node.ctx.Identifier() != null) {
@@ -570,7 +573,7 @@ public class IRBuilder implements ASTVisitor {
                     // member in class scope
                     varAddr = new IRGetElementPtrInst(varRegistry.name, cur.getThis(),
                             new PointerType(translator.translateAllocaType(varRegistry.type)),
-                            cur.block, new IntConst(0), new IntConst(memberIndex));
+                            cur.block, new NumConst(0), new NumConst(memberIndex));
                 } else varAddr = varRegistry.value;
                 // variable resolve
                 node.value = memLoad(varAddr, cur.block);
@@ -692,8 +695,8 @@ public class IRBuilder implements ASTVisitor {
         // step 1. malloc this dim.
         // size calculation using (curDimLength+1) * elementTypeSize (metadata)
         Value curDimSize = new IRBinaryInst(LLVM.MulInst, IRTranslator.i32Type,
-                eachDimLengths.get(curDim), new IntConst(elementType.size()), cur.block);
-        Value mallocSize = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, curDimSize, new IntConst(IRTranslator.i32Type.size()), cur.block);
+                eachDimLengths.get(curDim), new NumConst(elementType.size()), cur.block);
+        Value mallocSize = new IRBinaryInst(LLVM.AddInst, IRTranslator.i32Type, curDimSize, new NumConst(IRTranslator.i32Type.size()), cur.block);
         Value mallocPtr = new IRCallInst(module.getMalloc(), cur.block, mallocSize).noalias();
 
         // step 2. store length at the head of the array
@@ -702,7 +705,7 @@ public class IRBuilder implements ASTVisitor {
 
         // step 3. get array head pointer, malloc the internal space
         Value arrHeadPointer = new IRBitCastInst(
-                new IRGetElementPtrInst(lengthDestPtr, IRTranslator.i32PointerType, cur.block, new IntConst(1)),
+                new IRGetElementPtrInst(lengthDestPtr, IRTranslator.i32PointerType, cur.block, new NumConst(1)),
                 new PointerType(elementType), cur.block);
         if (curDim < eachDimLengths.size() - 1) {
             // int* curDimPtr = 0; while (curDimPtr != tailDimPtr) {curDimPtr++;}
@@ -714,7 +717,7 @@ public class IRBuilder implements ASTVisitor {
             curDimPtr.addBranch(arrHeadPointer, cur.block); // initial branch
 
             Value tailDimPtr = new IRGetElementPtrInst(arrHeadPointer, arrHeadPointer.type, cur.block, eachDimLengths.get(curDim));
-            IRBaseInst incrPtr = new IRGetElementPtrInst(curDimPtr, curDimPtr.type, null, new IntConst(1));
+            IRBaseInst incrPtr = new IRGetElementPtrInst(curDimPtr, curDimPtr.type, null, new NumConst(1));
 
             new IRBrInst(condBlock, cur.block);
 
@@ -736,7 +739,7 @@ public class IRBuilder implements ASTVisitor {
     }
 
     private Value classMalloc(StructType classType) {
-        Value mallocPtr = new IRCallInst(module.getMalloc(), cur.block, new IntConst(classType.size())).noalias();
+        Value mallocPtr = new IRCallInst(module.getMalloc(), cur.block, new NumConst(classType.size())).noalias();
         return new IRBitCastInst(mallocPtr, new PointerType(classType), cur.block);
     }
 

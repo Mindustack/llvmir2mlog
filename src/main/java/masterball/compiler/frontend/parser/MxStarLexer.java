@@ -2,14 +2,12 @@
 
 package masterball.compiler.frontend.parser;
 
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class MxStarLexer extends Lexer {
@@ -209,7 +207,7 @@ public class MxStarLexer extends Lexer {
                 "ArithShiftLeftOp", "ArithShiftRightOp", "BitAndOp", "BitOrOp", "BitXorOp",
                 "BitNotOp", "AssignOp", "IncrementOp", "DecrementOp", "MemberOp", "LeftBracket",
                 "RightBracket", "LeftParen", "RightParen", "SemiColon", "Comma", "LeftBrace",
-                "RightBrace", "QuoteOp", "LambdaStartSymbol", "LambdaArrowSymbol", "IntType",
+                "RightBrace", "QuoteOp", "LambdaStartSymbol", "LambdaArrowSymbol", "NumType",
                 "BoolType", "StringType", "VoidType", "NullConstant", "TrueConstant",
                 "FalseConstant", "IfKw", "ElseKw", "ForKw", "WhileKw", "BreakKw", "ContinueKw",
                 "ReturnKw", "NewKw", "ClassKw", "ThisPointer", "WhitespaceEater", "NewlineEater",
@@ -238,7 +236,7 @@ public class MxStarLexer extends Lexer {
                 "BitOrOp", "BitXorOp", "BitNotOp", "AssignOp", "IncrementOp", "DecrementOp",
                 "MemberOp", "LeftBracket", "RightBracket", "LeftParen", "RightParen",
                 "SemiColon", "Comma", "LeftBrace", "RightBrace", "QuoteOp", "LambdaStartSymbol",
-                "LambdaArrowSymbol", "IntType", "BoolType", "StringType", "VoidType",
+                "LambdaArrowSymbol", "NumType", "BoolType", "StringType", "VoidType",
                 "NullConstant", "TrueConstant", "FalseConstant", "IfKw", "ElseKw", "ForKw",
                 "WhileKw", "BreakKw", "ContinueKw", "ReturnKw", "NewKw", "ClassKw", "ThisPointer",
                 "WhitespaceEater", "NewlineEater", "LineCommentEater", "BlockCommentEater",

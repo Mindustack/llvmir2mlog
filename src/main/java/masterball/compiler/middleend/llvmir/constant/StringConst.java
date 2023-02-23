@@ -1,7 +1,7 @@
 package masterball.compiler.middleend.llvmir.constant;
 
 import masterball.compiler.middleend.llvmir.type.ArrayType;
-import masterball.compiler.middleend.llvmir.type.IntType;
+import masterball.compiler.middleend.llvmir.type.NumType;
 import masterball.compiler.middleend.llvmir.type.PointerType;
 import masterball.compiler.share.lang.LLVM;
 
@@ -13,7 +13,7 @@ public class StringConst extends GlobalValue {
 
     public StringConst(String constData) {
         super(LLVM.StrConstAnon,
-                new PointerType(new ArrayType(new IntType(8), constData.length() + 1))
+                new PointerType(new ArrayType(new NumType(8), constData.length() + 1))
         );
         this.constData = constData;
     }

@@ -2,15 +2,15 @@ package masterball.compiler.backend.rvasm;
 
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
-import masterball.compiler.backend.rvasm.inst.*;
+import masterball.compiler.backend.rvasm.inst.AsmLiInst;
 import masterball.compiler.backend.rvasm.operand.*;
-import masterball.compiler.middleend.llvmir.constant.BoolConst;
-import masterball.compiler.middleend.llvmir.constant.IntConst;
 import masterball.compiler.middleend.llvmir.Value;
+import masterball.compiler.middleend.llvmir.constant.BoolConst;
 import masterball.compiler.middleend.llvmir.constant.NullptrConst;
+import masterball.compiler.middleend.llvmir.constant.NumConst;
 import masterball.compiler.share.error.codegen.InternalError;
-import masterball.compiler.share.lang.RV32I;
 import masterball.compiler.share.error.codegen.UnimplementedError;
+import masterball.compiler.share.lang.RV32I;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class AsmCurrent {
             return (Register) value.asmOperand;
         }
         Integer intValue = null;
-        if (value instanceof IntConst) intValue = ((IntConst) value).constData;
+        if (value instanceof NumConst) intValue = ((NumConst) value).constData;
         else if (value instanceof BoolConst) intValue = ((BoolConst) value).constData ? 1 : 0;
         else if (value instanceof NullptrConst) intValue = 0;
 
@@ -49,7 +49,7 @@ public class AsmCurrent {
         }
 
         // const info is memorized by Li
-        if (!(value instanceof IntConst || value instanceof BoolConst)) value.asmOperand = ret;
+        if (!(value instanceof NumConst || value instanceof BoolConst)) value.asmOperand = ret;
         return ret;
     }
 
@@ -61,7 +61,7 @@ public class AsmCurrent {
 
     public Immediate toImm(Value value) {
         if (value.asmOperand instanceof RawStackOffset) return (Immediate) value.asmOperand;
-        if (value instanceof IntConst) return new Immediate(((IntConst) value).constData);
+        if (value instanceof NumConst) return new Immediate(((NumConst) value).constData);
         if (value instanceof BoolConst) return new Immediate(((BoolConst) value).constData ? 1 : 0);
         throw new UnimplementedError(this);
     }

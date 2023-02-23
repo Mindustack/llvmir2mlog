@@ -2,8 +2,10 @@ package masterball.compiler.middleend.llvmir;
 
 import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
 import masterball.compiler.middleend.llvmir.constant.StringConst;
-import masterball.compiler.middleend.llvmir.hierarchy.*;
+import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
+import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
+import masterball.compiler.middleend.llvmir.hierarchy.TargetInfo;
 import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
 import masterball.compiler.share.pass.IRBlockPass;
 import masterball.compiler.share.pass.IRFuncPass;
@@ -69,6 +71,7 @@ public class IRPrinter implements IRModulePass, IRFuncPass, IRBlockPass {
 
         if (module.classes.size() > 0) ps.print('\n');
         for (IRFunction func : module.functions) runOnFunc(func);
+
     }
 
 }

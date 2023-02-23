@@ -7,18 +7,18 @@ import masterball.compiler.backend.rvasm.inst.*;
 import masterball.compiler.backend.rvasm.operand.*;
 import masterball.compiler.backend.rvasm.operand.RawStackOffset.RawType;
 import masterball.compiler.middleend.llvmir.User;
+import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.constant.*;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
-import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.inst.*;
 import masterball.compiler.middleend.llvmir.type.IRFuncType;
 import masterball.compiler.middleend.llvmir.type.PointerType;
 import masterball.compiler.middleend.llvmir.type.StructType;
+import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.lang.RV32I;
-import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.misc.Pair;
 import masterball.compiler.share.pass.IRBlockPass;
 import masterball.compiler.share.pass.IRFuncPass;
@@ -44,7 +44,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     }
 
     private static boolean validImm(Value value) {
-        return (value instanceof IntConst && ((IntConst) value).constData >= -1 * RV32I.ImmBound && ((IntConst) value).constData < RV32I.ImmBound) || value instanceof BoolConst;
+        return (value instanceof NumConst && ((NumConst) value).constData >= -1 * RV32I.ImmBound && ((NumConst) value).constData < RV32I.ImmBound) || value instanceof BoolConst;
     }
 
     private static boolean validImm(int value) {
@@ -52,14 +52,14 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     }
 
     private static boolean equalZero(Value value) {
-        return value instanceof NullptrConst || (value instanceof IntConst && ((IntConst) value).constData == 0) || (value instanceof BoolConst && !((BoolConst) value).constData);
+        return value instanceof NullptrConst || (value instanceof NumConst && ((NumConst) value).constData == 0) || (value instanceof BoolConst && !((BoolConst) value).constData);
     }
 
     // check an immediate: whether it is a valid two power, return imm log2
     // if not a valid 2power immediate, return null
     private static Immediate twoPowerCheck(Value value) {
-        if (!(value instanceof IntConst)) return null;
-        int log2 = 0, valData = ((IntConst) value).constData;
+        if (!(value instanceof NumConst)) return null;
+        int log2 = 0, valData = ((NumConst) value).constData;
         if (valData <= 0) return null;
         while (valData > 1) {
             if (valData % 2 != 0) return null;
@@ -135,6 +135,8 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         // lower the stack pointer
         // sp low
+
+        //?
         new AsmALUInst(RV32I.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 new RawStackOffset(0, RawType.lowerSp), cur.func.entryBlock);
 
@@ -229,7 +231,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).lhs()), cur.toReg(((IRICmpInst) inst.condition()).rhs()),
                         (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
         } else {
-            new AsmBrInst(RV32I.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new IntConst(0)),
+            new AsmBrInst(RV32I.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new NumConst(0)),
                     (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
         }
 
@@ -287,12 +289,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         // local & const && only for load/store
 
-        if (index instanceof IntConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
+        if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
             int offset = 0;
             if (classType != null) {
-                offset = classType.memberOffset(((IntConst) index).constData);
+                offset = classType.memberOffset(((NumConst) index).constData);
             } else {
-                offset = ((IntConst) index).constData * elementSize;
+                offset = ((NumConst) index).constData * elementSize;
             }
             inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
             return;
@@ -506,7 +508,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         VirtualReg gepReg = new VirtualReg();
         if (classType != null) {
             // class member get
-            assert index instanceof IntConst;
+            assert index instanceof NumConst;
             if (equalZero(index)) {
                 Register ptrReg = cur.toReg(ptrPos);
                 if (ptrPos instanceof GlobalValue) {
@@ -517,12 +519,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                     }
                 } else new AsmMvInst(gepReg, ptrReg, cur.block);
             } else {
-                int memberOffset = classType.memberOffset(((IntConst) index).constData);
-                awesomeALU(RV32I.AddInst, gepReg, ptrPos, new IntConst(memberOffset));
+                int memberOffset = classType.memberOffset(((NumConst) index).constData);
+                awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(memberOffset));
             }
         } else {
             // array
-            if (index instanceof IntConst) {
+            if (index instanceof NumConst) {
                 // constant folding
                 if (equalZero(index)) {
                     Register ptrReg = cur.toReg(ptrPos);
@@ -534,12 +536,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                         }
                     } else new AsmMvInst(gepReg, ptrReg, cur.block);
                 } else {
-                    int totalSize = ((IntConst) index).constData * elementSize;
-                    awesomeALU(RV32I.AddInst, gepReg, ptrPos, new IntConst(totalSize));
+                    int totalSize = ((NumConst) index).constData * elementSize;
+                    awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(totalSize));
                 }
             } else {
                 VirtualReg mulReg = new VirtualReg();
-                awesomeALU(RV32I.MulInst, mulReg, index, new IntConst(elementSize));
+                awesomeALU(RV32I.MulInst, mulReg, index, new NumConst(elementSize));
                 // this not use awesomeALU because it can not be optimized
                 new AsmALUInst(RV32I.AddInst, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
             }

@@ -4,11 +4,10 @@ import com.Kvto.LLVMIRBaseVisitor;
 import com.Kvto.LLVMIRLexer;
 import com.Kvto.LLVMIRParser;
 import darksword.console.display.RowMark;
+import darksword.interpreter.error.InternalError;
 import masterball.compiler.middleend.llvmir.User;
 import masterball.compiler.middleend.llvmir.Value;
-import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
-import masterball.compiler.middleend.llvmir.constant.IntConst;
-import masterball.compiler.middleend.llvmir.constant.StringConst;
+import masterball.compiler.middleend.llvmir.constant.*;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
@@ -65,22 +64,25 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         Log.info("Build Module finish from .ll file.");
     }
 
-    private Value newValue(String name, IRBaseType type) {//new
-        if (valueMap.get(name) != null) return valueMap.get(name);
-        Value ret = new Value(name, type);
-        valueMap.put(name, ret);
-        return ret;
-    }
+    static String destName = "";//todo maybe use stack
 
     private void setNewValue(String name, Value value) {//cover rename
         value.name = name;
         valueMap.put(name, value);
     }
 
+    private Value newValue(String name, IRBaseType type) {//new get
+        if (valueMap.get(name) != null) return valueMap.get(name);
+        Value ret = new Value(name, type);
+        valueMap.put(name, ret);
+        return ret;
+    }
+
     //private void setNewValue(IRBaseType type, Value value) {//cover rename
 //        value.type = type;
 //        valueMap.put(value.name, value);
 //    }
+    @Deprecated
     private Value newValue(IRBaseType type) {//not into
         Value ret = new Value(type);
         return ret;
@@ -100,11 +102,11 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         if (ctx.intType() != null) {
 
 
-            int bitWidth = Integer.parseInt(ctx.intType().getText().substring(1));  // emit 'i'
-            if (bitWidth == 1) return new BoolType();
-            else if (bitWidth == 8) return new MemBoolType();
+//            int bitWidth = Integer.parseInt(ctx.intType().getText().substring(1));  // emit 'i'
+//            if (bitWidth == 1) return new BoolType();
+//            else if (bitWidth == 8) return new MemBoolType();
 
-            return new IntType(bitWidth);
+            return new NumType();
         } else if (ctx.labelType() != null) {
             return new LabelType();
 //            } else if (ctx.localReg() != null) {
@@ -113,9 +115,17 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
 //            assert ctx.arrayType() != null;
 //            return new ArrayType(translateType(ctx.arrayType().type()), Integer.parseInt(ctx.arrayType().getText()));//TODO length?
+        } else if (ctx.arrayType() != null) {
+
+            return new ArrayType(translateType(ctx.arrayType().type()), Integer.parseInt(ctx.arrayType().IntLit().getText()));
+        } else if (ctx.floatType() != null) {
+
+            return new NumType();
         }
+
         return null;
     }
+
 
     private Value regToValue(LLVMIRParser.ValueContext valueContext) {
         String name = "";//todo handle
@@ -305,6 +315,25 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     // this part is instructions
     // CFG order!
 
+    private IRBaseType translateType(LLVMIRParser.ConcreteTypeContext ctx) {
+        if (ctx.intType() != null) {
+            return new NumType();
+        }
+        if (ctx.floatType() != null) {
+            return new NumType();
+        }
+        if (ctx.labelType() != null) {
+            return new LabelType();
+        }
+        if (ctx.arrayType() != null) {
+            return new ArrayType(translateType(ctx.arrayType().type()), Integer.parseInt(ctx.arrayType().IntLit().getText()));
+        }
+        //  if(ctx.)
+        // todo if (ctx.!= null)
+
+        return null;
+    }
+
     private void deepToInst(LLVMIRParser.BasicBlockContext ctx, HashSet<IRBlock> visited) {
         IRBlock block = (IRBlock) valueMap.get(ctx.LabelIdent().getText());//todo long
 
@@ -317,7 +346,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
             inst.setParentBlock(block);
             rowMarker.put(inst, new RowMark(instCtx.getStart().getLine(), inst.format()));
         }
-        IRBaseInst inst = (IRBaseInst) visit(ctx.terminator());
+        IRBaseInst inst = (IRBaseInst) ctx.terminator().accept(this);
         inst.setParentBlock(block);
         rowMarker.put(inst, new RowMark(ctx.terminator().getStart().getLine(), inst.format()));
 
@@ -335,26 +364,40 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitLocalDefInst(LLVMIRParser.LocalDefInstContext ctx) {
+    public Value visitTypeConst(LLVMIRParser.TypeConstContext ctx) {
+        return super.visitTypeConst(ctx);
+    }
 
+    @Override
+    public Value visitGetElementPtrInst(LLVMIRParser.GetElementPtrInstContext ctx) {
+        ArrayList<Value> indices = new ArrayList<>();
 
-        String destName = ctx.LocalIdent().getText().substring(1);
+        for (var offsetCtx : ctx.typeValue())
+            indices.add(offsetCtx.value().accept(this));
 
-//        IRAllocaInst inst = new IRAllocaInst(
-//                destName,
-//                translateType(ctx.valueInstruction().allocaInst().type()),
-//                null
-//        );
-        var inst = visit(ctx.valueInstruction());
+        IRGetElementPtrInst inst = new IRGetElementPtrInst(ctx.typeValue(0).accept(this), null, null, indices);
+        inst.type = inst.headPointer().type;
 
+        for (int i = 0; i < inst.indicesNum(); ++i) {
+            if (i == 0) { // the first index always indexes the pointer
+                assert inst.type instanceof PointerType;
+                inst.type = ((PointerType) inst.type).pointedType;
+            } else {
+                if (inst.type instanceof StructType) {
+                    inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
+                } else if (inst.type instanceof ArrayType) {
+                    inst.type = ((ArrayType) inst.type).elementType;
+                } else {
+                    throw new InternalError("getelementptr in other types");
+                }
+            }
+        }
 
-        setNewValue(destName, inst);
-//        if (inst.type!=null){
-//            setNewValue(inst.type,);
-//        }
+        // wrapped
+        inst.type = new PointerType(inst.type);
 
+        //  setNewValue(destName, inst);
         return inst;
-
     }
 
     @Override
@@ -365,42 +408,73 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitLocalDefInst(LLVMIRParser.LocalDefInstContext ctx) {
+
+
+        destName = ctx.LocalIdent().getText().substring(1);
+
+//        IRAllocaInst inst = new IRAllocaInst(
+//                destName,
+//                translateType(ctx.valueInstruction().allocaInst().type()),
+//                null
+//        );
+        var inst = visit(ctx.valueInstruction());
+
+        newValue(destName, inst.type);
+        setNewValue(destName, inst);
+//        if (inst.type!=null){
+//            setNewValue(inst.type,);
+//        }
+
+        return inst;
+
+    }
+
+    @Override
     public Value visitAllocaInst(LLVMIRParser.AllocaInstContext ctx) {
 
-        return newValue(translateType(ctx.type()));
+        return new IRAllocaInst(
+                destName,
+                translateType(ctx.type()),
+                null
+        );
 
     }
 
     @Override
     public Value visitValueInstruction(LLVMIRParser.ValueInstructionContext ctx) {
 
+        /* todo is it ok */
+        return ctx.getChild(0).accept(this);
+//        if (ctx.allocaInst() != null) {
+//
+//            return visit(ctx.allocaInst());
+//
+//        }
+//        if (ctx.loadInst() != null) {
+//            return visit(ctx.loadInst());
+//        }
+//        if (ctx.addInst() != null) {
+//            return visit(ctx.addInst());
+//        }
+//        if (ctx.subInst() != null) {
+//            return visit(ctx.subInst());
+//        }
+//        if (ctx.mulInst() != null) {
+//            return visit(ctx.mulInst());
+//        }
+//        if (ctx.iCmpInst() != null) {
+//            return visit(ctx.iCmpInst());
+//        }
+//        if (ctx.callInst() != null) {
+//            return visit(ctx.callInst());
+//        }if (ctx.phiInst()!=null) {
+//            return visit(ctx.phiInst());
+//        }
+//        if(ctx.child)
 
-        if (ctx.allocaInst() != null) {
 
-            return visit(ctx.allocaInst());
-
-        }
-        if (ctx.loadInst() != null) {
-            return visit(ctx.loadInst());
-        }
-        if (ctx.addInst() != null) {
-            return visit(ctx.addInst());
-        }
-        if (ctx.subInst() != null) {
-            return visit(ctx.subInst());
-        }
-        if (ctx.mulInst() != null) {
-            return visit(ctx.mulInst());
-        }
-        if (ctx.iCmpInst() != null) {
-            return visit(ctx.iCmpInst());
-        }
-        if (ctx.callInst() != null) {
-            return visit(ctx.callInst());
-        }
-
-
-        return null;
+//        return null;
     }
 
     @Override
@@ -430,10 +504,21 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitFAddInst(LLVMIRParser.FAddInstContext ctx) {
+        return visitBinary("add", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitFSubInst(LLVMIRParser.FSubInstContext ctx) {
+        return visitBinary("sub", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
     public Value visitSubInst(LLVMIRParser.SubInstContext ctx) {
 
-        return super.visitSubInst(ctx);
+        return visitBinary("sub", ctx.typeValue(), ctx.value());
     }
+
 
     @Override
     public Value visitValue(LLVMIRParser.ValueContext ctx) {
@@ -445,44 +530,23 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
                 return regToValue(ctx);
 
             } else if (constant.intConst() != null) {
-                return new IntConst(Integer.parseInt(constant.intConst().IntLit().getText()));
+                return new NumConst(Integer.parseInt(constant.intConst().IntLit().getText()));
             }
+            if (constant.arrayConst() != null) {
+//                return new
+            }//todo finish it
 
+            if (constant.boolConst() != null) {
+                return new BoolConst(Objects.equals(constant.boolConst().getText(), "true"));
 
-//        if (ctx.value().constant()==null) {
-//            if (type.intType() != null) {
-//
-//        } else if (ctx.StringConstant() != null) {
-//            String rawString = ctx.StringConstant().toString();
-//            return new StringConst(
-//                    rawString.substring(2, rawString.length() - 1) // filter： c" "
-//                            .replace("\\5C", "\\")
-//                            .replace("\\0A", "\n")
-//                            .replace("\\00", "\0")
-//                            .replace("\\09", "\t")
-//                            .replace("\\22", "\"")
-//            );
-//        } else if (ctx.BoolConstant() != null) {
-//            return new BoolConst(Objects.equals(ctx.BoolConstant().getText(), "true"));
-//        }
-//        }
-//        if (type.!= null) {
-//            return regToValue(ctx.GlobalReg());
-//        } else if (ctx.LocalReg() != null) {
-//            return regToValue(ctx.LocalReg());
-//        } else
-//
-//        assert ctx.NullptrConstant() != null;
-//        return new NullptrConst();
-
-
-        } else {
-            if (ctx.LocalIdent() != null) {
-                return regToValue(ctx);
             }
+            if (constant.nullConst() != null) {
+                return new NullptrConst();
+            }
+//      }
+//
 
         }
-
         return null;
 
     }
@@ -494,7 +558,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         IRBinaryInst inst = new IRBinaryInst(
                 op,
 //                translateType(ctx.type())
-                new IntType(8)
+                new NumType(8)
                 ,
                 visit(typeValueContext),
                 visit(valueContext),
@@ -503,19 +567,20 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         return inst;
     }
 
-//    @Override
-//    public Value visitBitCastInst(LLVMIRParser.BitCastInstContext ctx) {
+    @Override
+    public Value visitBitCastInst(LLVMIRParser.BitCastInstContext ctx) {
 //         String destName = ctx.instDest().LocalReg().getText().substring(1);
-//
-//        IRBitCastInst inst = new IRBitCastInst(
-//                visit(ctx.src),
-//                translateType(ctx.type(1)),
-//                null
-//        );
-//
-//        setNewValue(destName, inst);
-//        return inst;
-//    }
+
+
+        IRBitCastInst inst = new IRBitCastInst(
+                visit(ctx.typeValue()),
+                translateType(ctx.type()),
+                null
+        );
+
+        // setNewValue(destName, inst);
+        return inst;
+    }
 
     @Override
     public Value visitTruncInst(LLVMIRParser.TruncInstContext ctx) {
@@ -563,8 +628,11 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     @Override
     public Value visitRetTerm(LLVMIRParser.RetTermContext ctx) {
         if (ctx.value() != null) {
-            return new IRRetInst(visit(ctx.value()), null);
+            return new IRRetInst(visit(ctx.concreteType()), null);
         }
+//        System.out.println(ctx.concreteType());
+//        System.out.println(ctx.value());
+//        System.out.println(ctx.getText());
         return new IRRetInst(null);
     }
 
@@ -623,41 +691,6 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
 
-//todo compute pointer
-
-//    @Override
-//    public Value visitGetelementptr(LLVMIRParser.GetelementptrContext ctx) {
-//        String destName = ctx.instDest().LocalReg().getText().substring(1);
-//
-//        ArrayList<Value> indices = new ArrayList<>();
-//
-//        for (var offsetCtx : ctx.gepOffset())
-//            indices.add(visit(offsetCtx.atom()));
-//
-//        IRGetElementPtrInst inst = new IRGetElementPtrInst(visit(ctx.src), null, null, indices);
-//        inst.type = inst.headPointer().type;
-//        for (int i = 0; i < inst.indicesNum(); ++i) {
-//            if (i == 0) { // the first index always indexes the pointer
-//                assert inst.type instanceof PointerType;
-//                inst.type = ((PointerType) inst.type).pointedType;
-//            } else {
-//                if (inst.type instanceof StructType) {
-//                    inst.type = ((StructType) inst.type).memberVarTypes.get(((IntConst) indices.get(i)).constData);
-//                } else if (inst.type instanceof ArrayType) {
-//                    inst.type = ((ArrayType) inst.type).elementType;
-//                } else {
-//                    throw new InternalError("getelementptr in other types");
-//                }
-//            }
-//        }
-//
-//        // wrapped
-//        inst.type = new PointerType(inst.type);
-//
-//        setNewValue(destName, inst);
-//        return inst;
-//    }
-//
 
     @Override
     public Value visitAndInst(LLVMIRParser.AndInstContext ctx) {
@@ -681,9 +714,49 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitFMulInst(LLVMIRParser.FMulInstContext ctx) {
+        return visitBinary("mul", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
     public Value visitFDivInst(LLVMIRParser.FDivInstContext ctx) {
         return visitBinary("div", ctx.typeValue(), ctx.value());
     }
+
+    @Override
+    public Value visitUDivInst(LLVMIRParser.UDivInstContext ctx) {
+        return visitBinary("div", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitSDivInst(LLVMIRParser.SDivInstContext ctx) {
+        return visitBinary("div", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitFRemInst(LLVMIRParser.FRemInstContext ctx) {
+        return visitBinary("rem", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitSRemInst(LLVMIRParser.SRemInstContext ctx) {
+        return visitBinary("rem", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitURemInst(LLVMIRParser.URemInstContext ctx) {
+        return visitBinary("rem", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitShlInst(LLVMIRParser.ShlInstContext ctx) {
+        return visitBinary("shl", ctx.typeValue(), ctx.value());
+    }
+
+    @Override
+    public Value visitLShrInst(LLVMIRParser.LShrInstContext ctx) {
+        return visitBinary("lshr", ctx.typeValue(), ctx.value());
+    }//todo so many unfinished
 
     @Override
     public Value visitLabel(LLVMIRParser.LabelContext ctx) {
@@ -693,6 +766,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         }
         return null;
     }
+
 
     // this is used to handle forward reference
     public static class RawOnlyName extends Value {
@@ -704,47 +778,17 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
         }
     }
 
+    @Override
+    public Value visitPhiInst(LLVMIRParser.PhiInstContext ctx) {
+        //  String destName = ctx.instDest().LocalReg().getText().substring(1);
+        IRPhiInst inst = new IRPhiInst(translateType(ctx.type()), null);
 
-    // todo wtf
-//
-//    @Override
-//    public Value visitPhi(LLVMIRParser.PhiContext ctx) {
-//        String destName = ctx.instDest().LocalReg().getText().substring(1);
-//        IRPhiInst inst = new IRPhiInst(translateType(ctx.type()), null);
-//
-//        for (var phi : ctx.phiBranch()) {
-//            inst.addBranch(visit(phi.atom(0)), (IRBlock) visit(phi.atom(1)));
-//        }
-//        setNewValue(destName, inst);
-//        return inst;
-//    }
-//
-//
-    //todo least need
+        for (var phi : ctx.inc()) {
+            inst.addBranch(visit(phi.value()), (IRBlock) visit(phi.LocalIdent()));
+        }
+        //setNewValue(destName, inst);
+        return inst;
+    }
 
-//    @Override
-//    public Value visitAtom(LLVMIRParser.AtomContext ctx) {
-//        if (ctx.GlobalReg() != null) {
-//            return regToValue(ctx.GlobalReg());
-//        } else if (ctx.LocalReg() != null) {
-//            return regToValue(ctx.LocalReg());
-//        } else if (ctx.integerConstant() != null) {
-//            return new IntConst(Integer.parseInt(ctx.integerConstant().getText()));
-//        } else if (ctx.StringConstant() != null) {
-//            String rawString = ctx.StringConstant().toString();
-//            return new StringConst(
-//                    rawString.substring(2, rawString.length() - 1) // filter： c" "
-//                            .replace("\\5C", "\\")
-//                            .replace("\\0A", "\n")
-//                            .replace("\\00", "\0")
-//                            .replace("\\09", "\t")
-//                            .replace("\\22", "\"")
-//            );
-//        } else if (ctx.BoolConstant() != null) {
-//            return new BoolConst(Objects.equals(ctx.BoolConstant().getText(), "true"));
-//        }
-//
-//        assert ctx.NullptrConstant() != null;
-//        return new NullptrConst();
-//    }
+
 }

@@ -6,13 +6,13 @@ import masterball.compiler.middleend.llvmir.constant.*;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.inst.*;
-import masterball.compiler.middleend.llvmir.type.IntType;
-import masterball.compiler.share.warn.ZeroDivisionWarning;
+import masterball.compiler.middleend.llvmir.type.NumType;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.pass.IRBlockPass;
 import masterball.compiler.share.pass.IRFuncPass;
 import masterball.compiler.share.pass.InstVisitor;
+import masterball.compiler.share.warn.ZeroDivisionWarning;
 import masterball.debug.Log;
 
 import java.util.*;
@@ -222,10 +222,10 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
             if (getConst(dest) == null) {
                 int result;
                 BaseConst replace = null;
-                if (srcConst instanceof IntConst) result = ((IntConst) srcConst).constData;
+                if (srcConst instanceof NumConst) result = ((NumConst) srcConst).constData;
                 else if (srcConst instanceof BoolConst) result = ((BoolConst) srcConst).constData ? 1 : 0;
                 else return;
-                if (dest.type instanceof IntType) replace = new IntConst(result);
+                if (dest.type instanceof NumType) replace = new NumConst(result);
                 else replace = new BoolConst(result != 0);
                 lattice.put(dest, replace);
                 dest.replaceAllUsesWith(replace);
@@ -264,9 +264,9 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
         if (lhsConst == uncertain || rhsConst == uncertain) {
 
             if (Objects.equals(inst.op, LLVM.MulInst) || Objects.equals(inst.op, LLVM.AndInst)) {
-                if ((lhsConst instanceof IntConst && ((IntConst) lhsConst).constData == 0) ||
-                        (rhsConst instanceof IntConst && ((IntConst) rhsConst).constData == 0)) {
-                    replace = new IntConst(0);
+                if ((lhsConst instanceof NumConst && ((NumConst) lhsConst).constData == 0) ||
+                        (rhsConst instanceof NumConst && ((NumConst) rhsConst).constData == 0)) {
+                    replace = new NumConst(0);
                 }
 
                 if ((lhsConst instanceof BoolConst && !((BoolConst) lhsConst).constData) ||
@@ -282,9 +282,9 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
                 valueWorklist.offer(inst);
             }
         } else if (lhsConst != null && rhsConst != null && getConst(inst) == null) {
-            if (lhsConst instanceof IntConst) {
-                assert rhsConst instanceof IntConst;
-                int lhsNum = ((IntConst) lhsConst).constData, rhsNum = ((IntConst) rhsConst).constData;
+            if (lhsConst instanceof NumConst) {
+                assert rhsConst instanceof NumConst;
+                int lhsNum = ((NumConst) lhsConst).constData, rhsNum = ((NumConst) rhsConst).constData;
                 int result = 0;
                 switch (inst.op) {
                     case LLVM.AddInst:
@@ -321,7 +321,7 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
                         result = lhsNum >> rhsNum;
                         break;
                 }
-                replace = new IntConst(result);
+                replace = new NumConst(result);
             } else {
                 assert lhsConst instanceof BoolConst;
                 assert rhsConst instanceof BoolConst;
@@ -404,9 +404,9 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
             }
         } else if (lhsConst != null && rhsConst != null && getConst(inst) == null) {
             boolean result = false;
-            if (lhsConst instanceof IntConst) {
-                assert rhsConst instanceof IntConst;
-                int lhsNum = ((IntConst) lhsConst).constData, rhsNum = ((IntConst) rhsConst).constData;
+            if (lhsConst instanceof NumConst) {
+                assert rhsConst instanceof NumConst;
+                int lhsNum = ((NumConst) lhsConst).constData, rhsNum = ((NumConst) rhsConst).constData;
                 switch (inst.op) {
                     case LLVM.LessArg:
                         result = lhsNum < rhsNum;

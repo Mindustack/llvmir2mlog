@@ -89,7 +89,7 @@ public class ModuleBuilder extends LLVMIRBaseVisitor<Value> {
                 if (bitWidth == 1) return new BoolType();
                 else if (bitWidth == 8) return new MemBoolType();
 
-                return new IntType(bitWidth);
+                return new NumType(bitWidth);
             } else if (ctx.basicType().VoidType() != null) {
                 return new VoidType();
             } else if (ctx.basicType().LabelType() != null) {
@@ -397,7 +397,7 @@ public class ModuleBuilder extends LLVMIRBaseVisitor<Value> {
                 inst.type = ((PointerType) inst.type).pointedType;
             } else {
                 if (inst.type instanceof StructType) {
-                    inst.type = ((StructType) inst.type).memberVarTypes.get(((IntConst) indices.get(i)).constData);
+                    inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
                 } else if (inst.type instanceof ArrayType) {
                     inst.type = ((ArrayType) inst.type).elementType;
                 } else {
@@ -474,7 +474,7 @@ public class ModuleBuilder extends LLVMIRBaseVisitor<Value> {
         } else if (ctx.LocalReg() != null) {
             return regToValue(ctx.LocalReg());
         } else if (ctx.integerConstant() != null) {
-            return new IntConst(Integer.parseInt(ctx.integerConstant().getText()));
+            return new NumConst(Integer.parseInt(ctx.integerConstant().getText()));
         } else if (ctx.StringConstant() != null) {
             String rawString = ctx.StringConstant().toString();
             return new StringConst(

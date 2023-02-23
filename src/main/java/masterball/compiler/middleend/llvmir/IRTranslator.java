@@ -7,17 +7,16 @@ import masterball.compiler.frontend.info.type.VarType;
 import masterball.compiler.middleend.llvmir.type.*;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.lang.MxStar;
-import masterball.compiler.share.lang.RV32I;
 
 import java.util.Objects;
 
 public class IRTranslator {
-    public static final IRBaseType stringType = new PointerType(new IntType(8)),
+    public static final IRBaseType stringType = new PointerType(new NumType(8)),
             boolType = new BoolType(),
             memBoolType = new MemBoolType(),
-            i32Type = new IntType(32),
+            i32Type = new NumType(32),
             voidType = new VoidType(),
-            heapPointerType = new PointerType(new IntType(8)),
+            heapPointerType = new PointerType(new NumType(8)),
             nullType = heapPointerType,
             i32PointerType = new PointerType(i32Type);
     // to translate types, you must instantiate a Translator to support translate CLASS

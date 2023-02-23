@@ -1,24 +1,24 @@
 package masterball.compiler.middleend.llvmir.constant;
 
-import masterball.compiler.middleend.llvmir.type.IntType;
+import masterball.compiler.middleend.llvmir.type.NumType;
 import masterball.compiler.share.lang.LLVM;
 
-public class IntConst extends BaseConst {
+public class NumConst extends BaseConst {
     public int constData;
 
-    public IntConst(int constData) {
-        super(LLVM.ConstAnon, new IntType());
+    public NumConst(int constData) {
+        super(LLVM.ConstAnon, new NumType());
         this.constData = constData;
     }
 
-    public IntConst(int constData, int bitWidth) {
-        super(LLVM.ConstAnon, new IntType(bitWidth));
+    public NumConst(int constData, int bitWidth) {
+        super(LLVM.ConstAnon, new NumType(bitWidth));
         this.constData = constData;
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof IntConst && constData == ((IntConst) o).constData;
+        return o instanceof NumConst && constData == ((NumConst) o).constData;
     }
 
     // constant identifier: simply a number

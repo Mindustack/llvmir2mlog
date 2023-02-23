@@ -50,7 +50,7 @@ public class Machine {
     public PrintStream stdout;
     public Scanner scanner;
     // builtin
-    private LibReader libReader;
+    private final LibReader libReader;
     private int heapCur, stackCur;
 
     public Machine(IRModule module) throws IOException {
@@ -79,9 +79,9 @@ public class Machine {
 
                 for (GlobalVariable glbVar : module.globalVarSeg) {
                     int dat = 0;
-                    if (glbVar.initValue instanceof IntConst) {
+                    if (glbVar.initValue instanceof NumConst) {
                         assert glbVar.initValue.type.size() == 4;
-                        dat = ((IntConst) glbVar.initValue).constData;
+                        dat = ((NumConst) glbVar.initValue).constData;
                     } else if (glbVar.initValue instanceof BoolConst) {
                         // mem bool
                         assert glbVar.initValue.type.size() == 4;
@@ -183,8 +183,8 @@ public class Machine {
     }
 
     public int regRead(Value reg) {
-        if (reg instanceof IntConst) {
-            return ((IntConst) reg).constData;
+        if (reg instanceof NumConst) {
+            return ((NumConst) reg).constData;
         } else if (reg instanceof BoolConst) {
             return ((BoolConst) reg).constData ? 1 : 0;
         } else if (reg instanceof NullptrConst) {

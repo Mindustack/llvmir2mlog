@@ -3,11 +3,11 @@
 package darksword.interpreter.generated;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class LLVMIRLexer extends Lexer {
@@ -306,7 +306,7 @@ public class LLVMIRLexer extends Lexer {
                 "T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32",
                 "T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40",
                 "T__41", "T__42", "T__43", "T__44", "T__45", "T__46", "T__47", "T__48",
-                "T__49", "T__50", "IntType", "VoidType", "LabelType", "GlobalReg", "LocalReg",
+                "T__49", "T__50", "NumType", "VoidType", "LabelType", "GlobalReg", "LocalReg",
                 "NullptrConstant", "BoolConstant", "StringConstant", "LinkageType", "PreemptionSpecifiers",
                 "VisibilityStyles", "GlobalWord", "UnnamedAddr", "FuncAttr", "ParaAttr",
                 "IntegerLiteral", "Identifier", "WhitespaceEater", "NewlineEater", "LineCommentEater",
@@ -336,7 +336,7 @@ public class LLVMIRLexer extends Lexer {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, "IntType", "VoidType", "LabelType", "GlobalReg",
+                null, null, null, null, "NumType", "VoidType", "LabelType", "GlobalReg",
                 "LocalReg", "NullptrConstant", "BoolConstant", "StringConstant", "LinkageType",
                 "PreemptionSpecifiers", "VisibilityStyles", "GlobalWord", "UnnamedAddr",
                 "FuncAttr", "ParaAttr", "IntegerLiteral", "Identifier", "WhitespaceEater",

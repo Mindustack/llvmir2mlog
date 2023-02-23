@@ -5,16 +5,52 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class Main {
-    public static void main(String[] args) {
-        try {
-            var mb2 = new MB2();
-            String s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
-            new IRPrinter( s,new PrintStream(s)              ).runOnModule(mb2.irModule);
+    public static void main(String[] args) throws IOException {
+        MB2 mb2;
+        String s;
 
-          //  System.out.println(mb2.irModule);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        mb2 = new MB2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
+        new IRPrinter(s, new PrintStream(s)).runOnModule(mb2.irModule);
+
+        //  System.out.println(mb2.irModule);
+
+
+//        AsmBuilder builder = new AsmBuilder();
+//        builder.runOnModule(mb2.irModule);
+//        AsmModule module = builder.module;
+//
+//        // Graph Coloring
+//        new RegisterAllocator().runOnModule(module);
+//
+//        // Stack Allocate. Eliminate RawStackOffset
+//        new StackAllocator().runOnModule(module);
+//
+//        // Optimize Assembly. Don't comment it directly because there are some necessary passes.
+//        new BackEndOptimizer().runOnModule(module);
+//        s=s+2;
+//        new AsmPrinter(
+//                s,
+//              new PrintStream(s)
+//        ).runOnModule(module);
+
 
     }
 }

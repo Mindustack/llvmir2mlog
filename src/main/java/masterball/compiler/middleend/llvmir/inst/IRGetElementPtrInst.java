@@ -8,15 +8,16 @@ import masterball.compiler.middleend.llvmir.type.StructType;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.pass.InstVisitor;
-import masterball.debug.Log;
 
 import java.util.ArrayList;
 
 public class IRGetElementPtrInst extends IRBaseInst {
 
-    // headPointer is the field (struct* or a pointer)
-    // yieldType / retType is the type of the result
-    // hint: move ptr: getelement type, type* ptr %a, i32 offset
+    /**
+     * headPointer is the field (struct* or a pointer)
+     * yieldType / retType is the type of the result
+     * hint: move ptr: getelement i32, i32* ptr %a, i32 offset
+     */
 
     private String elementName = null;
 

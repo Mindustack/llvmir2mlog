@@ -3,7 +3,7 @@ package masterball.compiler.middleend.optim;
 import masterball.compiler.middleend.analyzer.LoopAnalyzer;
 import masterball.compiler.middleend.llvmir.IRTranslator;
 import masterball.compiler.middleend.llvmir.Value;
-import masterball.compiler.middleend.llvmir.constant.IntConst;
+import masterball.compiler.middleend.llvmir.constant.NumConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.Loop;
@@ -31,8 +31,8 @@ import java.util.Objects;
  */
 
 public class IVTrans implements IRFuncPass, IRLoopPass {
-    private HashMap<Value, BIV> basicIV = new HashMap<>();
-    private HashMap<Value, IV> derivedIV = new HashMap<>();
+    private final HashMap<Value, BIV> basicIV = new HashMap<>();
+    private final HashMap<Value, IV> derivedIV = new HashMap<>();
 
     @Override
     public void runOnLoop(Loop loop) {
@@ -132,15 +132,15 @@ public class IVTrans implements IRFuncPass, IRLoopPass {
 
             Value newStep = null;
 
-            if (biv.invariant instanceof IntConst && ((IntConst) biv.invariant).constData == 1)
+            if (biv.invariant instanceof NumConst && ((NumConst) biv.invariant).constData == 1)
                 newStep = iv.invariant;
             else {
                 newStep = new IRBinaryInst(LLVM.MulInst, IRTranslator.i32Type, iv.invariant, biv.invariant, null);
                 biv.initBLock.tAddBeforeTerminator((IRBaseInst) newStep);
             }
 
-            if (iv.invariant instanceof IntConst && biv.init instanceof IntConst) {
-                newInit = new IntConst(((IntConst) iv.invariant).constData * ((IntConst) biv.init).constData);
+            if (iv.invariant instanceof NumConst && biv.init instanceof NumConst) {
+                newInit = new NumConst(((NumConst) iv.invariant).constData * ((NumConst) biv.init).constData);
             } else {
                 newInit = new IRBinaryInst(LLVM.MulInst, IRTranslator.i32Type, biv.init, iv.invariant, null);
                 biv.initBLock.tAddBeforeTerminator((IRBaseInst) newInit);
