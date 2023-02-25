@@ -58,5 +58,6 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
     public void runOnBlock(AsmBlock block) {
         ps.println(block.identifier + ":");
         block.instructions.forEach(inst -> ps.println(AsmFormatter.instFormat(inst)));
+        // block.instructions.forEach(inst -> System.out.println(AsmFormatter.instFormat(inst)) );
     }
 }

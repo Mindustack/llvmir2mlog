@@ -1,18 +1,18 @@
 package masterball.compiler.middleend.llvmir.hierarchy;
 
+import com.Kvto.LLVMIRParser;
 import masterball.compiler.middleend.analyzer.CallGraphAnalyzer;
 import masterball.compiler.middleend.llvmir.IRTranslator;
 import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.constant.GlobalValue;
-import masterball.compiler.middleend.llvmir.inst.IRCallInst;
 import masterball.compiler.middleend.llvmir.type.IRBaseType;
 import masterball.compiler.middleend.llvmir.type.IRFuncType;
 import masterball.compiler.share.lang.LLVM;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 public class IRFunction extends GlobalValue {
+
     public final LinkedList<IRBlock> blocks = new LinkedList<>();
     public IRModule parentModule;
     public IRBlock entryBlock, exitBlock;
@@ -24,6 +24,8 @@ public class IRFunction extends GlobalValue {
 
     // info in Loop
     public HashSet<Loop> topLevelLoops = new HashSet<>();
+    public LLVMIRParser.FuncDefContext Source;
+    public LinkedHashMap<String, Value> valueMap = new LinkedHashMap<>();
 
     public IRFunction(String name, IRFuncType funcType, IRModule parentModule) {
         // not init complete.
@@ -43,7 +45,7 @@ public class IRFunction extends GlobalValue {
     // bottom function decl
     public IRFunction(String name, IRBaseType retType, IRBaseType... argTypes) {
         super(name, new IRFuncType(retType, null));
-        for (IRBaseType argType : argTypes) ((IRFuncType) this.type).argTypes.add(argType);
+        Collections.addAll(((IRFuncType) this.type).argTypes, argTypes);
     }
 
     public boolean isVoid() {
@@ -52,6 +54,10 @@ public class IRFunction extends GlobalValue {
 
     public void addArg(Value arg) {
         this.addOperand(arg);
+    }
+
+    public List Args() {
+        return this.operands;
     }
 
     public Value getArg(int index) {

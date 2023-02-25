@@ -3,7 +3,6 @@ package masterball.compiler.backend.optim;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.inst.*;
-import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.share.pass.AsmFuncPass;
 import masterball.debug.Log;
 
@@ -85,7 +84,7 @@ public class TCO implements AsmFuncPass {
                     it.remove();
                     assert block.terminator() instanceof AsmRetInst;
                     block.instructions.removeLast();
-                    new AsmTailInst(((AsmCallInst) inst).callFunc, block);
+                    new AsmTailInst(((AsmCallInst) inst).callFunc, block);//todo wtf
                     break;
                 }
             }

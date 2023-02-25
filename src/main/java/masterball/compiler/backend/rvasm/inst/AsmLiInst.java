@@ -18,5 +18,5 @@ public class AsmLiInst extends AsmBaseInst {
     @Override
     public String format() {
         return String.format("%s\t%s, %s", RV32I.LiInst, rd, imm);
-    }
+    }//set a number
 }

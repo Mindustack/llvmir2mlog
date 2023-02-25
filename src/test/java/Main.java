@@ -32,7 +32,7 @@ public class Main {
         builder.runOnModule(mb2.irModule);
         AsmModule module = builder.module;
 
-        // Graph Coloring
+       //  Graph Coloring
         new RegisterAllocator().runOnModule(module);
 
         // Stack Allocate. Eliminate RawStackOffset

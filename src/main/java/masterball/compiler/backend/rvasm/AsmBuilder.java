@@ -353,10 +353,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             if (((GlobalValue) inst.loadPtr()).gpRegMark) {
                 new AsmMvInst(instReg, PhysicalReg.reg("gp"), cur.block);
             } else {
-                VirtualReg luiReg = new VirtualReg();
+//                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
-                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmLoadInst(inst.type.size(), instReg, luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.lo), cur.block);
+//                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
+                new AsmLoadInst(inst.type.size(), instReg, null, new GlobalAddr(globalReg), cur.block);
             }
         } else {
             // if it is not global, it must be loaded from stack, right?
@@ -393,10 +393,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             if (((GlobalValue) inst.storePtr()).gpRegMark) {
                 new AsmMvInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
             } else {
-                VirtualReg luiReg = new VirtualReg();
+//                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.storePtr());
-                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmStoreInst(inst.storeValue().type.size(), luiReg, cur.toReg(inst.storeValue()), new GlobalAddr(globalReg, GlobalAddr.HiLo.lo), cur.block);
+//                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
+                new AsmStoreInst(inst.storeValue().type.size(), null, cur.toReg(inst.storeValue()), new GlobalAddr(globalReg), cur.block);
             }
         } else {
             if (inst.storePtr().asmOperand instanceof RawStackOffset) {

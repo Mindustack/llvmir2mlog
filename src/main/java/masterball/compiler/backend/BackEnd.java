@@ -9,9 +9,8 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
 import masterball.compiler.middleend.MiddleEnd;
 import masterball.console.Config;
-import masterball.debug.Log;
 import masterball.console.Console;
-import masterball.debug.Timer;
+import masterball.debug.Log;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

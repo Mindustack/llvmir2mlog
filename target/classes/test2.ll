@@ -1,11 +1,14 @@
-define i4 @main() {
-1:
+define i4 @main(i4 %s) {
+0:
+
+
  %se=call i4 @g()
+
  ret i4 %se
 }
 
 define i4 @g() {
-0:
+2:
 	%1 = add i4 0, 0
 	%2 = add i4 1, 1
 	%3 = add i4 2, 2
@@ -24,4 +27,3 @@ define i4 @g() {
 	%16 = add i4 -1, -1
 	ret i4 %16
 }
-

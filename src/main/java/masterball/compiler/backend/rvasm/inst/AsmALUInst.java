@@ -3,7 +3,6 @@ package masterball.compiler.backend.rvasm.inst;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Immediate;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
 
 // Arithm and Logic Inst
 // add, sub, ...
@@ -41,7 +40,9 @@ public class AsmALUInst extends AsmBaseInst {
 
 
         if (this.imm != null) // I-Type
-            return String.format("%s\t%s, %s, %s", op + RV32I.ITypeSuffix, rd, rs1, imm);
+            return String.format("%s\t%s, %s, %s", op
+//                    + RV32I.ITypeSuffix
+                    , rd, rs1, imm);
         else if (this.rs2 != null) // R-Type
             return String.format("%s\t%s, %s, %s", op, rd, rs1, rs2);
         else

@@ -4,8 +4,6 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.inst.*;
 import masterball.compiler.backend.rvasm.operand.PhysicalReg;
-import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
-import masterball.compiler.middleend.llvmir.inst.IRStoreInst;
 import masterball.compiler.share.pass.AsmFuncPass;
 
 import java.util.HashMap;

@@ -1,12 +1,7 @@
-; ModuleID = 'E:\WORKSPACE\llvmir2mlog\src\main\resources\out'
-source_filename = "E:\WORKSPACE\llvmir2mlog\src\main\resources\out"
-target datalayout = "e-m:e-p:32:32-i64:64-n32-S128"
-target triple = "riscv32"
 
+define i64 @main(i64 %s) {
 
-define i64 @main() {
-
-1:                                                ; preds = 
+0:                                                ; preds = 
   ret i64 -2
 
 }

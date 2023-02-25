@@ -1,6 +1,5 @@
 package masterball.compiler.backend.rvasm.inst;
 
-import masterball.compiler.backend.rvasm.AsmTranslator;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Immediate;
 import masterball.compiler.backend.rvasm.operand.Register;
@@ -23,6 +22,8 @@ public class AsmStoreInst extends AsmBaseInst {
     public String format() {
         // sw rs2, offset(rs1)
         return String.format("%s\t%s, %s(%s)",
-                RV32I.StoreInstPrefix + AsmTranslator.translateByteWidth(byteWidth), rs2, imm, rs1);
+                RV32I.StoreInstPrefix
+                //  + AsmTranslator.translateByteWidth(byteWidth)
+                , rs2, imm, rs1);
     }
 }

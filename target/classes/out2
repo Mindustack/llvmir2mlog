@@ -1,10 +1,25 @@
-# fileName: E:\WORKSPACE\llvmir2mlog\src\main\resources\out2	 compiled by @Masterball.
-	.text
-	.globl	main
-	.p2align	1
-	.type	main,@function
-main:
-1:
+0:
+	op add	sp, sp, -16
+	write	ra, 0(sp)
+	call	g
+	read	ra, 0(sp)
+	op add	sp, sp, 16
 	ret
-	.size	main, .-main
-                                        # -- End function
+2:
+	set	t0, 1
+	set	t0, 2
+	set	t0, 3
+	set	t0, 4
+	set	t0, 5
+	set	t0, 6
+	set	t0, 7
+	set	t0, -8
+	set	t0, -7
+	set	t0, -6
+	set	t0, -5
+	set	t0, -4
+	set	t0, -3
+	set	t0, -2
+	set	t0, -1
+	add	a0, t0, -1
+	ret

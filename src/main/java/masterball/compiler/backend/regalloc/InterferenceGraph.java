@@ -3,9 +3,11 @@ package masterball.compiler.backend.regalloc;
 import masterball.compiler.backend.rvasm.inst.AsmMvInst;
 import masterball.compiler.backend.rvasm.operand.Register;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-// Register Interference Graph
+/* Register Interference Graph */
 
 public class InterferenceGraph {
 
