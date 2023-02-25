@@ -11,6 +11,7 @@ public class RV32I {
     public static final int I32Unit = 4;
     public static final int MaxStackSize = Integer.MAX_VALUE;
 
+
     // --- Register Related ---
 
     public static final int MaxArgRegNum = 8;
@@ -43,14 +44,14 @@ public class RV32I {
     public static final String ITypeSuffix = "i";
     public static final String BrInstPrefix = "b";
     public static final String CallInst = "call";
-    public static final String JmpInstPrefix = "j";
+    public static final String JmpInstPrefix = "jump";
     public static final String LaInst = "set";//将地址值rot加载到寄存器rd
     public static final String LiInst = "set";//将立即数imm加载到寄存器rd
     public static final String LoadInstPrefix = "read";
     public static final String StoreInstPrefix = "write";
-    public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
+    // public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
     public static final String MvInst = "set";
-    public static final String RetInst = "ret";
+    public static final String RetInst = "return";
     public static final String SltInst = "slt";
     //与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
     public static final String SeqzInst = "seqz";
@@ -71,12 +72,12 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
 
     public static final String AddInst = "op add";
     public static final String SubInst = "op sub";
-    public static final String MulInst = "mul";
-    public static final String AndInst = "and";
-    public static final String OrInst = "or";
-    public static final String XorInst = "xor";
-    public static final String ShiftLeftInst = "sll";//移位
-    public static final String ShiftRightInst = "sra";//too
-    public static final String DivInst = "div";
-    public static final String ModInst = "rem";
+    public static final String MulInst = "op mul";
+    public static final String AndInst = "op and";
+    public static final String OrInst = "op or";
+    public static final String XorInst = "op xor";
+    public static final String ShiftLeftInst = "op sll";//移位
+    public static final String ShiftRightInst = "op sra";//too
+    public static final String DivInst = "op div";
+    public static final String ModInst = "op rem";
 }
