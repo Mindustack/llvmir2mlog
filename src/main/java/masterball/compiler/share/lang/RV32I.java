@@ -44,16 +44,28 @@ public class RV32I {
     public static final String BrInstPrefix = "b";
     public static final String CallInst = "call";
     public static final String JmpInstPrefix = "j";
-    public static final String LaInst = "la";
-    public static final String LiInst = "li";
+    public static final String LaInst = "la";//将地址值rot加载到寄存器rd
+    public static final String LiInst = "li";//将立即数imm加载到寄存器rd 
     public static final String LoadInstPrefix = "l";
     public static final String StoreInstPrefix = "s";
-    public static final String LuiInst = "lui";
+    public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
     public static final String MvInst = "mv";
     public static final String RetInst = "ret";
     public static final String SltInst = "slt";
+//与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
     public static final String SeqzInst = "seqz";
     public static final String SnezInst = "snez";
+    /*
+    slt rd, rs1, rs2	如果rs1值小于rs2（有符号），则rd置1，否则置0
+slti rd, rs1, imm	如果rs1值小于立即数imm（符号扩展后），则rd置1，否则置0
+sltu rd, rs1, rs2	如果rs1值小于rs2（无符号），则rd置1，否则置0
+sltui rd, rs1, imm	如果rs1值小于立即数imm（无符号），则rd置1，否则置0
+
+seqz rd, rs1	如果rs1值等于0，则rd置1，否则置0（伪指令）
+snez rd, rs1	如果rs1值不等于0，则rd置1，否则置0（伪指令）
+sltz rd, rs1	如果rs1值小于0，则rd置1，否则置0（伪指令）
+sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令） 
+*/
     public static final String TailInst = "tail";
 
     public static final String AddInst = "add";
@@ -62,8 +74,8 @@ public class RV32I {
     public static final String AndInst = "and";
     public static final String OrInst = "or";
     public static final String XorInst = "xor";
-    public static final String ShiftLeftInst = "sll";
-    public static final String ShiftRightInst = "sra";
+    public static final String ShiftLeftInst = "sll";//移位
+    public static final String ShiftRightInst = "sra";//too
     public static final String DivInst = "div";
     public static final String ModInst = "rem";
 }

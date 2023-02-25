@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="target/generated-test-sources/test-annotations"/>
-	<classpathentry kind="src" path="target/generated-sources/annotations"/>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="output" path="target/classes"/>
+<?xml version="1.0" encoding="UTF-8"?><classpath>
+<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<classpathentry kind="src" path="target/generated-test-sources/test-annotations"/>
+<classpathentry kind="src" path="target/generated-sources/annotations"/>
+<classpathentry kind="src" path="src/main/java"/>
+<classpathentry kind="src" path="src/test/java"/>
+<classpathentry kind="src" path="src/main/resources"/>
+<classpathentry kind="src" path="src/test/resources"/>
+<classpathentry kind="output" path="target/classes"/>
+<classpathentry kind="lib" path="lib/antlr4-runtime-4.11.1.jar"/>
 </classpath>
