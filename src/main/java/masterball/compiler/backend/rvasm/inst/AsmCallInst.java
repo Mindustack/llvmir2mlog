@@ -40,6 +40,6 @@ public class AsmCallInst extends AsmBaseInst {
     @Override
     public String format() {
         // call symbol
-        return String.format("%s\t%s", RV32I.CallInst, callFunc.identifier);
+        return String.format("%s\t %s", RV32I.CallInst, callFunc.identifier);
     }
 }
