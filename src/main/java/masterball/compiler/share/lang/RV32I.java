@@ -42,9 +42,9 @@ public class RV32I {
     // --- RV32 Inst ---
 
     public static final String ITypeSuffix = "i";
-    public static final String BrInstPrefix = "b";
+    public static final String BrInstPrefix = "jump";
     public static final String CallInst = "call";
-    public static final String JmpInstPrefix = "jump";
+    public static final String JmpInstPrefix = "jump always";
     public static final String LaInst = "set";//将地址值rot加载到寄存器rd
     public static final String LiInst = "set";//将立即数imm加载到寄存器rd
     public static final String LoadInstPrefix = "read";
@@ -70,14 +70,14 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     public static final String TailInst = "tail";
 
 
-    public static final String AddInst = "op add";
-    public static final String SubInst = "op sub";
-    public static final String MulInst = "op mul";
-    public static final String AndInst = "op and";
-    public static final String OrInst = "op or";
-    public static final String XorInst = "op xor";
-    public static final String ShiftLeftInst = "op sll";//移位
-    public static final String ShiftRightInst = "op sra";//too
-    public static final String DivInst = "op div";
-    public static final String ModInst = "op rem";
+    public static final String AddInst = "add";
+    public static final String SubInst = "sub";
+    public static final String MulInst = "mul";
+    public static final String AndInst = "and";
+    public static final String OrInst = "or";
+    public static final String XorInst = "xor";
+    public static final String ShiftLeftInst = "sll";//移位
+    public static final String ShiftRightInst = "sra";//too
+    public static final String DivInst = "div";
+    public static final String ModInst = "rem";
 }
