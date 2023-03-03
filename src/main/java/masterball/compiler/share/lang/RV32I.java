@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class RV32I {
     // --- Sys Config for RV ---
 
-    public static final int ImmBound = (1 << 20);
+  //  public static final int ImmBound = (1 << 20);
     public static final int SpLowUnit = 16;
     public static final int I32Unit = 1;
     public static final int MaxStackSize = Integer.MAX_VALUE;

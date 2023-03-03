@@ -1,6 +1,6 @@
 package masterball.compiler.backend.regalloc;
 
-import masterball.compiler.backend.rvasm.inst.AsmMvInst;
+import masterball.compiler.backend.rvasm.inst.AsmMoveInst;
 import masterball.compiler.backend.rvasm.operand.Register;
 
 import java.util.HashSet;
@@ -65,7 +65,7 @@ public class InterferenceGraph {
         public boolean precolored;
         public int degree;
         public double priority;
-        public Set<AsmMvInst> moveList = new LinkedHashSet<>();
+        public Set<AsmMoveInst> moveList = new LinkedHashSet<>();
 
         public void init(boolean isPrecolored) {
             this.adjList.clear();
