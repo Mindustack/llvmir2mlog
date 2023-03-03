@@ -20,7 +20,7 @@ public class RedundantInst implements AsmFuncPass {
 
             for (int i = 0; i < block.instructions.size() - 1; i++)
                 // move twice
-                if (block.instructions.get(i) instanceof AsmMvInst && block.instructions.get(i + 1) instanceof AsmMvInst &&
+                if (block.instructions.get(i) instanceof AsmMoveInst && block.instructions.get(i + 1) instanceof AsmMoveInst &&
                         block.instructions.get(i).rd.color == block.instructions.get(i + 1).rd.color) {
                     toRemoveSet.add(block.instructions.get(i));
                 }

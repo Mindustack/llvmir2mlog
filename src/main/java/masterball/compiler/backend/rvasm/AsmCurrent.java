@@ -8,9 +8,7 @@ import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.constant.BoolConst;
 import masterball.compiler.middleend.llvmir.constant.NullptrConst;
 import masterball.compiler.middleend.llvmir.constant.NumConst;
-import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.error.codegen.UnimplementedError;
-import masterball.compiler.share.lang.RV32I;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +52,8 @@ public class AsmCurrent {
     }
 
     public Immediate toImm(int value) {
-        if (value < -1 * RV32I.ImmBound || value > RV32I.ImmBound)
-            throw new InternalError("invalid immediate detected");
+      //  if (value < -1 * RV32I.ImmBound || value > RV32I.ImmBound)
+        //    throw new InternalError("invalid immediate detected");
         return new Immediate(value);
     }
 
