@@ -21,9 +21,19 @@ public class AsmStoreInst extends AsmBaseInst {
     @Override
     public String format() {
         // sw rs2, offset(rs1)
-        return String.format("%s\t%s, %s(%s)",
-                RV32I.StoreInstPrefix
-                //  + AsmTranslator.translateByteWidth(byteWidth)
-                , rs2, imm, rs1);
+
+        if (imm.value == 0) {
+
+            return String.format("%s %s cell %s",
+                    RV32I.StoreInstPrefix
+                    , rs2, rs1);
+        }
+
+
+        return String.format("op add %s %s %s\n", rs1, imm, rs1) +
+                String.format("\t%s %s cell %s",
+                        RV32I.StoreInstPrefix
+                        //  + AsmTranslator.translateByteWidth(byteWidth)
+                        , rs2, rs1);
     }
 }

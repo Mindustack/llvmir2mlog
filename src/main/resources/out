@@ -2,7 +2,16 @@
 define i64 @main(i64 %s) {
 
 0:                                                ; preds = 
-  ret i64 -2
+  %se = call i64 @g()
+  ret i64 %se
+
+}
+
+define i64 @g() {
+
+2:                                                ; preds = 
+  %15 = call i64 @g()
+  ret i64 1
 
 }
 

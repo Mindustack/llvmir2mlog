@@ -22,9 +22,16 @@ public class AsmLoadInst extends AsmBaseInst {
     public String format() {
         // lw rd, offset(rs1)
         //yes it is
-        return String.format("%s\t %s %s(%s)",
-                RV32I.LoadInstPrefix
-                //+ AsmTranslator.translateByteWidth(byteWidth)
-                , rd, imm, rs1);
+        if (imm.value == 0) {
+
+            return String.format("%s %s cell %s",
+                    RV32I.LoadInstPrefix
+                    , rd, rs1);
+        }
+        return String.format("op add %s %s %s\n", rs1, imm, rs1) +
+                String.format("%s %s cell %s",
+                        RV32I.LoadInstPrefix
+                        //+ AsmTranslator.translateByteWidth(byteWidth)
+                        , rd, rs1);
     }
 }

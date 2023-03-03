@@ -355,8 +355,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             } else {
 //                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
+                // awesomeALU(RV32I.AddInst,instReg,);
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmLoadInst(inst.type.size(), instReg, null, new GlobalAddr(globalReg), cur.block);
+                new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
+                //new AsmLoadInst(inst.type.size(), instReg, null, new GlobalAddr(globalReg), cur.block);
             }
         } else {
             // if it is not global, it must be loaded from stack, right?

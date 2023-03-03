@@ -46,7 +46,7 @@ public class LoadStorePeephole implements AsmFuncPass {
                             if (lastStore.rs2.color == inst.rd.color)
                                 toRemove.add(inst);
                             else if (!dirty.contains(lastStore.rs2.color))
-                                toReplace.put(inst, new AsmMvInst(inst.rd.color, lastStore.rs2.color, null));
+                                toReplace.put(inst, new AsmMoveInst(inst.rd.color, lastStore.rs2.color, null));
 
                     }
                 }
