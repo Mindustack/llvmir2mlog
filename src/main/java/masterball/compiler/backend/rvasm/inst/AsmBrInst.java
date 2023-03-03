@@ -24,6 +24,6 @@ public class AsmBrInst extends AsmBaseInst {
     @Override
     public String format() {
         // beq rs1, rs2, dest
-        return String.format("%s %s\t %s %s", RV32I.BrInstPrefix,op, rs1, rs2, dest);
+        return String.format("%s %s %s %s", RV32I.BrInstPrefix, op, rs1, rs2, dest);
     }
 }

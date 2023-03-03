@@ -41,13 +41,13 @@ static final String symbol ="op";
 
 
         if (this.imm != null) // I-Type
-            return String.format("%s %s\t %s, %s, %s",symbol ,op
+            return String.format("%s %s %s %s %s", symbol, op
 //                    + RV32I.ITypeSuffix
                     , rd, rs1, imm);
         else if (this.rs2 != null) // R-Type
-            return String.format("%s %s\t %s, %s, %s",symbol , op, rd, rs1, rs2);
+            return String.format("%s %s %s %s %s", symbol, op, rd, rs1, rs2);
         else
             // unary, maybe pseudo inst
-            return String.format("%s %s\t %s, %s",symbol , op, rd, rs1);
+            return String.format("%s %s %s %s", symbol, op, rd, rs1);
     }
 }

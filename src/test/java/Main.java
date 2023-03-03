@@ -6,7 +6,6 @@ import masterball.compiler.backend.rvasm.AsmBuilder;
 import masterball.compiler.backend.rvasm.AsmPrinter;
 import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
 import masterball.compiler.middleend.llvmir.IRPrinter;
-import masterball.compiler.middleend.optim.MiddleEndOptimizer;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,7 +18,7 @@ public class Main {
         mb2 = new MB2();
 
 
-        new MiddleEndOptimizer().runOnModule(mb2.irModule);
+       // new MiddleEndOptimizer().runOnModule(mb2.irModule);
 
 
         s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
@@ -32,14 +31,16 @@ public class Main {
         builder.runOnModule(mb2.irModule);
         AsmModule module = builder.module;
 
-       //  Graph Coloring
+//         Graph Coloring
         new RegisterAllocator().runOnModule(module);
-
+//
         // Stack Allocate. Eliminate RawStackOffset
         new StackAllocator().runOnModule(module);
-
+//
         // Optimize Assembly. Don't comment it directly because there are some necessary passes.
         new BackEndOptimizer().runOnModule(module);
+
+
         s = s + 2;
         new AsmPrinter(
                 s,

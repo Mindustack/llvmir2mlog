@@ -38,7 +38,7 @@ public class AsmTailInst extends AsmBaseInst {
     @Override
     public String format() {
         // tail symbol
-        return String.format("%s\t%s", RV32I.TailInst, callFunc.identifier);
+        return String.format("%s %s", RV32I.TailInst, callFunc.identifier);
     }
 
 }

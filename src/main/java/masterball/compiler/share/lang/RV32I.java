@@ -7,7 +7,7 @@ public class RV32I {
     // --- Sys Config for RV ---
 
   //  public static final int ImmBound = (1 << 20);
-    public static final int SpLowUnit = 16;
+  public static final int SpLowUnit = 1;
     public static final int I32Unit = 1;
     public static final int MaxStackSize = Integer.MAX_VALUE;
 
@@ -20,10 +20,11 @@ public class RV32I {
     public static final String TempRegPrefix = "t";
     public static final String SavedRegPrefix = "s";
     public static final ArrayList<String> RV32Reg = new ArrayList<String>(Arrays.asList(
-            "zero", "ra", "sp", "gp", "tp", "t0", "t1", "t2", "s0", "s1",
+            "zero", "ra", "sp", "gp", "tp",
+
             "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-            "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
-            "t3", "t4", "t5", "t6"
+            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
+            "t0", "t1", "t2", "t3", "t4", "t5", "t6"
     ));
 
     // --- Byte Width Keyword ---
@@ -41,10 +42,10 @@ public class RV32I {
 
     // --- RV32 Inst ---
 
-    public static final String ITypeSuffix = "i";
-    
+    //  public static final String ITypeSuffix = "i";
+
     public static final String BrInstPrefix = "jump";
-    public static final String CallInst = "call";
+    public static final String CallInst = "jump always";
     public static final String JmpInstPrefix = "jump always";
     public static final String LaInst = "set";//将地址值rot加载到寄存器rd
     public static final String LiInst = "set";//将立即数imm加载到寄存器rd
@@ -52,7 +53,7 @@ public class RV32I {
     public static final String StoreInstPrefix = "write";
     // public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
     public static final String MvInst = "set";
-    public static final String RetInst = "return";
+    public static final String RetInst = "set @counter ra";
     public static final String SltInst = "slt";// todo part of op 
     //与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
     public static final String SeqzInst = "seqz";
@@ -80,7 +81,7 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     public static final String ShiftLeftInst = "sll";//移位
     public static final String ShiftRightInst = "sra";//too
     public static final String DivInst = "div";
-    public static final String ModInst = "rem";
+    public static final String ModInst = "mod";
 }
 /*
 ## Native functions:
@@ -224,4 +225,4 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     * sin, cos, tan
     * asin, acos, atan
  
-* /
+*/
