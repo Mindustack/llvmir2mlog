@@ -6,7 +6,7 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
 import masterball.compiler.backend.rvasm.inst.AsmBaseInst;
 import masterball.compiler.backend.rvasm.inst.AsmLoadInst;
-import masterball.compiler.backend.rvasm.inst.AsmMvInst;
+import masterball.compiler.backend.rvasm.inst.AsmMoveInst;
 import masterball.compiler.backend.rvasm.inst.AsmStoreInst;
 import masterball.compiler.backend.rvasm.operand.*;
 import masterball.compiler.backend.rvasm.operand.RawStackOffset.RawType;
@@ -53,7 +53,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
      * frozenMoves: have been frozen, no need to consider it.
      * worklistMoves and activeMoves are moves "exists"
      */
-    private final HashSet<AsmMvInst>
+    private final HashSet<AsmMoveInst>
             coalescedMoves = new LinkedHashSet<>(),
             constrainedMoves = new LinkedHashSet<>(),
             frozenMoves = new LinkedHashSet<>(),
@@ -189,12 +189,12 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
 
             for (int i = block.instructions.size() - 1; i >= 0; i--) {
                 AsmBaseInst inst = block.instructions.get(i);
-                if (inst instanceof AsmMvInst) {
+                if (inst instanceof AsmMoveInst) {
                     lives.removeAll(inst.uses());
                     HashSet<Register> moveRelated = new HashSet<>(inst.defs());
                     moveRelated.addAll(inst.uses());
-                    moveRelated.forEach(reg -> reg.node.moveList.add((AsmMvInst) inst));
-                    worklistMoves.add((AsmMvInst) inst);
+                    moveRelated.forEach(reg -> reg.node.moveList.add((AsmMoveInst) inst));
+                    worklistMoves.add((AsmMoveInst) inst);
                 }
 
                 lives.add(PhysicalReg.reg("zero"));
@@ -229,7 +229,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
      */
     private void enableMoves(Set<Register> regs) {
         for (Register reg : regs)
-            for (AsmMvInst move : nodeMoves(reg))
+            for (AsmMoveInst move : nodeMoves(reg))
                 if (activeMoves.contains(move)) {
                     activeMoves.remove(move);
                     worklistMoves.add(move);
@@ -296,7 +296,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
      */
     private void coalesce() {
         var it = worklistMoves.iterator();
-        AsmMvInst move = it.next();
+        AsmMoveInst move = it.next();
 
         // Log.track("coalesce", move.rd, move.rs1);
 
@@ -325,7 +325,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
     }
 
     private void freezeMoves(Register u) {
-        for (AsmMvInst move : nodeMoves(u)) {
+        for (AsmMoveInst move : nodeMoves(u)) {
             Register v;
             if (unionSet.getAlias(u) == unionSet.getAlias(move.rs1)) v = unionSet.getAlias(move.rd);
             else v = unionSet.getAlias(move.rs1);
@@ -428,7 +428,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
                     if (use.stackOffset == null) continue;
 
                     if (!inst.defs().contains(use)) {
-                        if (inst instanceof AsmMvInst && inst.rd.stackOffset == null) {
+                        if (inst instanceof AsmMoveInst && inst.rd.stackOffset == null) {
                             // move rd reg -> load rd stackPos(sp)
                             assert use.equals(inst.rs1);
                             AsmBaseInst loadInst = new AsmLoadInst(((VirtualReg) use).size, inst.rd, PhysicalReg.reg("sp"), use.stackOffset, null);
@@ -461,7 +461,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
                     if (def.stackOffset == null) continue;
 
                     if (inst.uses().contains(def)) continue; // has been considered previously
-                    if (inst instanceof AsmMvInst && inst.rs1.stackOffset == null) {
+                    if (inst instanceof AsmMoveInst && inst.rs1.stackOffset == null) {
                         AsmBaseInst storeInst = new AsmStoreInst(((VirtualReg) def).size, PhysicalReg.reg("sp"), inst.rs1, def.stackOffset, null);
                         it.set(storeInst);
                     } else {
@@ -494,8 +494,8 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
      * only those in workList or active are valid.
      * warning: adjList < worklistMoves, so use this to make program faster
      */
-    private HashSet<AsmMvInst> nodeMoves(Register reg) {
-        HashSet<AsmMvInst> ret = new HashSet<>();
+    private HashSet<AsmMoveInst> nodeMoves(Register reg) {
+        HashSet<AsmMoveInst> ret = new HashSet<>();
         reg.node.moveList.forEach(move -> {
             if (activeMoves.contains(move) || worklistMoves.contains(move))
                 ret.add(move);

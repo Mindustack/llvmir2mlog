@@ -146,16 +146,16 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         for (PhysicalReg phyReg : PhysicalReg.calleeSaved) {
             VirtualReg rd = new VirtualReg();
             calleeSaveTemp.add(rd);
-            new AsmMvInst(rd, phyReg, cur.func.entryBlock);
+            new AsmMoveInst(rd, phyReg, cur.func.entryBlock);
         }
 
         // ra
         VirtualReg raTemp = new VirtualReg();
-        new AsmMvInst(raTemp, PhysicalReg.reg("ra"), cur.func.entryBlock);
+        new AsmMoveInst(raTemp, PhysicalReg.reg("ra"), cur.func.entryBlock);
 
         // move arguments 0~7 to reg
         for (int i = 0; i < Integer.min(cur.func.arguments.size(), RV32I.MaxArgRegNum); i++) {
-            new AsmMvInst(cur.func.arguments.get(i), PhysicalReg.a(i), cur.func.entryBlock);
+            new AsmMoveInst(cur.func.arguments.get(i), PhysicalReg.a(i), cur.func.entryBlock);
         }
 
         // load arguments in mem to reg
@@ -168,11 +168,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         // callee temp back
         for (int i = 0; i < PhysicalReg.calleeSaved.size(); i++) {
-            new AsmMvInst(PhysicalReg.calleeSaved.get(i), calleeSaveTemp.get(i), cur.func.exitBlock);
+            new AsmMoveInst(PhysicalReg.calleeSaved.get(i), calleeSaveTemp.get(i), cur.func.exitBlock);
         }
 
         // ra temp back
-        new AsmMvInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
+        new AsmMoveInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
 
         // sp back
         new AsmALUInst(RV32I.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
@@ -247,7 +247,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         for (int i = 0; i < Integer.min(inst.callFunc().getArgNum(), RV32I.MaxArgRegNum); i++) {
             if (inst.getArg(i) instanceof GlobalValue) {
                 if (((GlobalValue) inst.getArg(i)).gpRegMark) {
-                    new AsmMvInst(PhysicalReg.a(i), PhysicalReg.reg("gp"), cur.block);
+                    new AsmMoveInst(PhysicalReg.a(i), PhysicalReg.reg("gp"), cur.block);
                 } else {
                     new AsmLaInst(PhysicalReg.a(i), inst.getArg(i).asmOperand.identifier, cur.block);
                 }
@@ -271,7 +271,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmCallInst(callFunc, cur.block, inst.isTailCall);
         if (!inst.callFunc().isVoid()) {
             // return value
-            new AsmMvInst(cur.toReg(inst), PhysicalReg.reg("a0"), cur.block);
+            new AsmMoveInst(cur.toReg(inst), PhysicalReg.reg("a0"), cur.block);
         }
     }
 
@@ -303,7 +303,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         Register instReg = cur.toReg(inst);
         Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
-        new AsmMvInst(instReg, gepReg, cur.block);
+        new AsmMoveInst(instReg, gepReg, cur.block);
     }
 
     @Override
@@ -351,7 +351,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         Register instReg = cur.toReg(inst);
         if (inst.loadPtr() instanceof GlobalValue) {
             if (((GlobalValue) inst.loadPtr()).gpRegMark) {
-                new AsmMvInst(instReg, PhysicalReg.reg("gp"), cur.block);
+                new AsmMoveInst(instReg, PhysicalReg.reg("gp"), cur.block);
             } else {
 //                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
@@ -391,7 +391,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public void visit(IRStoreInst inst) {
         if (inst.storePtr() instanceof GlobalValue) {
             if (((GlobalValue) inst.storePtr()).gpRegMark) {
-                new AsmMvInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
+                new AsmMoveInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
             } else {
 //                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.storePtr());
@@ -501,7 +501,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         if (validImm(source)) {
             new AsmLiInst(dest, cur.toImm(source), cur.block);
         } else {
-            new AsmMvInst(dest, cur.toReg(source), cur.block);
+            new AsmMoveInst(dest, cur.toReg(source), cur.block);
         }
     }
 
@@ -514,11 +514,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 Register ptrReg = cur.toReg(ptrPos);
                 if (ptrPos instanceof GlobalValue) {
                     if (((GlobalValue) ptrPos).gpRegMark) {
-                        new AsmMvInst(gepReg, PhysicalReg.reg("gp"), cur.block);
+                        new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
                     } else {
                         new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
                     }
-                } else new AsmMvInst(gepReg, ptrReg, cur.block);
+                } else new AsmMoveInst(gepReg, ptrReg, cur.block);
             } else {
                 int memberOffset = classType.memberOffset(((NumConst) index).constData);
                 awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(memberOffset));
@@ -531,11 +531,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                     Register ptrReg = cur.toReg(ptrPos);
                     if (ptrPos instanceof GlobalValue) {
                         if (((GlobalValue) ptrPos).gpRegMark) {
-                            new AsmMvInst(gepReg, PhysicalReg.reg("gp"), cur.block);
+                            new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
                         } else {
                             new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
                         }
-                    } else new AsmMvInst(gepReg, ptrReg, cur.block);
+                    } else new AsmMoveInst(gepReg, ptrReg, cur.block);
                 } else {
                     int totalSize = ((NumConst) index).constData * elementSize;
                     awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(totalSize));
