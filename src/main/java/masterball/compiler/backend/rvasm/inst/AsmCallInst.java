@@ -4,7 +4,7 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.operand.PhysicalReg;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 import java.util.HashSet;
 
@@ -22,7 +22,7 @@ public class AsmCallInst extends AsmBaseInst {
     @Override
     public HashSet<Register> uses() {
         HashSet<Register> ret = new HashSet<>();
-        for (int i = 0; i < Integer.min(RV32I.MaxArgRegNum, callFunc.arguments.size()); i++)
+        for (int i = 0; i < Integer.min(MLOG.MaxArgRegNum, callFunc.arguments.size()); i++)
             ret.add(PhysicalReg.a(i));
         return ret;
     }
@@ -42,7 +42,7 @@ public class AsmCallInst extends AsmBaseInst {
         // call symbol
         return
                 "op add ra @counter 2" + "\n"
-                        + String.format("\t%s %s", RV32I.CallInst, callFunc.entryBlock.identifier)
+                        + String.format("\t%s %s", MLOG.CallInst, callFunc.entryBlock.identifier)
                 ;
     }
 }

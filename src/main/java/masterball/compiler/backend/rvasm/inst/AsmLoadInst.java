@@ -3,7 +3,7 @@ package masterball.compiler.backend.rvasm.inst;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Immediate;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 public class AsmLoadInst extends AsmBaseInst {
     private final int byteWidth;
@@ -25,12 +25,13 @@ public class AsmLoadInst extends AsmBaseInst {
         if (imm.value == 0) {
 
             return String.format("%s %s cell %s",
-                    RV32I.LoadInstPrefix
+                    MLOG.LoadInstPrefix
                     , rd, rs1);
         }
         return String.format("op add tf %s %s\n", imm, rs1) +
                 String.format("%s %s cell tf",
-                        RV32I.LoadInstPrefix
+                        MLOG.LoadInstPrefix
+
                         //+ AsmTranslator.translateByteWidth(byteWidth)
                         , rd);
     }

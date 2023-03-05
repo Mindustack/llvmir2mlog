@@ -18,7 +18,7 @@ import masterball.compiler.middleend.llvmir.type.PointerType;
 import masterball.compiler.middleend.llvmir.type.StructType;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 import masterball.compiler.share.misc.Pair;
 import masterball.compiler.share.pass.IRBlockPass;
 import masterball.compiler.share.pass.IRFuncPass;
@@ -81,9 +81,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 function.arguments.add(reg);
 
                 // spill
-                if (i >= RV32I.MaxArgRegNum) {
+                if (i >= MLOG.MaxArgRegNum) {
                     reg.stackOffset = new RawStackOffset(function.calleeArgStackUse, RawType.calleeArg);
-                    function.calleeArgStackUse += RV32I.I32Unit;
+                    function.calleeArgStackUse += MLOG.I32Unit;
                 }
             }
         }
@@ -100,9 +100,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 function.arguments.add(reg);
 
                 // spill
-                if (i >= RV32I.MaxArgRegNum) {
+                if (i >= MLOG.MaxArgRegNum) {
                     reg.stackOffset = new RawStackOffset(function.calleeArgStackUse, RawType.calleeArg);
-                    function.calleeArgStackUse += RV32I.I32Unit;
+                    function.calleeArgStackUse += MLOG.I32Unit;
                 }
             }
 
@@ -138,7 +138,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         // sp low
 
         //?
-        new AsmALUInst(RV32I.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
+        new AsmALUInst(MLOG.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 new RawStackOffset(0, RawType.lowerSp), cur.func.entryBlock);
 
         // backup callee
@@ -154,12 +154,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmMoveInst(raTemp, PhysicalReg.reg("ra"), cur.func.entryBlock);
 
         // move arguments 0~7 to reg
-        for (int i = 0; i < Integer.min(cur.func.arguments.size(), RV32I.MaxArgRegNum); i++) {
+        for (int i = 0; i < Integer.min(cur.func.arguments.size(), MLOG.MaxArgRegNum); i++) {
             new AsmMoveInst(cur.func.arguments.get(i), PhysicalReg.a(i), cur.func.entryBlock);
         }
 
         // load arguments in mem to reg
-        for (int i = RV32I.MaxArgRegNum; i < cur.func.arguments.size(); i++) {
+        for (int i = MLOG.MaxArgRegNum; i < cur.func.arguments.size(); i++) {
             new AsmLoadInst(function.getOperand(i).type.size(), cur.func.arguments.get(i), PhysicalReg.reg("sp"),
                     cur.func.arguments.get(i).stackOffset, cur.func.entryBlock);
         }
@@ -175,7 +175,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmMoveInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
 
         // sp back
-        new AsmALUInst(RV32I.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
+        new AsmALUInst(MLOG.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 new RawStackOffset(0, RawType.raiseSp), cur.func.exitBlock);
 
         // return
@@ -198,7 +198,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     @Override
     public void visit(IRAllocaInst inst) {
         inst.asmOperand = new RawStackOffset(cur.func.allocaStackUse, RawType.alloca);
-        cur.func.allocaStackUse += RV32I.I32Unit;
+        cur.func.allocaStackUse += MLOG.I32Unit;
     }
 
     @Override
@@ -232,7 +232,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).lhs()), cur.toReg(((IRICmpInst) inst.condition()).rhs()),
                         (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
         } else {
-            new AsmBrInst(RV32I.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new NumConst(0)),
+            new AsmBrInst(MLOG.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new NumConst(0)),
                     (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
         }
 
@@ -244,7 +244,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         AsmFunction callFunc = (AsmFunction) inst.callFunc().asmOperand;
 
         // 0~7
-        for (int i = 0; i < Integer.min(inst.callFunc().getArgNum(), RV32I.MaxArgRegNum); i++) {
+        for (int i = 0; i < Integer.min(inst.callFunc().getArgNum(), MLOG.MaxArgRegNum); i++) {
             if (inst.getArg(i) instanceof GlobalValue) {
                 if (((GlobalValue) inst.getArg(i)).gpRegMark) {
                     new AsmMoveInst(PhysicalReg.a(i), PhysicalReg.reg("gp"), cur.block);
@@ -255,7 +255,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
 
         // spill to mem
-        for (int i = RV32I.MaxArgRegNum; i < callFunc.arguments.size(); i++) {
+        for (int i = MLOG.MaxArgRegNum; i < callFunc.arguments.size(); i++) {
 
             new AsmStoreInst(inst.getArg(i).type.size(), PhysicalReg.reg("sp"),
                     // notice: here use the argument of CallInst, not the func
@@ -316,29 +316,29 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         Register instReg = cur.toReg(inst);
         switch (inst.op) {
             case LLVM.LessArg:
-                awesomeALU(RV32I.SltInst, instReg, inst.lhs(), inst.rhs());
+                awesomeALU(MLOG.SltInst, instReg, inst.lhs(), inst.rhs());
                 break;
             case LLVM.GreaterArg:
-                awesomeALU(RV32I.SltInst, instReg, inst.rhs(), inst.lhs());
+                awesomeALU(MLOG.SltInst, instReg, inst.rhs(), inst.lhs());
                 break;
             case LLVM.GreaterEqualArg: // a >= b -> !(a < b)
-                awesomeALU(RV32I.SltInst, instReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(RV32I.XorInst, instReg, instReg, cur.toImm(1), cur.block);
+                awesomeALU(MLOG.SltInst, instReg, inst.lhs(), inst.rhs());
+                new AsmALUInst(MLOG.XorInst, instReg, instReg, cur.toImm(1), cur.block);
                 break;
             case LLVM.LessEqualArg: // a <= b -> !(b < a)
-                awesomeALU(RV32I.SltInst, instReg, inst.rhs(), inst.lhs());
-                new AsmALUInst(RV32I.XorInst, instReg, instReg, cur.toImm(1), cur.block);
+                awesomeALU(MLOG.SltInst, instReg, inst.rhs(), inst.lhs());
+                new AsmALUInst(MLOG.XorInst, instReg, instReg, cur.toImm(1), cur.block);
                 break;
             case LLVM.EqualArg: { // a == b -> xor = a ^ b; seqz rd, xor
                 VirtualReg xorReg = new VirtualReg();
-                awesomeALU(RV32I.XorInst, xorReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(RV32I.SeqzInst, instReg, xorReg, cur.block);
+                awesomeALU(MLOG.XorInst, xorReg, inst.lhs(), inst.rhs());
+                new AsmALUInst(MLOG.SeqzInst, instReg, xorReg, cur.block);
                 break;
             }
             case LLVM.NotEqualArg: {
                 VirtualReg xorReg = new VirtualReg();
-                awesomeALU(RV32I.XorInst, xorReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(RV32I.SnezInst, instReg, xorReg, cur.block);
+                awesomeALU(MLOG.XorInst, xorReg, inst.lhs(), inst.rhs());
+                new AsmALUInst(MLOG.SnezInst, instReg, xorReg, cur.block);
                 break;
             }
             default:
@@ -357,8 +357,8 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
                 // awesomeALU(RV32I.AddInst,instReg,);
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
-                //new AsmLoadInst(inst.type.size(), instReg, null, new GlobalAddr(globalReg), cur.block);
+                // new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
+                new AsmLoadInst(inst.type.size(), instReg, globalReg, cur.toImm(0), cur.block);
             }
         } else {
             // if it is not global, it must be loaded from stack, right?
@@ -398,7 +398,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //                VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.storePtr());
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmStoreInst(inst.storeValue().type.size(), null, cur.toReg(inst.storeValue()), new GlobalAddr(globalReg), cur.block);
+                new AsmStoreInst(inst.storeValue().type.size(), null, cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
             }
         } else {
             if (inst.storePtr().asmOperand instanceof RawStackOffset) {
@@ -469,13 +469,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         // remember this calculate only support two IR Value
 
         // div can not use this optimize because of negative num problem
-        if (rvOp.equals(RV32I.MulInst)) {
+        if (rvOp.equals(MLOG.MulInst)) {
             Immediate lhsLog2 = twoPowerCheck(lhs), rhsLog2 = twoPowerCheck(rhs);
             if (lhsLog2 != null) {
-                new AsmALUInst(RV32I.ShiftLeftInst, dest, cur.toReg(rhs), lhsLog2, cur.block);
+                new AsmALUInst(MLOG.ShiftLeftInst, dest, cur.toReg(rhs), lhsLog2, cur.block);
                 return;
             } else if (rhsLog2 != null) {
-                new AsmALUInst(RV32I.ShiftLeftInst, dest, cur.toReg(lhs), rhsLog2, cur.block);
+                new AsmALUInst(MLOG.ShiftLeftInst, dest, cur.toReg(lhs), rhsLog2, cur.block);
                 return;
             }
         }
@@ -488,10 +488,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 new AsmALUInst(rvOp, dest, cur.toReg(rhs), cur.toImm(lhs), cur.block);
                 return;
             }
-        } else if (rvOp.equals(RV32I.SubInst)) {
+        } else if (rvOp.equals(MLOG.SubInst)) {
             if (validImm(rhs)) {
                 // not communicative
-                new AsmALUInst(RV32I.AddInst, dest, cur.toReg(lhs), cur.toImm(rhs).negative(), cur.block);
+                new AsmALUInst(MLOG.AddInst, dest, cur.toReg(lhs), cur.toImm(rhs).negative(), cur.block);
                 return;
             }
         }
@@ -523,7 +523,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 } else new AsmMoveInst(gepReg, ptrReg, cur.block);
             } else {
                 int memberOffset = classType.memberOffset(((NumConst) index).constData);
-                awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(memberOffset));
+                awesomeALU(MLOG.AddInst, gepReg, ptrPos, new NumConst(memberOffset));
             }
         } else {
             // array
@@ -540,13 +540,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                     } else new AsmMoveInst(gepReg, ptrReg, cur.block);
                 } else {
                     int totalSize = ((NumConst) index).constData * elementSize;
-                    awesomeALU(RV32I.AddInst, gepReg, ptrPos, new NumConst(totalSize));
+                    awesomeALU(MLOG.AddInst, gepReg, ptrPos, new NumConst(totalSize));
                 }
             } else {
                 VirtualReg mulReg = new VirtualReg();
-                awesomeALU(RV32I.MulInst, mulReg, index, new NumConst(elementSize));
+                awesomeALU(MLOG.MulInst, mulReg, index, new NumConst(elementSize));
                 // this not use awesomeALU because it can not be optimized
-                new AsmALUInst(RV32I.AddInst, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
+                new AsmALUInst(MLOG.AddInst, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
             }
         }
         return gepReg;

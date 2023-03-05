@@ -1,6 +1,6 @@
 package masterball.compiler.backend.rvasm.operand;
 
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 public class VirtualReg extends Register {
 
@@ -8,14 +8,14 @@ public class VirtualReg extends Register {
     public final int num, size;
 
     public VirtualReg() {
-        super(RV32I.VirtualRegPrefix + virtualRegNum);
+        super(MLOG.VirtualRegPrefix + virtualRegNum);
         this.num = virtualRegNum;
         this.size = 4;
         virtualRegNum++;
     }
 
     public VirtualReg(int size) {
-        super(RV32I.VirtualRegPrefix + virtualRegNum);
+        super(MLOG.VirtualRegPrefix + virtualRegNum);
         this.num = virtualRegNum;
         this.size = size;
         virtualRegNum++;

@@ -9,6 +9,7 @@ import masterball.compiler.middleend.llvmir.constant.BoolConst;
 import masterball.compiler.middleend.llvmir.constant.NullptrConst;
 import masterball.compiler.middleend.llvmir.constant.NumConst;
 import masterball.compiler.share.error.codegen.UnimplementedError;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class AsmCurrent {
 
     public Map<Integer, Register> recordLi = new HashMap<>();
 
-    public Register toReg(Value value) {
+    public Register toReg(@NotNull Value value) {
         if (value.asmOperand != null) {
             return (Register) value.asmOperand;
         }

@@ -1,7 +1,7 @@
 package masterball.compiler.backend.rvasm;
 
 import masterball.compiler.share.lang.LLVM;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 import masterball.compiler.share.misc.Pair;
 
 public class AsmTranslator {
@@ -9,12 +9,12 @@ public class AsmTranslator {
     public static String translateByteWidth(int byteWidth) {
         switch (byteWidth) {
             case 1:
-                return RV32I.ByteKeyword;
+                return MLOG.ByteKeyword;
             case 2:
-                return RV32I.HalfWordKeyword;
+                return MLOG.HalfWordKeyword;
             case 4:
             case 8:
-                return RV32I.WordKeyword; // pointer type 64bit -> 32bit
+                return MLOG.WordKeyword; // pointer type 64bit -> 32bit
         }
         return "";
     }
@@ -22,13 +22,13 @@ public class AsmTranslator {
     public static String translateArithmOp(String irOp) {
         switch (irOp) {
             case LLVM.DivInst:
-                return RV32I.DivInst;
+                return MLOG.DivInst;
             case LLVM.ModInst:
-                return RV32I.ModInst;
+                return MLOG.ModInst;
             case LLVM.ShiftLeftInst:
-                return RV32I.ShiftLeftInst;
+                return MLOG.ShiftLeftInst;
             case LLVM.ShiftRightInst:
-                return RV32I.ShiftRightInst;
+                return MLOG.ShiftRightInst;
             // notice: LLVM IR and RV32 Asm have many in common
             default:
                 return irOp;
@@ -39,13 +39,13 @@ public class AsmTranslator {
     public static Pair<String, Boolean> translateCmpOp(String irOp) {
         switch (irOp) {
             case LLVM.GreaterArg:
-                return new Pair<>(RV32I.LessSuffix, true);
+                return new Pair<>(MLOG.LessSuffix, true);
             case LLVM.GreaterEqualArg:
-                return new Pair<>(RV32I.GreaterEqualSuffix, false);
+                return new Pair<>(MLOG.GreaterEqualSuffix, false);
             case LLVM.LessArg:
-                return new Pair<>(RV32I.LessSuffix, false);
+                return new Pair<>(MLOG.LessSuffix, false);
             case LLVM.LessEqualArg:
-                return new Pair<>(RV32I.GreaterEqualSuffix, true);
+                return new Pair<>(MLOG.GreaterEqualSuffix, true);
             default:
                 return new Pair<>(irOp, false);
         }
@@ -53,12 +53,12 @@ public class AsmTranslator {
 
     public static boolean isCommunicative(String rvOp) {
         switch (rvOp) {
-            case RV32I.SubInst:
-            case RV32I.DivInst:
-            case RV32I.ModInst:
-            case RV32I.ShiftLeftInst:
-            case RV32I.ShiftRightInst:
-            case RV32I.SltInst:
+            case MLOG.SubInst:
+            case MLOG.DivInst:
+            case MLOG.ModInst:
+            case MLOG.ShiftLeftInst:
+            case MLOG.ShiftRightInst:
+            case MLOG.SltInst:
                 return false;
             default:
                 return true;
@@ -67,10 +67,10 @@ public class AsmTranslator {
 
     public static boolean hasIType(String rvOp) {
         switch (rvOp) {
-            case RV32I.SubInst:
-            case RV32I.MulInst:
-            case RV32I.DivInst:
-            case RV32I.ModInst:
+            case MLOG.SubInst:
+            case MLOG.MulInst:
+            case MLOG.DivInst:
+            case MLOG.ModInst:
                 return false;
             default:
                 return true;

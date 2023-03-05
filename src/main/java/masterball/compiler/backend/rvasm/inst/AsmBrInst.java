@@ -2,7 +2,7 @@ package masterball.compiler.backend.rvasm.inst;
 
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 // no beqz now
 
@@ -24,6 +24,6 @@ public class AsmBrInst extends AsmBaseInst {
     @Override
     public String format() {
         // beq rs1, rs2, dest
-        return String.format("%s %s %s %s", RV32I.BrInstPrefix, op, rs1, rs2, dest);
+        return String.format("%s %s %s %s", MLOG.BrInstPrefix, op, rs1, rs2, dest);
     }
 }

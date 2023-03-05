@@ -3,7 +3,7 @@ package masterball.compiler.backend.rvasm.inst;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Immediate;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 public class AsmLiInst extends AsmBaseInst {
     public AsmLiInst(Register rd, Immediate imm, AsmBlock parentBlock) {
@@ -17,6 +17,6 @@ public class AsmLiInst extends AsmBaseInst {
 
     @Override
     public String format() {
-        return String.format("%s %s %s", RV32I.LiInst, rd, imm);
+        return String.format("%s %s %s", MLOG.LiInst, rd, imm);
     }//set a number
 }
