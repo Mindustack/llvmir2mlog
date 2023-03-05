@@ -1,7 +1,6 @@
 package masterball.compiler.backend.rvasm.operand;
 
-import masterball.compiler.share.lang.RV32I;
-import masterball.debug.Log;
+import masterball.compiler.share.lang.MLOG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ public class PhysicalReg extends Register {
      */
     public static final HashMap<String, PhysicalReg> phyRegs = new HashMap<>() {
         {
-            RV32I.RV32Reg.forEach(regName -> put(regName, new PhysicalReg(regName)));
+            MLOG.RV32Reg.forEach(regName -> put(regName, new PhysicalReg(regName)));
         }
     };
     // calling convention
@@ -40,14 +39,14 @@ public class PhysicalReg extends Register {
     }
 
     public static PhysicalReg a(int index) {
-        return phyRegs.get(RV32I.FuncArgRegPrefix + index);
+        return phyRegs.get(MLOG.FuncArgRegPrefix + index);
     }
 
     public static PhysicalReg t(int index) {
-        return phyRegs.get(RV32I.TempRegPrefix + index);
+        return phyRegs.get(MLOG.TempRegPrefix + index);
     }
 
     public static PhysicalReg s(int index) {
-        return phyRegs.get(RV32I.SavedRegPrefix + index);
+        return phyRegs.get(MLOG.SavedRegPrefix + index);
     }
 }

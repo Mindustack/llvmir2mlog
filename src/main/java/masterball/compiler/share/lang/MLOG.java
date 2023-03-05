@@ -3,7 +3,7 @@ package masterball.compiler.share.lang;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class RV32I {
+public class MLOG {
     // --- Sys Config for RV ---
 
   //  public static final int ImmBound = (1 << 20);

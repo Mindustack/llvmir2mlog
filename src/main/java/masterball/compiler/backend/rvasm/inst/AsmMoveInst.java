@@ -2,7 +2,7 @@ package masterball.compiler.backend.rvasm.inst;
 
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 public class AsmMoveInst extends AsmBaseInst {
     public AsmMoveInst(Register rd, Register rs1, AsmBlock parentBlock) {
@@ -17,6 +17,6 @@ public class AsmMoveInst extends AsmBaseInst {
     @Override
     public String format() {
         // mv rd, rs1
-        return String.format("%s %s %s", RV32I.MvInst, rd, rs1);
+        return String.format("%s %s %s", MLOG.MvInst, rd, rs1);
     }
 }

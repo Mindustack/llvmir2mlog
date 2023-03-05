@@ -6,7 +6,7 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
 import masterball.compiler.backend.rvasm.inst.AsmBaseInst;
 import masterball.compiler.backend.rvasm.operand.Immediate;
 import masterball.compiler.backend.rvasm.operand.RawStackOffset;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 import masterball.compiler.share.pass.AsmFuncPass;
 import masterball.compiler.share.pass.AsmModulePass;
 
@@ -21,8 +21,8 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
     public void runOnFunc(AsmFunction function) {
         function.totalStackUse += function.callerArgStackUse + function.allocaStackUse + function.spillStackUse;
 
-        if (function.totalStackUse % RV32I.SpLowUnit != 0)
-            function.totalStackUse = (function.totalStackUse / RV32I.SpLowUnit + 1) * RV32I.SpLowUnit;
+        if (function.totalStackUse % MLOG.SpLowUnit != 0)
+            function.totalStackUse = (function.totalStackUse / MLOG.SpLowUnit + 1) * MLOG.SpLowUnit;
 
 //        Log.report(function.identifier, function.totalStackUse, function.callerArgStackUse, function.allocaStackUse, function.spillStackUse);
 

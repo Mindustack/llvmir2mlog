@@ -15,7 +15,7 @@ import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.IRCallInst;
 import masterball.compiler.share.lang.MxStar;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 import masterball.debug.Log;
 import masterball.debug.Statistics;
 
@@ -119,17 +119,17 @@ public class Machine {
         this.regs[2] = __machineMem - compiledFunc.totalStackUse; // stack pointer.
 
         // 0~7
-        for (int i = 0; i < Integer.min(call.callFunc().getArgNum(), RV32I.MaxArgRegNum); i++) {
+        for (int i = 0; i < Integer.min(call.callFunc().getArgNum(), MLOG.MaxArgRegNum); i++) {
             // a0 ~ a7
             this.regs[10 + i] = this.regRead(call.getArg(i));
         }
 
         // spill to mem
-        for (int i = RV32I.MaxArgRegNum; i < call.callFunc().getArgNum(); i++) {
+        for (int i = MLOG.MaxArgRegNum; i < call.callFunc().getArgNum(); i++) {
             this.regs[2] -= call.getArg(i).type.size();
         }
 
-        for (int i = RV32I.MaxArgRegNum; i < call.callFunc().getArgNum(); i++) {
+        for (int i = MLOG.MaxArgRegNum; i < call.callFunc().getArgNum(); i++) {
             this.storeBySize(this.regs[2] + compiledFunc.arguments.get(i).stackOffset.value,
                     this.regRead(call.getArg(i)),
                     call.getArg(i).type.size());

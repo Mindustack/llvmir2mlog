@@ -4,7 +4,7 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.operand.PhysicalReg;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 import java.util.HashSet;
 
@@ -20,7 +20,7 @@ public class AsmTailInst extends AsmBaseInst {
     @Override
     public HashSet<Register> uses() {
         HashSet<Register> ret = new HashSet<>();
-        for (int i = 0; i < Integer.min(RV32I.MaxArgRegNum, callFunc.arguments.size()); i++)
+        for (int i = 0; i < Integer.min(MLOG.MaxArgRegNum, callFunc.arguments.size()); i++)
             ret.add(PhysicalReg.a(i));
         return ret;
     }
@@ -38,7 +38,7 @@ public class AsmTailInst extends AsmBaseInst {
     @Override
     public String format() {
         // tail symbol
-        return String.format("%s %s", RV32I.TailInst, callFunc.identifier);
+        return String.format("%s %s", MLOG.TailInst, callFunc.identifier);
     }
 
 }

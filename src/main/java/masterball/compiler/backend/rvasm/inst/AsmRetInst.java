@@ -3,7 +3,7 @@ package masterball.compiler.backend.rvasm.inst;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.operand.PhysicalReg;
 import masterball.compiler.backend.rvasm.operand.Register;
-import masterball.compiler.share.lang.RV32I;
+import masterball.compiler.share.lang.MLOG;
 
 import java.util.HashSet;
 
@@ -27,6 +27,6 @@ public class AsmRetInst extends AsmBaseInst {
 
     @Override
     public String format() {
-        return RV32I.RetInst;
+        return MLOG.RetInst;
     }
 }
