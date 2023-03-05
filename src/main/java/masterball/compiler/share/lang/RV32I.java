@@ -35,11 +35,26 @@ public class RV32I {
 
     // --- Compare Suffix ---
 
-    public static final String GreaterEqualSuffix = "greaterThan";
+    public static final String GreaterEqualSuffix = "greaterThanEq";
+    public static final String GreaterSuffix ="greaterThan" ;
+    public static final String LessEqualSuffix = "lessThanEq";
+    
+  //  public static final String GreaterThanSuffix ="greaterThan" ;
+  
+    
     public static final String LessSuffix = "lessThan";
     public static final String EqualSuffix = "equal";
     public static final String NotEqualSuffix = "notEqual";
-
+    public static final String StrictEqualSuffix="strictEqual";
+/*Conditions:
+        * equal
+        * notEqual
+        * lessThan
+        * lessThanEq
+        * greaterThan
+        * greaterThanEq
+        * strictEqual
+        */
     // --- RV32 Inst ---
 
     //  public static final String ITypeSuffix = "i";

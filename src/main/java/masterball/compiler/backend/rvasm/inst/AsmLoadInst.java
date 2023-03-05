@@ -28,10 +28,10 @@ public class AsmLoadInst extends AsmBaseInst {
                     RV32I.LoadInstPrefix
                     , rd, rs1);
         }
-        return String.format("op add %s %s %s\n", rs1, imm, rs1) +
-                String.format("%s %s cell %s",
+        return String.format("op add tf %s %s\n", imm, rs1) +
+                String.format("%s %s cell tf",
                         RV32I.LoadInstPrefix
                         //+ AsmTranslator.translateByteWidth(byteWidth)
-                        , rd, rs1);
+                        , rd);
     }
 }

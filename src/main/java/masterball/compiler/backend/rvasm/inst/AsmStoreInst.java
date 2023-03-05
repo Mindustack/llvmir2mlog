@@ -30,10 +30,10 @@ public class AsmStoreInst extends AsmBaseInst {
         }
 
 
-        return String.format("op add %s %s %s\n", rs1, imm, rs1) +
-                String.format("\t%s %s cell %s",
+        return String.format("op add tf %s %s\n", imm, rs1) +
+                String.format("\t%s %s cell tf",
                         RV32I.StoreInstPrefix
                         //  + AsmTranslator.translateByteWidth(byteWidth)
-                        , rs2, rs1);
+                        , rs2);
     }
 }
