@@ -6,9 +6,11 @@ import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.pass.InstVisitor;
 
-// It is a fake instruction which can not be recognized by llc
-// It is value itself is meaningless (void inst)
-// created by SSADestructor
+/*
+ It is a fake instruction which can not be recognized by llc
+ It is value itself is meaningless (void inst)
+ created by SSADestructor
+*/
 
 public class IRMoveInst extends IRBaseInst {
 

@@ -53,7 +53,7 @@ public class AliasAnalyzer implements IRFuncPass {
         certain.clear();
         bitcastUnion.clear();
         certain.addAll(function.parentModule.globalVarSeg);
-        certain.addAll(function.parentModule.stringConstSeg);
+        //certain.addAll(function.parentModule.stringConstSeg);
 
         for (IRBlock block : function.blocks)
             for (IRBaseInst inst : block.instructions) {

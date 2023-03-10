@@ -22,13 +22,13 @@ public class AsmTranslator {
     public static String translateArithmOp(String irOp) {
         switch (irOp) {
             case LLVM.DivInst:
-                return MLOG.DivInst;
+                return MLOG.DivOperation;
             case LLVM.ModInst:
-                return MLOG.ModInst;
+                return MLOG.ModOpertion;
             case LLVM.ShiftLeftInst:
-                return MLOG.ShiftLeftInst;
+                return MLOG.ShiftLeftOperation;
             case LLVM.ShiftRightInst:
-                return MLOG.ShiftRightInst;
+                return MLOG.ShiftOperation;
             // notice: LLVM IR and RV32 Asm have many in common
             default:
                 return irOp;
@@ -53,12 +53,17 @@ public class AsmTranslator {
 
     public static boolean isCommunicative(String rvOp) {
         switch (rvOp) {
-            case MLOG.SubInst:
-            case MLOG.DivInst:
-            case MLOG.ModInst:
-            case MLOG.ShiftLeftInst:
-            case MLOG.ShiftRightInst:
-            case MLOG.SltInst:
+            case MLOG.SubOperation://todo why not add
+            case MLOG.DivOperation:
+            case MLOG.ModOpertion:
+            case MLOG.ShiftLeftOperation:
+            case MLOG.ShiftOperation:
+            case MLOG.LessThanOperation:
+//            case MLOG.NotEqualOperation:
+//            case MLOG.EqualOperation:
+//            case MLOG.GreaterThanOperation:
+//            case MLOG.LessThanEqOperation:
+//            case MLOG.op
                 return false;
             default:
                 return true;
@@ -67,10 +72,10 @@ public class AsmTranslator {
 
     public static boolean hasIType(String rvOp) {
         switch (rvOp) {
-            case MLOG.SubInst:
-            case MLOG.MulInst:
-            case MLOG.DivInst:
-            case MLOG.ModInst:
+            case MLOG.SubOperation:
+            case MLOG.MulOperation:
+            case MLOG.DivOperation:
+            case MLOG.ModOpertion:
                 return false;
             default:
                 return true;

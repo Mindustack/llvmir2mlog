@@ -1,35 +1,33 @@
 package masterball.compiler.middleend.llvmir;
 
 import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
-import masterball.compiler.middleend.llvmir.constant.StringConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
-import masterball.compiler.middleend.llvmir.inst.*;
+import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
 import masterball.compiler.middleend.llvmir.type.IRFuncType;
-import masterball.compiler.middleend.llvmir.type.PointerType;
 
 // Formatter is a powerful tool in formatting one-line LLVM IR grammar
 // To link them up, please see @IRPrinter
 
 public class IRFormatter {
 
-    public static String stringConstInitFormat(StringConst stringConst) {
-        return stringConst.identifier() + " = private unnamed_addr constant " + ((PointerType) stringConst.type).pointedType + " "
-                + stringConst.constDataFormat() + ", align " + ((PointerType) stringConst.type).pointedType.size();
-    }
+//    public static String stringConstInitFormat(StringConst stringConst) {
+//        return stringConst.identifier() + " = private unnamed_addr constant " + ((PointerType) stringConst.type).pointedType + " "
+//                + stringConst.constDataFormat() + ", align " + ((PointerType) stringConst.type).pointedType.size();
+//    }
 
     public static String globalVarInitFormat(GlobalVariable globalVar) {
         return globalVar.identifier() + " = global " + globalVar.pointedType() + " zeroinitializer, align " + globalVar.pointedType().size();
     }
 
-    public static String classInitFormat(StructProto structProto) {
-        StringBuilder ret = new StringBuilder(structProto.identifier() + " = type {");
-        for (int i = 0; i < structProto.struct().memberVarTypes.size(); i++) {
-            ret.append(structProto.struct().memberVarTypes.get(i));
-            if (i != structProto.struct().memberVarTypes.size() - 1) ret.append(", ");
-        }
-        ret.append("}");
-        return ret.toString();
-    }
+//    public static String classInitFormat(StructProto structProto) {
+//        StringBuilder ret = new StringBuilder(structProto.identifier() + " = type {");
+//        for (int i = 0; i < structProto.struct().memberVarTypes.size(); i++) {
+//            ret.append(structProto.struct().memberVarTypes.get(i));
+//            if (i != structProto.struct().memberVarTypes.size() - 1) ret.append(", ");
+//        }
+//        ret.append("}");
+//        return ret.toString();
+//    }
 
     public static String funcDeclFormat(IRFunction function) {
         // declare void @print(i8*)

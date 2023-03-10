@@ -138,7 +138,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         // sp low
 
         //?
-        new AsmALUInst(MLOG.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
+        new AsmALUInst(MLOG.AddOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 new RawStackOffset(0, RawType.lowerSp), cur.func.entryBlock);
 
         // backup callee
@@ -175,7 +175,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmMoveInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
 
         // sp back
-        new AsmALUInst(MLOG.AddInst, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
+        new AsmALUInst(MLOG.AddOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 new RawStackOffset(0, RawType.raiseSp), cur.func.exitBlock);
 
         // return
@@ -316,29 +316,29 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         Register instReg = cur.toReg(inst);
         switch (inst.op) {
             case LLVM.LessArg:
-                awesomeALU(MLOG.SltInst, instReg, inst.lhs(), inst.rhs());
+                awesomeALU(MLOG.LessThanOperation, instReg, inst.lhs(), inst.rhs());
                 break;
             case LLVM.GreaterArg:
-                awesomeALU(MLOG.SltInst, instReg, inst.rhs(), inst.lhs());
+                awesomeALU(MLOG.GreaterThanOperation, instReg, inst.rhs(), inst.lhs());
                 break;
             case LLVM.GreaterEqualArg: // a >= b -> !(a < b)
-                awesomeALU(MLOG.SltInst, instReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(MLOG.XorInst, instReg, instReg, cur.toImm(1), cur.block);
+                awesomeALU(MLOG.GreaterThanEqOperation, instReg, inst.lhs(), inst.rhs());
+                //new AsmALUInst(MLOG.XorOperation, instReg, instReg, cur.toImm(1), cur.block);
                 break;
             case LLVM.LessEqualArg: // a <= b -> !(b < a)
-                awesomeALU(MLOG.SltInst, instReg, inst.rhs(), inst.lhs());
-                new AsmALUInst(MLOG.XorInst, instReg, instReg, cur.toImm(1), cur.block);
+                awesomeALU(MLOG.LessThanEqOperation, instReg, inst.rhs(), inst.lhs());
+                //new AsmALUInst(MLOG.XorOperation, instReg, instReg, cur.toImm(1), cur.block);
                 break;
             case LLVM.EqualArg: { // a == b -> xor = a ^ b; seqz rd, xor
-                VirtualReg xorReg = new VirtualReg();
-                awesomeALU(MLOG.XorInst, xorReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(MLOG.SeqzInst, instReg, xorReg, cur.block);
+                // VirtualReg xorReg = new VirtualReg();
+                awesomeALU(MLOG.EqualOperation, instReg, inst.lhs(), inst.rhs());
+                // new AsmALUInst(MLOG.SeqzInst, instReg, xorReg, cur.block);
                 break;
             }
             case LLVM.NotEqualArg: {
-                VirtualReg xorReg = new VirtualReg();
-                awesomeALU(MLOG.XorInst, xorReg, inst.lhs(), inst.rhs());
-                new AsmALUInst(MLOG.SnezInst, instReg, xorReg, cur.block);
+                //VirtualReg xorReg = new VirtualReg();
+                awesomeALU(MLOG.NotEqualOperation, instReg, inst.lhs(), inst.rhs());
+                // new AsmALUInst(MLOG.SnezInst, instReg, xorReg, cur.block);
                 break;
             }
             default:
@@ -442,11 +442,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             module.globalVarSeg.add(globalReg);
         }
 
-        for (StringConst strConst : irModule.stringConstSeg) {
-            GlobalReg strReg = new GlobalReg(strConst.name, strConst.constData);
-            strConst.asmOperand = strReg;
-            module.stringConstSeg.add(strReg);
-        }
+//        for (StringConst strConst : irModule.stringConstSeg) {
+//            GlobalReg strReg = new GlobalReg(strConst.name, strConst.constData);
+//            strConst.asmOperand = strReg;
+//            module.stringConstSeg.add(strReg);
+//        }
     }
 
     private void allocate(AsmBaseInst inst) {
@@ -469,13 +469,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         // remember this calculate only support two IR Value
 
         // div can not use this optimize because of negative num problem
-        if (rvOp.equals(MLOG.MulInst)) {
+        if (rvOp.equals(MLOG.MulOperation)) {
             Immediate lhsLog2 = twoPowerCheck(lhs), rhsLog2 = twoPowerCheck(rhs);
             if (lhsLog2 != null) {
-                new AsmALUInst(MLOG.ShiftLeftInst, dest, cur.toReg(rhs), lhsLog2, cur.block);
+                new AsmALUInst(MLOG.ShiftLeftOperation, dest, cur.toReg(rhs), lhsLog2, cur.block);
                 return;
             } else if (rhsLog2 != null) {
-                new AsmALUInst(MLOG.ShiftLeftInst, dest, cur.toReg(lhs), rhsLog2, cur.block);
+                new AsmALUInst(MLOG.ShiftLeftOperation, dest, cur.toReg(lhs), rhsLog2, cur.block);
                 return;
             }
         }
@@ -488,10 +488,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 new AsmALUInst(rvOp, dest, cur.toReg(rhs), cur.toImm(lhs), cur.block);
                 return;
             }
-        } else if (rvOp.equals(MLOG.SubInst)) {
+        } else if (rvOp.equals(MLOG.SubOperation)) {
             if (validImm(rhs)) {
                 // not communicative
-                new AsmALUInst(MLOG.AddInst, dest, cur.toReg(lhs), cur.toImm(rhs).negative(), cur.block);
+                new AsmALUInst(MLOG.AddOperation, dest, cur.toReg(lhs), cur.toImm(rhs).negative(), cur.block);
                 return;
             }
         }
@@ -523,7 +523,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 } else new AsmMoveInst(gepReg, ptrReg, cur.block);
             } else {
                 int memberOffset = classType.memberOffset(((NumConst) index).constData);
-                awesomeALU(MLOG.AddInst, gepReg, ptrPos, new NumConst(memberOffset));
+                awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(memberOffset));
             }
         } else {
             // array
@@ -540,13 +540,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                     } else new AsmMoveInst(gepReg, ptrReg, cur.block);
                 } else {
                     int totalSize = ((NumConst) index).constData * elementSize;
-                    awesomeALU(MLOG.AddInst, gepReg, ptrPos, new NumConst(totalSize));
+                    awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(totalSize));
                 }
             } else {
                 VirtualReg mulReg = new VirtualReg();
-                awesomeALU(MLOG.MulInst, mulReg, index, new NumConst(elementSize));
+                awesomeALU(MLOG.MulOperation, mulReg, index, new NumConst(elementSize));
                 // this not use awesomeALU because it can not be optimized
-                new AsmALUInst(MLOG.AddInst, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
+                new AsmALUInst(MLOG.AddOperation, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
             }
         }
         return gepReg;

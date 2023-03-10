@@ -59,7 +59,8 @@ public class LLVM {
     public static final String StrMethodPrefix = FuncNameSplitter + "str" + FuncNameSplitter;
     public static final String BottomStrFuncPrefix = FuncNameSplitter + "bot" + StrMethodPrefix;
     public static final String BottomPrefix = FuncNameSplitter + "bot" + FuncNameSplitter;
-    public static final String StructPrefix = "class" + Splitter;
+    public static final String StructPrefix = "struct" + Splitter;
+    public static final String ArrayPrefix = "array" + Splitter;
 
     // this is for Glo2Loc
     public static final String LocalPrefix = "local" + Splitter;

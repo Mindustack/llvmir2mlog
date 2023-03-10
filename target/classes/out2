@@ -1,17 +1,17 @@
 0:
 	op add sp sp -4
-	write	ra 0(sp)
+	write ra cell sp
 	op add ra @counter 2
 	jump always 2
-	read ra 0(sp)
+	read ra cell sp
 	op add sp sp 4
 	set @counter ra
 2:
 	op add sp sp -4
-	write	ra 0(sp)
+	write ra cell sp
 	op add ra @counter 2
 	jump always 2
 	set a0 1
-	read ra 0(sp)
+	read ra cell sp
 	op add sp sp 4
 	set @counter ra

@@ -2,7 +2,7 @@ define i4 @main(i4 %s) {
 0:
 
 
- %se=call i4 @g()
+ %se=call i4 @g( )
 
  ret i4 %se
 }

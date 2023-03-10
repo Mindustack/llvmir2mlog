@@ -23,12 +23,12 @@ public class ZeroInstPeephole implements AsmFuncPass {
                     String op = ((AsmALUInst) inst).op;
 
                     switch (op) {
-                        case MLOG.AddInst:
-                        case MLOG.SubInst:
-                        case MLOG.OrInst:
-                        case MLOG.XorInst:
-                        case MLOG.ShiftLeftInst:
-                        case MLOG.ShiftRightInst: {
+                        case MLOG.AddOperation:
+                        case MLOG.SubOperation:
+                        case MLOG.OrOperation:
+                        case MLOG.XorOperation:
+                        case MLOG.ShiftLeftOperation:
+                        case MLOG.ShiftOperation: {
                             if (inst.rd.color == inst.rs1.color) {
                                 if (inst.imm != null && inst.imm.value == 0) it.remove();
                                 if (inst.rs2 != null && inst.rs2.color == PhysicalReg.reg("zero")) it.remove();

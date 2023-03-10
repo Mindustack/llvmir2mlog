@@ -1,9 +1,7 @@
 package masterball.compiler.middleend.llvmir.hierarchy;
 
 import masterball.compiler.middleend.llvmir.IRTranslator;
-import masterball.compiler.middleend.llvmir.StructProto;
 import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
-import masterball.compiler.middleend.llvmir.constant.StringConst;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
 
@@ -14,11 +12,11 @@ public class IRModule {
 
     public ArrayList<IRFunction> functions = new ArrayList<>();
     public ArrayList<IRFunction> builtinFunctions = new ArrayList<>();
-    public ArrayList<StructProto> classes = new ArrayList<>();
+ //   public ArrayList<StructProto> classes = new ArrayList<>();
 
     // static data segment
     public ArrayList<GlobalVariable> globalVarSeg = new ArrayList<>();
-    public ArrayList<StringConst> stringConstSeg = new ArrayList<>();
+    //public ArrayList<StringConst> stringConstSeg = new ArrayList<>();
 
     public void setBottomFunctions() {
         builtinFunctions.add(new IRFunction(LLVM.BottomPrefix + "malloc",
@@ -68,14 +66,14 @@ public class IRModule {
         throw new InternalError(op);
     }
 
-    public StringConst getStringConst(String constData) {
-        for (StringConst stringConst : stringConstSeg) {
-            if (Objects.equals(stringConst.constData, constData))
-                return stringConst;
-        }
-
-        StringConst stringConst = new StringConst(constData);
-        stringConstSeg.add(stringConst);
-        return stringConst;
-    }
+//    public StringConst getStringConst(String constData) {
+//        for (StringConst stringConst : stringConstSeg) {
+//            if (Objects.equals(stringConst.constData, constData))
+//                return stringConst;
+//        }
+//
+//        StringConst stringConst = new StringConst(constData);
+//        stringConstSeg.add(stringConst);
+//        return stringConst;
+//    }
 }

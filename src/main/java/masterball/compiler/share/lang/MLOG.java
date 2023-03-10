@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MLOG {
-    // --- Sys Config for RV ---
 
-    //  public static final int ImmBound = (1 << 20);
+
     public static final int SpLowUnit = 1;
     public static final int I32Unit = 1;
     public static final int MaxStackSize = Integer.MAX_VALUE;
@@ -35,26 +34,7 @@ public class MLOG {
 
     // --- Compare Suffix ---
 
-    public static final String GreaterEqualSuffix = "greaterThanEq";
-    public static final String GreaterSuffix ="greaterThan" ;
-    public static final String LessEqualSuffix = "lessThanEq";
-    
-  //  public static final String GreaterThanSuffix ="greaterThan" ;
-  
-    
-    public static final String LessSuffix = "lessThan";
-    public static final String EqualSuffix = "equal";
-    public static final String NotEqualSuffix = "notEqual";
-    public static final String StrictEqualSuffix="strictEqual";
-/*Conditions:
-        * equal
-        * notEqual
-        * lessThan
-        * lessThanEq
-        * greaterThan
-        * greaterThanEq
-        * strictEqual
-        */
+
     // --- RV32 Inst ---
 
     //  public static final String ITypeSuffix = "i";
@@ -69,10 +49,7 @@ public class MLOG {
     // public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
     public static final String MvInst = "set";
     public static final String RetInst = "set @counter ra";
-    public static final String SltInst = "slt";// todo part of op 
-    //与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
-    public static final String SeqzInst = "seqz";
-    public static final String SnezInst = "snez";
+
     /*
     slt rd, rs1, rs2	如果rs1值小于rs2（有符号），则rd置1，否则置0
 slti rd, rs1, imm	如果rs1值小于立即数imm（符号扩展后），则rd置1，否则置0
@@ -87,16 +64,46 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     public static final String TailInst = "tail";
 
 
-    public static final String AddInst = "add";
-    public static final String SubInst = "sub";
-    public static final String MulInst = "mul";
-    public static final String AndInst = "and";
-    public static final String OrInst = "or";
-    public static final String XorInst = "xor";
-    public static final String ShiftLeftInst = "sll";//移位
-    public static final String ShiftRightInst = "sra";//too
-    public static final String DivInst = "div";
-    public static final String ModInst = "mod";
+    public static final String AddOperation = "add";
+    public static final String SubOperation = "sub";
+    public static final String MulOperation = "mul";
+
+
+    public static final String OrOperation = "or";
+    public static final String XorOperation = "xor";
+    public static final String ShiftLeftOperation = "sll";//移位
+    public static final String ShiftOperation = "sra";//too
+    public static final String DivOperation = "div";
+    public static final String ModOpertion = "mod";
+    public static final String GreaterEqualSuffix = "greaterThanEq";
+    public static final String GreaterSuffix = "greaterThan";
+    public static final String LessEqualSuffix = "lessThanEq";
+
+    //  public static final String GreaterThanSuffix ="greaterThan" ;
+
+
+    public static final String LessSuffix = "lessThan";
+    public static final String EqualSuffix = "equal";
+    public static final String NotEqualSuffix = "notEqual";
+    public static final String StrictEqualSuffix = "strictEqual";
+
+    public static final String LessThanOperation = "lessThan";// todo part of op
+    //与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
+
+    /*Conditions:
+     * equal
+     * notEqual
+     * lessThan
+     * lessThanEq
+     * greaterThan
+     * greaterThanEq
+     * strictEqual
+     */
+    public static final String GreaterThanOperation = "greaterThan";
+    public static final String LessThanEqOperation = "lessThanEq";
+    public static final String GreaterThanEqOperation = "greaterThanEq";
+    public static final String EqualOperation = "equal";
+    public static final String NotEqualOperation = "notEqual";
 }
 /*
 ## Native functions:

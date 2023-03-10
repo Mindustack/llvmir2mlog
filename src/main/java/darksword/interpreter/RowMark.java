@@ -1,4 +1,4 @@
-package darksword.console.display;
+package darksword.interpreter;
 
 public class RowMark {
     public int row;

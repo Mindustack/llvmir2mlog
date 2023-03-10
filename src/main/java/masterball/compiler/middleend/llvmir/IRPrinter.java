@@ -1,7 +1,6 @@
 package masterball.compiler.middleend.llvmir;
 
 import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
-import masterball.compiler.middleend.llvmir.constant.StringConst;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
@@ -62,13 +61,13 @@ public class IRPrinter implements IRModulePass, IRFuncPass, IRBlockPass {
         for (GlobalVariable globalVar : module.globalVarSeg) ps.println(IRFormatter.globalVarInitFormat(globalVar));
         if (module.globalVarSeg.size() > 0) ps.print('\n');
 
-        for (StringConst stringConst : module.stringConstSeg)
-            ps.println(IRFormatter.stringConstInitFormat(stringConst));
-        if (module.stringConstSeg.size() > 0) ps.print('\n');
+//        for (StringConst stringConst : module.stringConstSeg)
+//            ps.println(IRFormatter.stringConstInitFormat(stringConst));
+        // if (module.stringConstSeg.size() > 0) ps.print('\n');
 
-        for (StructProto structProto : module.classes) ps.println(IRFormatter.classInitFormat(structProto));
+        //for (StructProto structProto : module.classes) ps.println(IRFormatter.classInitFormat(structProto));
 
-        if (module.classes.size() > 0) ps.print('\n');
+        // if (module.classes.size() > 0) ps.print('\n');
         for (IRFunction func : module.functions) runOnFunc(func);
 
     }
