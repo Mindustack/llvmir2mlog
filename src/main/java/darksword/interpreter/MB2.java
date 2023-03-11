@@ -730,8 +730,11 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     public Value visitGetElementPtrInst(LLVMIRParser.GetElementPtrInstContext ctx) {
         ArrayList<Value> indices = new ArrayList<>();
 
-        for (var offsetCtx : ctx.typeValue())
+        List<LLVMIRParser.TypeValueContext> typeValue = ctx.typeValue();
+        for (int i = 1; i < typeValue.size(); i++) {
+            var offsetCtx = typeValue.get(i);
             indices.add(offsetCtx.value().accept(this));
+        }
 
         IRGetElementPtrInst inst = new IRGetElementPtrInst(ctx.typeValue(0).accept(this), null, null, indices);
         inst.type = inst.headPointer().type;

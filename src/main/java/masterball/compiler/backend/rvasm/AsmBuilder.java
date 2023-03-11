@@ -198,7 +198,8 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     @Override
     public void visit(IRAllocaInst inst) {
         inst.asmOperand = new RawStackOffset(cur.func.allocaStackUse, RawType.alloca);
-        cur.func.allocaStackUse += MLOG.I32Unit;
+
+        cur.func.allocaStackUse += inst.type.size();
     }
 
     @Override
@@ -275,23 +276,24 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
     }
 
+    /**
+     * step 1. calculate address
+     * only 1~2 indices presented in LLVM IR
+     * 2 indices means it is a class "GetElementPtr". Then the first index must be 0
+     * index * elementSize (if it is array)
+     * memberOffset (if it is class)
+     * do some constant folding (detail in @awesomeGEP)
+     */
     @Override
     public void visit(IRGetElementPtrInst inst) {
-        /**
-         step 1. calculate address
-         only 1~2 indices presented in LLVM IR
-         2 indices means it is a class "GetElementPtr". Then the first index must be 0
-         index * elementSize (if it is array)
-         memberOffset (if it is class)
-         do some constant folding (detail in @awesomeGEP)
-         */
+
 
         Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
         StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
         int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
 
         // local & const && only for load/store
-
+//todo
         if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
             int offset = 0;
             if (classType != null) {
@@ -299,6 +301,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             } else {
                 offset = ((NumConst) index).constData * elementSize;
             }
+
             inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
             return;
         }
@@ -355,7 +358,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             if (((GlobalValue) inst.loadPtr()).gpRegMark) {
                 new AsmMoveInst(instReg, PhysicalReg.reg("gp"), cur.block);
             } else {
-//                VirtualReg luiReg = new VirtualReg();
+// todo               VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
                 // awesomeALU(RV32I.AddInst,instReg,);
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
@@ -397,7 +400,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             if (((GlobalValue) inst.storePtr()).gpRegMark) {
                 new AsmMoveInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
             } else {
-//                VirtualReg luiReg = new VirtualReg();
+//  todo              VirtualReg luiReg = new VirtualReg();
                 GlobalReg globalReg = (GlobalReg) cur.toReg(inst.storePtr());
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
                 new AsmStoreInst(inst.storeValue().type.size(), null, cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);

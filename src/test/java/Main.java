@@ -5,6 +5,7 @@ import masterball.compiler.backend.regalloc.StackAllocator;
 import masterball.compiler.backend.rvasm.AsmBuilder;
 import masterball.compiler.backend.rvasm.AsmPrinter;
 import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
+import masterball.compiler.middleend.llvmir.IRPrinter;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,9 +24,9 @@ public class Main {
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
 
         PrintStream printStream = System.out;
-        // new IRPrinter( printStream).runOnModule(mb2.irModule);
+        new IRPrinter(printStream).runOnModule(mb2.irModule);
 
-        //System.out.println(mb2.irModule);
+        System.out.println("==========================");
 
 
         AsmBuilder builder = new AsmBuilder();

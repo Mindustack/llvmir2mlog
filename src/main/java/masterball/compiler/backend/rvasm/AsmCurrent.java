@@ -23,6 +23,8 @@ public class AsmCurrent {
 
     public Register toReg(@NotNull Value value) {
         if (value.asmOperand != null) {
+
+
             return (Register) value.asmOperand;
         }
         Integer intValue = null;
