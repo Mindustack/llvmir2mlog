@@ -13,7 +13,7 @@ public class ASTPrinter implements ASTVisitor {
     private static final String INDENT = "..";
 
     private int nowIndentNum = 0;
-    private PrintStream ps;
+    private final PrintStream ps;
 
     public ASTPrinter(PrintStream ps) {
         this.ps = ps;

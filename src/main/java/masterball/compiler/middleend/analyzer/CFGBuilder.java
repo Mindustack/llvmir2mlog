@@ -12,7 +12,6 @@ public class CFGBuilder implements IRFuncPass {
             block.prevs.clear();
             block.nexts.clear();
         }
-        ;
     }
 
     @Override

@@ -12,7 +12,7 @@ public class IRModule {
 
     public ArrayList<IRFunction> functions = new ArrayList<>();
     public ArrayList<IRFunction> builtinFunctions = new ArrayList<>();
- //   public ArrayList<StructProto> classes = new ArrayList<>();
+ //  public ArrayList<StructProto> classes = new ArrayList<>();
 
     // static data segment
     public ArrayList<GlobalVariable> globalVarSeg = new ArrayList<>();

@@ -30,8 +30,8 @@ import java.util.*;
 
 public class GVN implements IRFuncPass {
 
-    private AliasAnalyzer analyzer = new AliasAnalyzer();
-    private Stack<NumberScope> scopeStack = new Stack<NumberScope>();
+    private final AliasAnalyzer analyzer = new AliasAnalyzer();
+    private final Stack<NumberScope> scopeStack = new Stack<NumberScope>();
 
     private static boolean numberTarget(Value value) {
         return value instanceof IRBinaryInst ||

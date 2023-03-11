@@ -87,7 +87,7 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     public static final String NotEqualSuffix = "notEqual";
     public static final String StrictEqualSuffix = "strictEqual";
 
-    public static final String LessThanOperation = "lessThan";// todo part of op
+    public static final String LessThanOperation = "lessThan";
     //与条件控制流指令类似，RV32I还提供了一组条件置位指令set。它会通过判断指令中给定的条件然会对目标寄存器置0或1。
 
     /*Conditions:

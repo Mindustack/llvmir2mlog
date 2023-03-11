@@ -24,6 +24,7 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
         if (function.totalStackUse % MLOG.SpLowUnit != 0)
             function.totalStackUse = (function.totalStackUse / MLOG.SpLowUnit + 1) * MLOG.SpLowUnit;
 
+
 //        Log.report(function.identifier, function.totalStackUse, function.callerArgStackUse, function.allocaStackUse, function.spillStackUse);
 
         // waiting for solving

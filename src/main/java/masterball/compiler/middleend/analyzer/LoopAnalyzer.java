@@ -1,8 +1,8 @@
 package masterball.compiler.middleend.analyzer;
 
-import masterball.compiler.middleend.llvmir.hierarchy.Loop;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
+import masterball.compiler.middleend.llvmir.hierarchy.Loop;
 import masterball.compiler.share.misc.Pair;
 import masterball.compiler.share.pass.IRFuncPass;
 import masterball.debug.Log;
@@ -12,10 +12,10 @@ import java.util.*;
 public class LoopAnalyzer implements IRFuncPass {
 
     // <head, tail>
-    private Map<IRBlock, Loop> headToLoopMap = new HashMap<>();
-    private ArrayList<Pair<IRBlock, IRBlock>> backEdge = new ArrayList<>();
-    private Stack<Loop> loopStack = new Stack<>();
-    private HashSet<IRBlock> visited = new HashSet<>();
+    private final Map<IRBlock, Loop> headToLoopMap = new HashMap<>();
+    private final ArrayList<Pair<IRBlock, IRBlock>> backEdge = new ArrayList<>();
+    private final Stack<Loop> loopStack = new Stack<>();
+    private final HashSet<IRBlock> visited = new HashSet<>();
 
     private void init(IRFunction function) {
         new CFGBuilder().runOnFunc(function);

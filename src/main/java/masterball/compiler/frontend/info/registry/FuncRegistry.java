@@ -1,10 +1,10 @@
 package masterball.compiler.frontend.info.registry;
 
+import masterball.compiler.frontend.info.scope.FuncScope;
 import masterball.compiler.frontend.info.type.MxBaseType;
 import masterball.compiler.frontend.info.type.MxFuncType;
 import masterball.compiler.frontend.info.type.VarType;
 import masterball.compiler.frontend.parser.MxStarParser;
-import masterball.compiler.frontend.info.scope.FuncScope;
 
 import java.util.ArrayList;
 
@@ -107,9 +107,8 @@ public class FuncRegistry extends BaseRegistry {
     }
 
     public String toString() {
-        StringBuilder ret = new StringBuilder("[FuncRegistry] ");
-        ret.append("name: " + name + " ");
-        ret.append("type: " + type);
-        return ret.toString();
+        String ret = "[FuncRegistry] " + "name: " + name + " " +
+                "type: " + type;
+        return ret;
     }
 }

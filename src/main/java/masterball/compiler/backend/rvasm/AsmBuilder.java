@@ -277,12 +277,14 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
     @Override
     public void visit(IRGetElementPtrInst inst) {
-        // step 1. calculate address
-        // only 1~2 indices presented in LLVM IR
-        // 2 indices means it is a class "GetElementPtr". Then the first index must be 0
-        // index * elementSize (if it is array)
-        // memberOffset (if it is class)
-        // do some constant folding (detail in @awesomeGEP)
+        /**
+         step 1. calculate address
+         only 1~2 indices presented in LLVM IR
+         2 indices means it is a class "GetElementPtr". Then the first index must be 0
+         index * elementSize (if it is array)
+         memberOffset (if it is class)
+         do some constant folding (detail in @awesomeGEP)
+         */
 
         Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
         StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;

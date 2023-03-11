@@ -1,6 +1,6 @@
 package masterball.debug;
 
-import java.io.*;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +8,6 @@ public class Log {
 
     private static final String logHint = "<masterball log>: ";
 
-    ;
     private static final Map<String, Integer> markCnt = new HashMap<>();
     private static final int InfoColor = 36, TrackColor = 32, MarkColor = 35;
     private static Verbose verbose;

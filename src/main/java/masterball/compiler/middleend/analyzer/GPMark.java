@@ -2,11 +2,8 @@ package masterball.compiler.middleend.analyzer;
 
 import masterball.compiler.middleend.llvmir.User;
 import masterball.compiler.middleend.llvmir.constant.GlobalValue;
-import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
-import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.IRBaseInst;
-import masterball.compiler.middleend.llvmir.type.PointerType;
 import masterball.compiler.share.pass.IRModulePass;
 import masterball.debug.Log;
 
@@ -18,7 +15,7 @@ import java.util.HashMap;
  */
 
 public class GPMark implements IRModulePass {
-    private HashMap<GlobalValue, Integer> useCount = new HashMap<>();
+    private final HashMap<GlobalValue, Integer> useCount = new HashMap<>();
 
     @Override
     public void runOnModule(IRModule module) {

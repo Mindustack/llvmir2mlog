@@ -1,6 +1,5 @@
 package masterball.console;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,8 +26,6 @@ public class Config {
         argSetting.put(Option.Wall, new Setting("-Wall", false, false));
         argSetting.put(Option.OJMode, new Setting("-oj", false, false));
     }
-
-    ;
 
     public static String getPath(Option option) {
         var setting = argSetting.get(option);

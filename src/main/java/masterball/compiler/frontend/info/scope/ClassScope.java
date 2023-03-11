@@ -1,10 +1,10 @@
 package masterball.compiler.frontend.info.scope;
 
-import masterball.compiler.share.error.semantic.NameError;
+import masterball.compiler.frontend.info.registry.BaseRegistry;
 import masterball.compiler.frontend.info.registry.ClassRegistry;
 import masterball.compiler.frontend.info.registry.FuncRegistry;
-import masterball.compiler.frontend.info.registry.BaseRegistry;
 import masterball.compiler.frontend.info.registry.VarRegistry;
+import masterball.compiler.share.error.semantic.NameError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,9 +53,8 @@ public class ClassScope extends BaseScope {
     }
 
     public String toString() {
-        StringBuilder ret = new StringBuilder("[ClassScope]\n");
-        ret.append("VarTable: ").append(varTable.toString()).append("\n");
-        ret.append("FuncTable: ").append(funcTable.toString()).append("\n");
-        return ret.toString();
+        String ret = "[ClassScope]\n" + "VarTable: " + varTable.toString() + "\n" +
+                "FuncTable: " + funcTable.toString() + "\n";
+        return ret;
     }
 }

@@ -1,7 +1,7 @@
 package masterball.compiler.frontend.info.registry;
 
-import masterball.compiler.frontend.parser.MxStarParser;
 import masterball.compiler.frontend.info.scope.ClassScope;
+import masterball.compiler.frontend.parser.MxStarParser;
 
 import java.util.ArrayList;
 
@@ -26,9 +26,8 @@ public class ClassRegistry extends BaseRegistry {
     }
 
     public String toString() {
-        StringBuilder ret = new StringBuilder("[ClassRegistry] ");
-        ret.append("\nname:" + name + " ");
-        ret.append("\nscope:" + scope + " ");
-        return ret.toString();
+        String ret = "[ClassRegistry] " + "\nname:" + name + " " +
+                "\nscope:" + scope + " ";
+        return ret;
     }
 }

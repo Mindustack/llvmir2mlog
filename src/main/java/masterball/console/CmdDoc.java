@@ -7,11 +7,10 @@ public class CmdDoc {
     private final static String TAB = "\t";
 
     public static String version() {
-        StringBuilder ret = new StringBuilder("Masterball 1.0.0 using JDK 11\n");
-        ret.append("Copyright (C) 2021 ACM Class 2020, SiriusNEO.\n");
-        ret.append("Target: RISC-V 32 Integer\n");
-        ret.append("OS Arch: x86_" + LLVM.PointerSize * 8 + "\n");
-        return ret.toString();
+        String ret = "Masterball 1.0.0 using JDK 11\n" + "Copyright (C) 2021 ACM Class 2020, SiriusNEO.\n" +
+                "Target: RISC-V 32 Integer\n" +
+                "OS Arch: x86_" + LLVM.PointerSize * 8 + "\n";
+        return ret;
     }
 
     public static String help() {

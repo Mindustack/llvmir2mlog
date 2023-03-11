@@ -1,6 +1,7 @@
 package masterball.compiler.backend.regalloc;
 
 import masterball.compiler.backend.analyzer.LivenessAnalyzer;
+import masterball.compiler.backend.regalloc.InterferenceGraph.Edge;
 import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
@@ -8,13 +9,16 @@ import masterball.compiler.backend.rvasm.inst.AsmBaseInst;
 import masterball.compiler.backend.rvasm.inst.AsmLoadInst;
 import masterball.compiler.backend.rvasm.inst.AsmMoveInst;
 import masterball.compiler.backend.rvasm.inst.AsmStoreInst;
-import masterball.compiler.backend.rvasm.operand.*;
+import masterball.compiler.backend.rvasm.operand.PhysicalReg;
+import masterball.compiler.backend.rvasm.operand.RawStackOffset;
 import masterball.compiler.backend.rvasm.operand.RawStackOffset.RawType;
+import masterball.compiler.backend.rvasm.operand.Register;
+import masterball.compiler.backend.rvasm.operand.VirtualReg;
+import masterball.compiler.share.lang.MLOG;
 import masterball.compiler.share.misc.UnionSet;
 import masterball.compiler.share.pass.AsmFuncPass;
 import masterball.compiler.share.pass.AsmModulePass;
 import masterball.debug.Log;
-import masterball.compiler.backend.regalloc.InterferenceGraph.Edge;
 import masterball.debug.Statistics;
 
 import java.util.*;
@@ -414,7 +418,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
 
         for (Register reg : spilledNodes) {
             reg.stackOffset = new RawStackOffset(curFunc.spillStackUse, RawType.spill);
-            curFunc.spillStackUse += 4;
+            curFunc.spillStackUse += MLOG.I32Unit;
         }
 
         for (AsmBlock block : curFunc.blocks) {

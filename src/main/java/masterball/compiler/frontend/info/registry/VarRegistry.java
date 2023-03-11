@@ -28,8 +28,6 @@ public class VarRegistry extends BaseRegistry {
     }
 
     public String toString() {
-        StringBuilder ret = new StringBuilder("[VarRegistry] ");
-        ret.append(type + "|" + name);
-        return ret.toString();
+        return "[VarRegistry] " + type + "|" + name;
     }
 }

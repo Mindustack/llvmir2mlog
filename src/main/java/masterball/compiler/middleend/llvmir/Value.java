@@ -17,6 +17,7 @@ public class Value {
     public static HashMap<String, Integer> renameTable = new HashMap<>();
     public IRBaseType type;
     public ArrayList<User> users = new ArrayList<User>();
+    public ArrayList<Value> mem = new ArrayList<Value>();
     public Value resolveFrom = null;
     public String name;
     public String comment = null;

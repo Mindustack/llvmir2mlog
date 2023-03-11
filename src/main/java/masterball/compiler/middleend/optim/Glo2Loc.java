@@ -11,7 +11,6 @@ import masterball.compiler.middleend.llvmir.inst.IRLoadInst;
 import masterball.compiler.middleend.llvmir.inst.IRStoreInst;
 import masterball.compiler.middleend.llvmir.type.PointerType;
 import masterball.compiler.share.lang.LLVM;
-import masterball.compiler.share.lang.MxStar;
 import masterball.compiler.share.pass.IRFuncPass;
 import masterball.debug.Log;
 
@@ -39,8 +38,9 @@ public class Glo2Loc implements IRFuncPass {
     // if a global variable isn't used many times, not localize it because not worthy
     public static final int UsageThreshold = 1;
 
-    private Map<GlobalVariable, Integer> refTimes = new HashMap<>();
-    private Set<GlobalVariable> ableSet = new HashSet<>(), constAbleSet = new HashSet<>();
+    private final Map<GlobalVariable, Integer> refTimes = new HashMap<>();
+    private final Set<GlobalVariable> ableSet = new HashSet<>();
+    private final Set<GlobalVariable> constAbleSet = new HashSet<>();
 
     private boolean constantDetect(GlobalVariable global) {
         if (global.initValue == null) return false;

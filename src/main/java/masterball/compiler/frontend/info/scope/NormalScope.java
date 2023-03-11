@@ -1,10 +1,10 @@
 package masterball.compiler.frontend.info.scope;
 
-import masterball.compiler.share.error.semantic.NameError;
+import masterball.compiler.frontend.info.registry.BaseRegistry;
 import masterball.compiler.frontend.info.registry.ClassRegistry;
 import masterball.compiler.frontend.info.registry.FuncRegistry;
-import masterball.compiler.frontend.info.registry.BaseRegistry;
 import masterball.compiler.frontend.info.registry.VarRegistry;
+import masterball.compiler.share.error.semantic.NameError;
 
 public class NormalScope extends BaseScope {
 
@@ -32,8 +32,6 @@ public class NormalScope extends BaseScope {
     }
 
     public String toString() {
-        StringBuilder ret = new StringBuilder("[NormalScope]\n");
-        ret.append("VarTable: ").append(varTable.toString());
-        return ret.toString();
+        return "[NormalScope]\n" + "VarTable: " + varTable.toString();
     }
 }

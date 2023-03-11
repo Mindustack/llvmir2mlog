@@ -18,11 +18,11 @@ public class IRPrinter implements IRModulePass, IRFuncPass, IRBlockPass {
     // based on hierarchy
 
     private final PrintStream ps;
-    private final String mxFileName;
 
-    public IRPrinter(String mxFileName, PrintStream ps) {
+
+    public IRPrinter(PrintStream ps) {
         this.ps = ps;
-        this.mxFileName = mxFileName;
+
     }
 
     @Override

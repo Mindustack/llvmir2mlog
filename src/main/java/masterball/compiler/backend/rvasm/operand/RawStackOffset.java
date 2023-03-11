@@ -7,7 +7,6 @@ public class RawStackOffset extends Immediate {
 
     public RawType level;
 
-    ;
     public RawStackOffset(int offset, RawType level) {
         super(offset);
         this.level = level;

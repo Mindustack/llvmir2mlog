@@ -4,13 +4,12 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmBlock;
 import masterball.compiler.backend.rvasm.hierarchy.AsmFunction;
 import masterball.compiler.backend.rvasm.inst.AsmJmpInst;
 import masterball.compiler.share.pass.AsmFuncPass;
-import masterball.debug.Log;
 
 import java.util.ArrayList;
 
 public class ReorderBlock implements AsmFuncPass {
 
-    private ArrayList<AsmBlock> reorderedList = new ArrayList<>();
+    private final ArrayList<AsmBlock> reorderedList = new ArrayList<>();
 
     private void reorderJump(AsmBlock block) {
         if (reorderedList.contains(block)) return;

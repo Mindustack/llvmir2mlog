@@ -53,7 +53,7 @@ public class IRRetInst extends IRBaseInst {
         String ret = LLVM.RetInst + " " + this.type;
         if (!this.type.match(new VoidType()))
             ret += " " + this.retVal().identifier();
-        return ret;//todo when return arg?
+        return ret;
     }
 
     @Override

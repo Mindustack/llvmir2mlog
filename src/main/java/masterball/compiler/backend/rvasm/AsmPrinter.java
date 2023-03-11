@@ -14,12 +14,12 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     private final static String TAB = "\t";
     private final PrintStream ps;
-    private final String irFileName;
+
     public int funcEndCounter = 0;
 
-    public AsmPrinter(String fileName, PrintStream ps) {
+    public AsmPrinter(PrintStream ps) {
         this.ps = ps;
-        this.irFileName = fileName;
+
     }
 
     @Override
