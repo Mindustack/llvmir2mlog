@@ -31,7 +31,7 @@ public class ArrayType extends IRBaseType {
     // align size
     @Override
     public int size() {
-        return elementType.size();
+        return elementType.size() * length;
     }
 
     @Override

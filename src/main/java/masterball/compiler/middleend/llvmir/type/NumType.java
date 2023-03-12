@@ -18,7 +18,7 @@ public class NumType extends IRBaseType {
 
     @Override
     public int size() {
-        return bitWidth / 8;
+        return 1;
     }
 
     @Override

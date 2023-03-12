@@ -6,7 +6,6 @@ import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
 import masterball.compiler.backend.rvasm.inst.*;
 import masterball.compiler.backend.rvasm.operand.*;
 import masterball.compiler.backend.rvasm.operand.RawStackOffset.RawType;
-import masterball.compiler.middleend.llvmir.User;
 import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.constant.*;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
@@ -15,7 +14,6 @@ import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.*;
 import masterball.compiler.middleend.llvmir.type.IRFuncType;
 import masterball.compiler.middleend.llvmir.type.PointerType;
-import masterball.compiler.middleend.llvmir.type.StructType;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
 import masterball.compiler.share.lang.MLOG;
@@ -199,7 +197,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public void visit(IRAllocaInst inst) {
         inst.asmOperand = new RawStackOffset(cur.func.allocaStackUse, RawType.alloca);
 
-        cur.func.allocaStackUse += inst.type.size();
+        cur.func.allocaStackUse += ((PointerType) inst.type).pointedType.size();
     }
 
     @Override
@@ -288,27 +286,49 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public void visit(IRGetElementPtrInst inst) {
 
 
-        Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
-        StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
-        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
+        Register instReg = cur.toReg(inst);
+        new AsmALUInst(MLOG.SubOperation, instReg, PhysicalReg.reg("sp")
+                , cur.toImm(inst.getOperand(0)), cur.block);
+        for (int i = 1; i < inst.operandSize(); ++i) {
 
-        // local & const && only for load/store
-//todo
-        if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
-            int offset = 0;
-            if (classType != null) {
-                offset = classType.memberOffset(((NumConst) index).constData);
-            } else {
-                offset = ((NumConst) index).constData * elementSize;
+            var operand = inst.getOperand(i);
+//todo heap then add
+
+            new AsmALUInst(MLOG.SubOperation, instReg, instReg,
+                    cur.toImm(operand), cur.block);
+
+
+            if (i != inst.operandSize()) {
+                new AsmLoadInst(1, instReg, instReg, cur.toImm(0), cur.block);
+
             }
 
-            inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
-            return;
-        }
 
-        Register instReg = cur.toReg(inst);
-        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
-        new AsmMoveInst(instReg, gepReg, cur.block);
+        }
+        //  new AsmMoveInst(instReg, instReg,cur.block);
+
+//        Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
+//        StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
+//        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
+//
+//        // local & const && only for load/store
+//
+//        if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
+//            int offset = 0;
+//            if (classType != null) {
+//                offset = classType.memberOffset(((NumConst) index).constData);
+//            } else {
+//                offset = ((NumConst) index).constData * elementSize;
+//            }
+//
+//            inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
+//            return;
+//        }
+//
+//        Register instReg = cur.toReg(inst);
+//        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
+//        new AsmMoveInst(instReg, gepReg, cur.block);
+
     }
 
     @Override
@@ -460,12 +480,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         inst.imm = new Immediate(inst.imm.value);
     }
 
-    private boolean specialGEPCheck(IRGetElementPtrInst inst) {
-        if (inst.asmOperand != null) return false;
-        for (User user : inst.users)
-            if (!(user instanceof IRLoadInst || user instanceof IRStoreInst)) return false;
-        return true;
-    }
+//    private boolean specialGEPCheck(IRGetElementPtrInst inst) {
+//        if (inst.asmOperand != null) return false;
+//        for (User user : inst.users)
+//            if (!(user instanceof IRLoadInst || user instanceof IRStoreInst)) return false;
+//        return true;
+//    }
 
     private void awesomeALU(String rvOp, Register dest, Value lhs, Value rhs) {
         // now support:
@@ -512,48 +532,48 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
     }
 
-    public Register awesomeGEP(Value ptrPos, Value index, int elementSize, StructType classType) {
-        VirtualReg gepReg = new VirtualReg();
-        if (classType != null) {
-            // class member get
-            assert index instanceof NumConst;
-            if (equalZero(index)) {
-                Register ptrReg = cur.toReg(ptrPos);
-                if (ptrPos instanceof GlobalValue) {
-                    if (((GlobalValue) ptrPos).gpRegMark) {
-                        new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
-                    } else {
-                        new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
-                    }
-                } else new AsmMoveInst(gepReg, ptrReg, cur.block);
-            } else {
-                int memberOffset = classType.memberOffset(((NumConst) index).constData);
-                awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(memberOffset));
-            }
-        } else {
-            // array
-            if (index instanceof NumConst) {
-                // constant folding
-                if (equalZero(index)) {
-                    Register ptrReg = cur.toReg(ptrPos);
-                    if (ptrPos instanceof GlobalValue) {
-                        if (((GlobalValue) ptrPos).gpRegMark) {
-                            new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
-                        } else {
-                            new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
-                        }
-                    } else new AsmMoveInst(gepReg, ptrReg, cur.block);
-                } else {
-                    int totalSize = ((NumConst) index).constData * elementSize;
-                    awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(totalSize));
-                }
-            } else {
-                VirtualReg mulReg = new VirtualReg();
-                awesomeALU(MLOG.MulOperation, mulReg, index, new NumConst(elementSize));
-                // this not use awesomeALU because it can not be optimized
-                new AsmALUInst(MLOG.AddOperation, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
-            }
-        }
-        return gepReg;
-    }
+//    public Register awesomeGEP(Value ptrPos, Value index, int elementSize, StructType classType) {
+//        VirtualReg gepReg = new VirtualReg();
+//        if (classType != null) {
+//            // class member get
+//            assert index instanceof NumConst;
+//            if (equalZero(index)) {
+//                Register ptrReg = cur.toReg(ptrPos);
+//                if (ptrPos instanceof GlobalValue) {
+//                    if (((GlobalValue) ptrPos).gpRegMark) {
+//                        new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
+//                    } else {
+//                        new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
+//                    }
+//                } else new AsmMoveInst(gepReg, ptrReg, cur.block);
+//            } else {
+//                int memberOffset = classType.memberOffset(((NumConst) index).constData);
+//                awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(memberOffset));
+//            }
+//        } else {
+//            // array
+//            if (index instanceof NumConst) {
+//                // constant folding
+//                if (equalZero(index)) {
+//                    Register ptrReg = cur.toReg(ptrPos);
+//                    if (ptrPos instanceof GlobalValue) {
+//                        if (((GlobalValue) ptrPos).gpRegMark) {
+//                            new AsmMoveInst(gepReg, PhysicalReg.reg("gp"), cur.block);
+//                        } else {
+//                            new AsmLaInst(gepReg, ptrReg.identifier, cur.block);
+//                        }
+//                    } else new AsmMoveInst(gepReg, ptrReg, cur.block);
+//                } else {
+//                    int totalSize = ((NumConst) index).constData * elementSize;
+//                    awesomeALU(MLOG.AddOperation, gepReg, ptrPos, new NumConst(totalSize));
+//                }
+//            } else {
+//                VirtualReg mulReg = new VirtualReg();
+//                awesomeALU(MLOG.MulOperation, mulReg, index, new NumConst(elementSize));
+//                // this not use awesomeALU because it can not be optimized
+//                new AsmALUInst(MLOG.AddOperation, gepReg, cur.toReg(ptrPos), mulReg, cur.block);
+//            }
+//        }
+//        return gepReg;
+//    }
 }
