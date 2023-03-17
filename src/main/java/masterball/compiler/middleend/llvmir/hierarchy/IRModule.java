@@ -1,6 +1,5 @@
 package masterball.compiler.middleend.llvmir.hierarchy;
 
-import masterball.compiler.middleend.llvmir.IRTranslator;
 import masterball.compiler.middleend.llvmir.constant.GlobalVariable;
 import masterball.compiler.share.error.codegen.InternalError;
 import masterball.compiler.share.lang.LLVM;
@@ -18,31 +17,7 @@ public class IRModule {
     public ArrayList<GlobalVariable> globalVarSeg = new ArrayList<>();
     //public ArrayList<StringConst> stringConstSeg = new ArrayList<>();
 
-    public void setBottomFunctions() {
-        builtinFunctions.add(new IRFunction(LLVM.BottomPrefix + "malloc",
-                IRTranslator.heapPointerType, IRTranslator.i32Type));
 
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.StrCatArg,
-                IRTranslator.stringType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.EqualArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.NotEqualArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessEqualArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-
-        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterEqualArg,
-                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
-    }
 
     public IRFunction getMalloc() {
         return builtinFunctions.get(0);
@@ -65,6 +40,36 @@ public class IRModule {
         }
         throw new InternalError(op);
     }
+//     public void setBottomFunctions() {
+//
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomPrefix + "malloc",
+//                IRTranslator.heapPointerType, IRTranslator.i32Type));
+//
+//
+//
+////        todo wtf2
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.StrCatArg,
+//                IRTranslator.stringType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.EqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.NotEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//    }
 
 //    public StringConst getStringConst(String constData) {
 //        for (StringConst stringConst : stringConstSeg) {

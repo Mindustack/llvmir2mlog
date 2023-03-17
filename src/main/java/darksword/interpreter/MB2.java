@@ -122,6 +122,34 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
     // visitint
 
+    public void setBottomFunctions() {
+
+
+//        builtinFunctions.add(new IRFunction(LLVM.BottomPrefix + "malloc",
+//                IRTranslator.heapPointerType, IRTranslator.i32Type));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.StrCatArg,
+//                IRTranslator.stringType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.EqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.NotEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.LessEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+//
+//        builtinFunctions.add(new IRFunction(LLVM.BottomStrFuncPrefix + LLVM.GreaterEqualArg,
+//                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
+    }
+
     @Override
     public Value visitCompilationUnit(LLVMIRParser.CompilationUnitContext ctx) {
 
@@ -135,6 +163,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
             if (context.funcDecl() != null) {
 
                 //funcDeclContexts.add(context.funcDecl());
+                // global map added in each visit
                 irModule.builtinFunctions.add((IRFunction) visit(context.funcDecl()));
 
             } else if (context.funcDef() != null) {
@@ -262,6 +291,7 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
             function.addArg(newValue(function, name, argType));
         }
+
 
         globalValueMap.put(funcName, function);
         //  setNewValue(funcName, function);

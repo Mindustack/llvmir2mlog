@@ -34,21 +34,21 @@ public class LLVM {
     public static final String ExitBlockLabel = "exit";
     public static final String MidBlockLabel = "mid";
 
-    public static final String IfTrueBlockLabel = "if" + Splitter + "true";
-    public static final String IfFalseBlockLabel = "if" + Splitter + "false";
-    public static final String IfExitBlockLabel = "if" + Splitter + "exit";
-
-    public static final String ForCondBlockLabel = "for" + Splitter + "cond";
-    public static final String ForIncrBlockLabel = "for" + Splitter + "incr";
-    public static final String ForBodyBlockLabel = "for" + Splitter + "body";
-    public static final String ForExitBlockLabel = "for" + Splitter + "exit";
-
-    public static final String WhCondBlockLabel = "wh" + Splitter + "cond";
-    public static final String WhBodyBlockLabel = "wh" + Splitter + "body";
-    public static final String WhExitBlockLabel = "wh" + Splitter + "exit";
-
-    public static final String LogicNoCutBlockLabel = "lg" + Splitter + "nocut";
-    public static final String LogicExitBlockLabel = "lg" + Splitter + "exit";
+//    public static final String IfTrueBlockLabel = "if" + Splitter + "true";
+//    public static final String IfFalseBlockLabel = "if" + Splitter + "false";
+//    public static final String IfExitBlockLabel = "if" + Splitter + "exit";
+//
+//    public static final String ForCondBlockLabel = "for" + Splitter + "cond";
+//    public static final String ForIncrBlockLabel = "for" + Splitter + "incr";
+//    public static final String ForBodyBlockLabel = "for" + Splitter + "body";
+//    public static final String ForExitBlockLabel = "for" + Splitter + "exit";
+//
+//    public static final String WhCondBlockLabel = "wh" + Splitter + "cond";
+//    public static final String WhBodyBlockLabel = "wh" + Splitter + "body";
+//    public static final String WhExitBlockLabel = "wh" + Splitter + "exit";
+//
+//    public static final String LogicNoCutBlockLabel = "lg" + Splitter + "nocut";
+//    public static final String LogicExitBlockLabel = "lg" + Splitter + "exit";
 
     public static final String SplitBlockLabel = "split";
     public static final String PreHeaderBlockLabel = "ph";
