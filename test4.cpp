@@ -56,6 +56,7 @@ void free(void *ap)
 		if(p>=p-> ptr && (bp>p || bp<p-> ptr))
 			break;    /* 被释放的块在链表的开头或结尾*/
 			
+
 	if (bp+bp-> size==p-> ptr) /*与上一相邻块合并 */
 	{    
 		bp-> size += p-> ptr-> size;
@@ -72,3 +73,4 @@ void free(void *ap)
 		p-> ptr = bp;
 	freep = p;
 }
+
