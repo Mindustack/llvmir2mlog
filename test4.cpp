@@ -2,73 +2,87 @@
 
 #define SIZE 8 
 #define NULL 0
-struct block{
 
-  struct block *ptr;
-
-  int size;
+typedef long Align;/*for alignment to long boundary*/
+union header { 
+    struct {
+        union header *ptr; /*next block if on free list*/
+        unsigned size; /*size of this block*/
+    } s;
+    Align x;
 };
-//struct block;
-static  struct block base;
-static  struct block *freep= NULL;
-void *morespace(int nunits){
-	
-}
 
-void *malloc(int nbytes) {
+typedef union header Header;
 
-  struct block *present, *prevp;
-  //struct block *morecore(int);
-  int nunits;
-  nunits = (nbytes + SIZE - 1) / SIZE + 1;
-  if ((prevp = freep) == NULL) {//fail to find...  throw line 41 to solve
 
-    base.ptr = freep = prevp = &base;
-    base.size = NULL;
-  }
-
-  for (present = prevp->ptr;; prevp = present, present = present->ptr) {
-    if (present->size >= nunits) /* 足够大 */
-    {
-      if (present->size == nunits) /* 正好 */
-        prevp->ptr = present->ptr;
-      else /*分配末尾部分*/
-      {
-        present->size -= nunits;
-        present += present->size;
-        present->size = nunits;
-      }
-      freep = prevp;
-      return (void *)(present + 1);
-    }
-    if (present == freep) /* 闭环的空闲链表*/
-      if ((present = (block *)morespace(nunits)) == NULL)
-        return NULL; /* 没有剩余的存储空间 */
-  }
-}
-
+static Header base;
+static Header *freep = NULL;
 void free(void *ap)
 {
-	struct block *bp,*p;
-	bp = (block *)ap -1; /* 指向块头 */
-
-	for(p=freep;!(bp>p && bp< p-> ptr);p=p-> ptr)
-		if(p>=p-> ptr && (bp>p || bp<p-> ptr))
-			break;    /* 被释放的块在链表的开头或结尾*/
-			
-	if (bp+bp-> size==p-> ptr) /*与上一相邻块合并 */
-	{    
-		bp-> size += p-> ptr-> size;
-		bp-> ptr = p-> ptr-> ptr;
-	} 
-	else
-		bp-> ptr = p-> ptr;
-	if (p+p-> size == bp)/* 与下一相邻块合并 */ 
-	{     
-		p-> size += bp-> size;
-		p-> ptr = bp-> ptr;
-	} 
-	else
-		p-> ptr = bp;
-	freep = p;
+    Header *bp,*p;
+    bp = (Header *)ap -1; /* point to block header */
+    for(p=freep;!(bp>p && bp< p->s.ptr);p=p->s.ptr)
+        if(p>=p->s.ptr && (bp>p || bp<p->s.ptr))
+            break;    /* freed block at start or end of arena*/
+    if (bp+bp->s.size==p->s.ptr) {    /* join to upper nbr */
+        bp->s.size += p->s.ptr->s.size;
+        bp->s.ptr = p->s.ptr->s.ptr;
+    } else
+        bp->s.ptr = p->s.ptr;
+    if (p+p->s.size == bp) {     /* join to lower nbr */
+        p->s.size += bp->s.size;
+        p->s.ptr = bp->s.ptr;
+    } else
+        p->s.ptr = bp;
+    freep = p;
 }
+static int heapcap 10 ;
+#define NALLOC 64    /* minimum #units to request */
+static Header *morecore(unsigned nu)
+{
+    int *cp;
+    Header *up;
+  //  if(nu < NALLOC)
+       // nu = NALLOC;
+    cp = heapcap= heapcap +nu * sizeof(Header);
+//    if(cp == (char *)-1)    /* no space at all*/
+      //  return NULL;
+    up = (Header *)cp;
+    up->s.size = nu;
+    free((void *)(up+1));
+    return freep;
+}
+
+
+
+void *malloc(unsigned nbytes)
+{
+    Header *p, *prevp;
+    unsigned nunits;
+    nunits = (nbytes+sizeof(Header)-1)/sizeof(Header) + 1;
+    if((prevp = freep) == NULL) { /* no free list */
+        base.s.ptr = freep = prevp = &base;
+        base.s.size = 0;
+    }
+    for(p = prevp->s.ptr; ;prevp = p, p= p->s.ptr) {
+        if(p->s.size >= nunits) { /* big enough */
+            if (p->s.size == nunits)  /* exactly */
+                prevp->s.ptr = p->s.ptr;
+            else {
+                p->s.size -= nunits;
+                p += p->s.size;
+                p->s.size = nunits;
+            }
+            freep = prevp;
+            return (void*)(p+1);
+        }
+        if (p== freep) /* wrapped around free list */
+            if ((p = morecore(nunits)) == NULL)
+                return NULL; /* none left */
+    }
+}
+
+
+int main (){
+	return 0
+	}
