@@ -4,7 +4,7 @@ public class NumType extends IRBaseType {
     public final int bitWidth;
 
     public NumType() {
-        this.bitWidth = 64;
+        this.bitWidth = 1;
     }
 
     public NumType(int bitWidth) {
@@ -23,6 +23,8 @@ public class NumType extends IRBaseType {
 
     @Override
     public String toString() {
-        return "i" + bitWidth;
+        return "i" + 64
+                //  bitWidth
+                ;
     }
 }
