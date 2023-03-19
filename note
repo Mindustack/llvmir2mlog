@@ -1,0 +1,15 @@
+clang -S -emit-llvm test4.cpp
+
+llvm-gcc -S test4.cpp
+
+llvm-as test4.ll 
+
+llc test4.bc
+
+
+
+
+llvm-as b.ll 
+
+llc b.bc -O0
+
