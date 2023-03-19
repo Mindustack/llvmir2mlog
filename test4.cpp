@@ -15,10 +15,12 @@ union header {
 typedef union header Header;
 
 
+
 static Header base;
 static Header *freep = NULL;
 void free(void *ap)
 {
+
     Header *bp,*p;
     bp = (Header *)ap -1; /* point to block header */
     for(p=freep;!(bp>p && bp< p->s.ptr);p=p->s.ptr)
@@ -35,7 +37,8 @@ void free(void *ap)
     } else
         p->s.ptr = bp;
     freep = p;
-}
+ }
+
 static int heapcap 10 ;
 #define NALLOC 64    /* minimum #units to request */
 static Header *morecore(unsigned nu)
@@ -85,4 +88,4 @@ void *malloc(unsigned nbytes)
 
 int main (){
 	return 0
-	}
+	} 
