@@ -8,8 +8,12 @@ a primary but entensible compiler backend for LLVM-IR to Mindustry Logic in Java
 
 main code from https://github.com/SiriusNEO/Masterball
 
-todo
+## quickstart
+src/test/java/Main.java
+
+## todo
 - [ ] full instruction phi insertvalue
+- [ ] figure out where const data goto 
 - [ ] standard library 
 - [ ] make mdt function builtin
 - [ ] deal with communication among processor

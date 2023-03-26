@@ -35,9 +35,9 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     Value TypePasser = new Value("TypePasser", null);
     IRFunction CurrentFunction;
 
-    public MB2() throws IOException {
+    public MB2(String file) throws IOException {
 
-        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test.ll";
+        
 
         // lexer
         LLVMIRLexer irLexer = new LLVMIRLexer(CharStreams.fromStream(new FileInputStream(new File(file))));

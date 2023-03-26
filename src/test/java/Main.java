@@ -15,7 +15,10 @@ public class Main {
         MB2 mb2;
         String s;
 
-        mb2 = new MB2();
+var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test.ll";
+
+        mb2 = new MB2(file
+);
 
 
         // new MiddleEndOptimizer().runOnModule(mb2.irModule);
