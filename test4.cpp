@@ -1,12 +1,20 @@
 
 
-#define SIZE 8 
+//#define SIZE 8 
 #define NULL 0
 
+
+// void write(int ads);
+// void write(*void ads);
+// void read(int ads);
+// void read(int ads);
+
 typedef long Align;/*for alignment to long boundary*/
+
+
 union header { 
     struct {
-        union header *ptr; /*next block if on free list*/
+        union header *ptr; /*next block if on Mfree list*/
         unsigned size; /*size of this block*/
     } s;
     Align x;
@@ -18,7 +26,7 @@ typedef union header Header;
 
 static Header base;
 static Header *freep = NULL;
-void free(void *ap)
+void Mfree(void *ap)
 {
 
     Header *bp,*p;
@@ -38,32 +46,59 @@ void free(void *ap)
         p->s.ptr = bp;
     freep = p;
  }
+#include <unistd.h>
+//int brk(void *addr);
+// #define intptr_t int;
+void *sbrk(intptr_t increment);
 
-static int heapcap 10 ;
-#define NALLOC 64    /* minimum #units to request */
-static Header *morecore(unsigned nu)
+//static header* heapcap= freep ;
+#define NALLOC 4    /* minimum #units to request */
+static Header *Mmorecore(unsigned nu)
 {
-    int *cp;
+    //int *heapcap;
+   // Header *up;
+
+
+//   //  if(nu < NALLOC)
+//        // nu = NALLOC;
+
+//  heapcap = sbrk(nu * sizeof(Header));
+
+//    //  heapcap += nu * sizeof(Header);
+
+
+//    if(heapcap == (char *)-1)    /* no space at all*/
+//       //  return NULL;
+//     up = (Header *)heapcap;
+//     //up->s.size = nu;
+//     Mfree((void *)(up+1));
+//     return freep;
+
+
+    char *cp;
     Header *up;
-  //  if(nu < NALLOC)
-       // nu = NALLOC;
-    cp = heapcap= heapcap +nu * sizeof(Header);
-//    if(cp == (char *)-1)    /* no space at all*/
-      //  return NULL;
+    if(nu < NALLOC)
+        nu = NALLOC;
+    cp = (char *)sbrk(
+       // nu * sizeof(Header)
+       512
+        );
+    if(cp == (char *)-1)    /* no space at all*/
+        return NULL;
     up = (Header *)cp;
     up->s.size = nu;
-    free((void *)(up+1));
+    Mfree((void *)(up+1));
     return freep;
 }
 
 
 
-void *malloc(unsigned nbytes)
+void *Mmalloc(unsigned nbytes)
 {
     Header *p, *prevp;
     unsigned nunits;
     nunits = (nbytes+sizeof(Header)-1)/sizeof(Header) + 1;
-    if((prevp = freep) == NULL) { /* no free list */
+    if((prevp = freep) == NULL) { /* no Mfree list */
         base.s.ptr = freep = prevp = &base;
         base.s.size = 0;
     }
@@ -79,13 +114,31 @@ void *malloc(unsigned nbytes)
             freep = prevp;
             return (void*)(p+1);
         }
-        if (p== freep) /* wrapped around free list */
-            if ((p = morecore(nunits)) == NULL)
+        if (p== freep) /* wrapped around Mfree list */
+            if ((p = Mmorecore(nunits)) == NULL)
                 return NULL; /* none left */
     }
 }
 
+#include <iostream>
+ 
+using namespace std;
 
 int main (){
-	return 0
+
+void * ip= (void *)Mmalloc(64);
+ // cout << "Address stored in ip variable: ";
+cout << ip << endl;
+// Mfree(ip);
+ip= (void *)Mmalloc(32);
+  //cout << "Address stored in ip variable: ";
+cout << ip << endl;
+// Mfree(ip);
+ip= (void *)Mmalloc(64);
+
+  //
+cout << ip << endl;
+// Mfree(ip);
+cout << "计算十进制数值"<< endl;
+	return 0;
 	} 

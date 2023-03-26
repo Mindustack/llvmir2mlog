@@ -13,10 +13,10 @@ typedef union header Header;
 static Header base;/*从空链表开始*/
 static Header *freep = NULL;/*空闲链表的初始指针*/
  
-void *malloc(unsigned nbytes)
+void *Mmalloc(unsigned nbytes)
 {
 	Header *p, *prevp;
-	Header *morecore(unsigned);
+	Header *Mmorecore(unsigned);
 	unsigned nunits;
  
 	nunits = (nbytes+sizeof(Header)-1)/sizeof(Header) + 1;
@@ -41,7 +41,7 @@ void *malloc(unsigned nbytes)
 			return (void*)(p+1);
 		}
 		if (p== freep) /* 闭环的空闲链表*/
-			if ((p = morecore(nunits)) == NULL)
+			if ((p = Mmorecore(nunits)) == NULL)
 				return NULL; /* 没有剩余的存储空间 */
 	}
 }
