@@ -21,7 +21,7 @@ union header {
         union header *ptr; /*next block if on Mfree list*/
         unsigned size; /*size of this block*/
     } s;
- //   Align x;
+   Align x;
 };
 
 typedef union header Header;
@@ -179,6 +179,9 @@ ip= (void *)Mmalloc(size);
 //		出处：http://www.cnblogs.com/wuyuegb2312
 
 int main (){
+	
+	cout<<sizeof(Header);
+	
 	void * start=sbrk(0);
 void *a; void*b;void*c;void* d;void*e;
 a=test(4);
