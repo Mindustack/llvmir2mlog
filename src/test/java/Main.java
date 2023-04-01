@@ -1,21 +1,25 @@
-import Mindustack.IRBuilder;
-import masterball.compiler.backend.optim.BackEndOptimizer;
-import masterball.compiler.backend.regalloc.RegisterAllocator;
-import masterball.compiler.backend.regalloc.StackAllocator;
-import masterball.compiler.backend.rvasm.AsmBuilder;
-import masterball.compiler.backend.rvasm.AsmPrinter;
-import masterball.compiler.backend.rvasm.hierarchy.AsmModule;
-import masterball.compiler.middleend.llvmir.IRPrinter;
+import Mindustack.compiler.backend.optim.BackEndOptimizer;
+import Mindustack.compiler.backend.regalloc.RegisterAllocator;
+import Mindustack.compiler.backend.regalloc.StackAllocator;
+import Mindustack.compiler.backend.rvasm.AsmBuilder;
+import Mindustack.compiler.backend.rvasm.AsmPrinter;
+import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
+import Mindustack.compiler.middleend.llvmir.IRBuilder;
+import Mindustack.compiler.middleend.llvmir.IRPrinter;
+import org.antlr.v4.runtime.CharStreams;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         IRBuilder IRBuilder;
-        String s;
+        //String s;
+        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test.ll";
 
-        IRBuilder = new IRBuilder();
+        IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
 
 
         // new MiddleEndOptimizer().runOnModule(IRBuilder.irModule);
