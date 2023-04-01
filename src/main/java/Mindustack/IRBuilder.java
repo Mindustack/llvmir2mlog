@@ -1,9 +1,9 @@
-package darksword.interpreter;
+package Mindustack;
 
 import com.Kvto.LLVMIRBaseVisitor;
 import com.Kvto.LLVMIRLexer;
 import com.Kvto.LLVMIRParser;
-import darksword.interpreter.error.InternalError;
+import darksword.interpreter.RowMark;
 import masterball.compiler.middleend.llvmir.User;
 import masterball.compiler.middleend.llvmir.Value;
 import masterball.compiler.middleend.llvmir.constant.*;
@@ -12,7 +12,7 @@ import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.*;
 import masterball.compiler.middleend.llvmir.type.*;
-import masterball.compiler.share.error.ParseErrorListener;
+import masterball.compiler.share.error.InternalError;
 import masterball.debug.Log;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,7 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class MB2 extends LLVMIRBaseVisitor<Value> {
+public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     static String destName = "";
     private final LinkedHashMap<IRBlock, LLVMIRParser.BasicBlockContext> blockCtx = new LinkedHashMap<>();
@@ -35,19 +35,19 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
     Value TypePasser = new Value("TypePasser", null);
     IRFunction CurrentFunction;
 
-    public MB2() throws IOException {
+    public IRBuilder() throws IOException {
 
         var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test.ll";
 
         // lexer
         LLVMIRLexer irLexer = new LLVMIRLexer(CharStreams.fromStream(new FileInputStream(new File(file))));
         irLexer.removeErrorListeners();
-        irLexer.addErrorListener(new ParseErrorListener());
+        // irLexer.addErrorListener(new ParseErrorListener());
 
         // parser
         LLVMIRParser irParser = new LLVMIRParser(new CommonTokenStream(irLexer));
         irParser.removeErrorListeners();
-        irParser.addErrorListener(new ParseErrorListener());
+        //  irParser.addErrorListener(new ParseErrorListener());
 
         // irModule.setBottomFunctions();
         // no need!
@@ -161,10 +161,11 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
             var context = ctx.topLevelEntity(i);
 
             if (context.funcDecl() != null) {
-
+                var irFunction = (IRFunction) visit(context.funcDecl());
+                irFunction.entryBlock = new IRBlock(irFunction.name + '0', irFunction);
                 //funcDeclContexts.add(context.funcDecl());
                 // global map added in each visit
-                irModule.builtinFunctions.add((IRFunction) visit(context.funcDecl()));
+                irModule.builtinFunctions.add(irFunction);
 
             } else if (context.funcDef() != null) {
 
@@ -503,7 +504,14 @@ public class MB2 extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitPointerType(LLVMIRParser.PointerTypeContext ctx) {
-        TypePasser.type = new PointerType(ctx.type().accept(this).type);
+        if (ctx.opaquePointerType() != null) {
+            TypePasser.type = new PointerType(new VoidType());//todo what is this
+        } else {
+            TypePasser.type = new PointerType(ctx.type().accept(this).type);
+
+        }
+
+
         return TypePasser;
     }
 

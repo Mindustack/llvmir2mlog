@@ -1,0 +1,11 @@
+
+
+
+;design
+
+define i32 @malloc(i32 %size){
+
+
+
+
+}

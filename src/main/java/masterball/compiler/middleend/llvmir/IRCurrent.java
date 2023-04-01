@@ -1,11 +1,8 @@
 package masterball.compiler.middleend.llvmir;
 
-import masterball.compiler.frontend.info.registry.ClassRegistry;
 import masterball.compiler.middleend.llvmir.hierarchy.IRBlock;
 import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.inst.IRBrInst;
-import masterball.compiler.share.lang.MxStar;
-import masterball.compiler.share.error.codegen.InternalError;
 
 import java.util.Stack;
 
@@ -16,7 +13,6 @@ public class IRCurrent {
     // current pointer
     public IRBlock block = null;
     public IRFunction func = null;
-    public ClassRegistry classRegistry = null;
 
     public void terminateAllBlocks() {
         for (IRBlock block : this.func.blocks)
@@ -33,22 +29,22 @@ public class IRCurrent {
         breakTargetBlocks.pop();
     }
 
-    public void setControlBr(String controlWord) {
-        switch (controlWord) {
-            case MxStar.continueKw:
-                new IRBrInst(contTargetBlocks.peek(), block);
-                break;
-            case MxStar.breakKw:
-                new IRBrInst(breakTargetBlocks.peek(), block);
-                break;
-            default:
-                throw new InternalError(controlWord);
-        }
-    }
+//    public void setControlBr(String controlWord) {
+//        switch (controlWord) {
+//            case MxStar.continueKw:
+//                new IRBrInst(contTargetBlocks.peek(), block);
+//                break;
+//            case MxStar.breakKw:
+//                new IRBrInst(breakTargetBlocks.peek(), block);
+//                break;
+//            default:
+//                throw new InternalError(controlWord);
+//        }
+//    }
 
-    public Value getThis() {
-        if (this.classRegistry == null || this.func == null)
-            throw new InternalError("IR this appears in not in a class");
-        return this.func.getOperand(0);
-    }
+//    public Value getThis() {
+//        if (null == null || this.func == null)
+//            throw new InternalError("IR this appears in not in a class");
+//        return this.func.getOperand(0);
+//    }
 }

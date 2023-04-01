@@ -6,12 +6,17 @@ import java.util.Map;
 
 public class Log {
 
+    public enum Verbose {off, all, infoOnly, markOnly, trackOnly, assertOnly}
+
     private static final String logHint = "<masterball log>: ";
 
     private static final Map<String, Integer> markCnt = new HashMap<>();
+
     private static final int InfoColor = 36, TrackColor = 32, MarkColor = 35;
+
     private static Verbose verbose;
     private static boolean infoOpen, markOpen, trackOpen;
+
     private static PrintStream ps = System.out;
 
     private static void colorPrintln(int color, String content) {
@@ -47,6 +52,8 @@ public class Log {
         }
     }
 
+    // --- info: show something ---
+
     public static void info(Object... vars) {
         if (!infoOpen) {
             return;
@@ -59,8 +66,6 @@ public class Log {
         colorPrintln(InfoColor, info.toString());
     }
 
-    // --- info: show something ---
-
     public static void info(VarPair... vars) {
         if (!infoOpen) {
             return;
@@ -72,6 +77,8 @@ public class Log {
         }
         colorPrintln(InfoColor, info.toString());
     }
+
+    // --- mark: place a mark ---
 
     public static void mark() {
         if (markOpen) {
@@ -86,8 +93,6 @@ public class Log {
             colorPrintln(MarkColor, logHint + "[Mark] mark " + nowCnt);
         }
     }
-
-    // --- mark: place a mark ---
 
     public static void mark(String msg) {
         if (markOpen) {
@@ -123,14 +128,14 @@ public class Log {
         }
     }
 
+    // --- track: track the behaviour ---
+
     public static void track(String msg) {
         if (!trackOpen) {
             return;
         }
         colorPrintln(TrackColor, logHint + "[Track] Tracking... " + msg);
     }
-
-    // --- track: track the behaviour ---
 
     public static void track(Object... vars) {
         if (!trackOpen) {
@@ -151,6 +156,4 @@ public class Log {
         ps.println(logHint + "[StackTrace]");
         throwable.printStackTrace();
     }
-
-    public enum Verbose {off, all, infoOnly, markOnly, trackOnly, assertOnly}
 }

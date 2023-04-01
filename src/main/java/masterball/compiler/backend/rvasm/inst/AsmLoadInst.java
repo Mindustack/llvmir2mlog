@@ -29,6 +29,7 @@ public class AsmLoadInst extends AsmBaseInst {
                     , rd, rs1);
         }
         return String.format("op add tf %s %s\n", imm, rs1) +
+                "\t" +
                 String.format("%s %s cell tf",
                         MLOG.LoadInstPrefix
 

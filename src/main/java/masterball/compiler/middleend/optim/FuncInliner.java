@@ -9,11 +9,12 @@ import masterball.compiler.middleend.llvmir.hierarchy.IRFunction;
 import masterball.compiler.middleend.llvmir.hierarchy.IRModule;
 import masterball.compiler.middleend.llvmir.inst.*;
 import masterball.compiler.share.lang.LLVM;
-import masterball.compiler.share.lang.MxStar;
 import masterball.compiler.share.pass.IRModulePass;
 import masterball.debug.Log;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Function Inliner Pass

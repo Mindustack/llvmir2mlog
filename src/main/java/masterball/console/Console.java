@@ -4,7 +4,8 @@ import masterball.console.error.NoArgumentValue;
 import masterball.console.error.UnknownArgument;
 import masterball.debug.Log;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.PrintStream;
 import java.util.Objects;
 
 public class Console {
@@ -12,34 +13,6 @@ public class Console {
     public boolean showVersion, showHelp, fsyntaxOnly, irOnly, optimize, wall, ojMode;
 
     public boolean canPrintAST, canPrintIR, canPrintOpt, canPrintASM;
-
-    public Console(String[] args) throws Exception {
-        argParser(args);
-        argMapping();
-
-        if (showHelp) {
-            System.out.println(CmdDoc.help());
-        }
-
-        if (showVersion) {
-            System.out.println(CmdDoc.version());
-        }
-
-        if (ojMode) {
-            Log.setVerbose(Log.Verbose.off);
-            canPrintAST = canPrintOpt = false;
-            canPrintIR = true;
-            canPrintASM = true;
-        } else {
-            Log.setVerbose(Log.Verbose.all);
-            Log.setPrintStream(
-                    (PrintStream) Config.getArgValue(Config.Option.LogOutput)
-            );
-            canPrintAST = canPrintIR = canPrintOpt = canPrintASM = true;
-        }
-
-        Log.track("Console started successfully.");
-    }
 
     public static String getFileName(String path) {
         if (path == null) return "test";
@@ -104,5 +77,33 @@ public class Console {
         optimize = (boolean) Config.argSetting.get(Config.Option.Optimize).argValue;
         wall = (boolean) Config.argSetting.get(Config.Option.Wall).argValue;
         ojMode = (boolean) Config.argSetting.get(Config.Option.OJMode).argValue;
+    }
+
+    public Console(String[] args) throws Exception {
+        argParser(args);
+        argMapping();
+
+        if (showHelp) {
+            System.out.println(CmdDoc.help());
+        }
+
+        if (showVersion) {
+            System.out.println(CmdDoc.version());
+        }
+
+        if (ojMode) {
+            Log.setVerbose(Log.Verbose.off);
+            canPrintAST = canPrintOpt = false;
+            canPrintIR = true;
+            canPrintASM = true;
+        } else {
+            Log.setVerbose(Log.Verbose.all);
+            Log.setPrintStream(
+                    (PrintStream) Config.getArgValue(Config.Option.LogOutput)
+            );
+            canPrintAST = canPrintIR = canPrintOpt = canPrintASM = true;
+        }
+
+        Log.track("Console started successfully.");
     }
 }

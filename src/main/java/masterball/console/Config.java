@@ -5,6 +5,24 @@ import java.util.Map;
 
 public class Config {
 
+    public enum Option {Version, Help, Input, LogOutput, ASTOutput, IROutput, OptOutput, ASMOutput, FSyntaxOnly, IROnly, Optimize, Wall, OJMode}
+
+    public static class Setting {
+        String argName;
+        String argValueStr;
+        boolean needValue;
+
+        Object argValue;
+        Object defaultValue;
+
+        public Setting(String argName, boolean needValue, Object defaultValue) {
+            this.argName = argName;
+            this.needValue = needValue;
+            this.argValue = defaultValue;
+            this.defaultValue = defaultValue;
+        }
+    }
+
     public static Map<Option, Setting> argSetting = new LinkedHashMap<>();
 
     static {
@@ -37,23 +55,5 @@ public class Config {
         var setting = argSetting.get(option);
         assert setting.needValue;
         return setting.argValue;
-    }
-
-    public enum Option {Version, Help, Input, LogOutput, ASTOutput, IROutput, OptOutput, ASMOutput, FSyntaxOnly, IROnly, Optimize, Wall, OJMode}
-
-    public static class Setting {
-        String argName;
-        String argValueStr;
-        boolean needValue;
-
-        Object argValue;
-        Object defaultValue;
-
-        public Setting(String argName, boolean needValue, Object defaultValue) {
-            this.argName = argName;
-            this.needValue = needValue;
-            this.argValue = defaultValue;
-            this.defaultValue = defaultValue;
-        }
     }
 }

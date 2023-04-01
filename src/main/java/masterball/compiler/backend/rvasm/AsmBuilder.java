@@ -83,6 +83,19 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                     reg.stackOffset = new RawStackOffset(function.calleeArgStackUse, RawType.calleeArg);
                     function.calleeArgStackUse += MLOG.I32Unit;
                 }
+
+
+                // just for recognition
+                for (IRBlock irBlock : builtinFunc.blocks) {
+                    AsmBlock block = new AsmBlock(irBlock.name);
+                    block.loopDepth = irBlock.loopDepth;
+                    irBlock.asmOperand = block;
+                    function.blocks.add(block);
+                }
+
+                function.entryBlock = (AsmBlock) builtinFunc.entryBlock.asmOperand;
+
+
             }
             //todo build library here
         }

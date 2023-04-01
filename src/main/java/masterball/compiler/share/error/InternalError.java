@@ -1,4 +1,4 @@
-package darksword.interpreter.error;
+package masterball.compiler.share.error;
 
 public class InternalError extends VirtualMachineError {
 
