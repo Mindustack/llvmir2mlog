@@ -15,7 +15,7 @@ define void @f() {
 
 
     %s1=alloca i32
-
+br label %1
    ; %s = load i32, i32* %s1
    ; %s = load i32, ptr %s1
 
@@ -24,6 +24,9 @@ define void @f() {
 
 
     ;call void @b(i32 %se,i32 %sde)
+%1:
+
+    %s12=alloca i32
 
 
 	ret void

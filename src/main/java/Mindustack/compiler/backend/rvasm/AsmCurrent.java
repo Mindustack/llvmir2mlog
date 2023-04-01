@@ -2,13 +2,16 @@ package Mindustack.compiler.backend.rvasm;
 
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmFunction;
+import Mindustack.compiler.backend.rvasm.inst.AsmALUInst;
 import Mindustack.compiler.backend.rvasm.inst.AsmLiInst;
+import Mindustack.compiler.backend.rvasm.inst.AsmLoadInst;
 import Mindustack.compiler.backend.rvasm.operand.*;
 import Mindustack.compiler.middleend.llvmir.Value;
 import Mindustack.compiler.middleend.llvmir.constant.BoolConst;
 import Mindustack.compiler.middleend.llvmir.constant.NullptrConst;
 import Mindustack.compiler.middleend.llvmir.constant.NumConst;
 import Mindustack.compiler.share.error.codegen.UnimplementedError;
+import Mindustack.compiler.share.lang.MLOG;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -24,6 +27,17 @@ public class AsmCurrent {
     public Register toReg(@NotNull Value value) {
         if (value.asmOperand != null) {
 
+            if (value.asmOperand instanceof RawStackOffset) {
+
+                var virtualReg = new VirtualReg();
+
+                var virtualReg1 = new VirtualReg();
+                new AsmALUInst(MLOG.SubOperation, virtualReg, PhysicalReg.reg("fp"),
+                        ((RawStackOffset) value.asmOperand), this.block);
+                new AsmLoadInst(1, virtualReg1, virtualReg
+                        , new Immediate(0), this.block);
+                return virtualReg1;
+            }
 
             return (Register) value.asmOperand;
         }

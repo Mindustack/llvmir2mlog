@@ -19,14 +19,36 @@ public class MLOG {
     public static final String FuncArgRegPrefix = "a";
     public static final String TempRegPrefix = "t";
     public static final String SavedRegPrefix = "s";
-    public static final ArrayList<String> RV32Reg = new ArrayList<String>(Arrays.asList(
-            "zero", "ra", "sp", "gp", "tp",
 
-            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
-            "t0", "t1", "t2", "t3", "t4", "t5", "t6"
+
+    public static final ArrayList<String> RV32RegCalleeSaved = new ArrayList<String>(List.of(
+
+
+            "s0", "s1", "s2", "s3", "s4", "s5",
+            "s6", "s7", "s8", "s9", "s10", "s11"
+
     ));
-    public static final ArrayList<String> RV32Reg = new ArrayList<String>(List.of());
+    public static final ArrayList<String> RV32RegCallerSaved = new ArrayList<String>(List.of(
+            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"//FuncArgReg
+            , "t0", "t1",
+            "t2", "t3", "t4", "t5", "t6"//TempReg
+    ));
+    public static final ArrayList<String> RV32Reg = new ArrayList<String>(Arrays.asList(
+            "zero",
+            "ra"//return address
+            , "sp" //top of stack
+            , "fp" //The address of the frame stack
+            , "gp" //start address of data zone
+            , "tp"//treads
+
+            , "pc"
+
+    )) {
+        {
+            addAll(RV32RegCallerSaved);
+            addAll(RV32RegCalleeSaved);
+        }
+    };
 
     // --- Byte Width Keyword ---
 

@@ -282,7 +282,8 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
 
         // Log.track("coalesce", move.rd, move.rs1);
 
-        Register rdAlias = unionSet.getAlias(move.rd), rs1Alias = unionSet.getAlias(move.rs1);
+        Register rdAlias = unionSet.getAlias(move.rd),
+                rs1Alias = unionSet.getAlias(move.rs1);
         InterferenceGraph.Edge edge;
         if (rs1Alias.node.precolored) edge = new InterferenceGraph.Edge(rs1Alias, rdAlias);
         else edge = new InterferenceGraph.Edge(rdAlias, rs1Alias);

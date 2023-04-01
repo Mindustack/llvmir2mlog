@@ -5,7 +5,6 @@ import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
 import Mindustack.compiler.middleend.llvmir.IRBuilder;
-import Mindustack.compiler.middleend.llvmir.IRPrinter;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.io.File;
@@ -17,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         IRBuilder IRBuilder;
         //String s;
-        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test.ll";
+        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test2.ll";
 
         IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
 
@@ -28,9 +27,9 @@ public class Main {
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
 
         PrintStream printStream = System.out;
-        new IRPrinter(printStream).runOnModule(IRBuilder.irModule);
+        //  new IRPrinter(printStream).runOnModule(IRBuilder.irModule);
 
-        System.out.println("==========================");
+        // System.out.println("==========================");
 
 
         AsmBuilder builder = new AsmBuilder();

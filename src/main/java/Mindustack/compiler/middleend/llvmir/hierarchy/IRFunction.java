@@ -33,7 +33,9 @@ public class IRFunction extends GlobalValue {
 
         super(name, funcType);
         entryBlock = new IRBlock(LLVM.EntryBlockLabel, this);
+
         exitBlock = new IRBlock(LLVM.ExitBlockLabel, this);
+
         entryBlock.parentFunction = this;
 
         // remember: here we place exit in second, not the logic order

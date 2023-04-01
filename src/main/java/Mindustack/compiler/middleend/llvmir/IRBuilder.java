@@ -70,6 +70,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         for (IRBlock block : function.blocks) {
             deepToInst(blockCtx.get(block), visited);
         }
+        function.entryBlock = function.blocks.get(0);
         for (RawOnlyName onlyName : RawOnlyName.workList) {
             var userList = new ArrayList<>(onlyName.users);
             for (User user : userList) {
@@ -249,9 +250,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         for (var blockCtx : ctx.funcBody().basicBlock()) {
             IRBlock block = (IRBlock) visit(blockCtx);
             block.parentFunction = function;
-            if (function.entryBlock == null) {
-                function.entryBlock = block;
-            }
+
             setNewValue(function, block.name, block);
             function.blocks.add(block);
         }
@@ -322,16 +321,9 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitTerminator(LLVMIRParser.TerminatorContext ctx) {
-        if (ctx.retTerm() != null) {
-            return visit(ctx.retTerm());
-        }
-        if (ctx.brTerm() != null) {
-            return visit(ctx.brTerm());
-        }
-        if (ctx.condBrTerm() != null) {
-            return visit(ctx.condBrTerm());
-        }
-        return null;
+
+
+        return visitChildren(ctx);
     }
 
     // this part is instructions
@@ -350,6 +342,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitBrTerm(LLVMIRParser.BrTermContext ctx) {
+
         return new IRBrInst((IRBlock) visit(ctx.label()), null);
 
     }
@@ -362,7 +355,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitLabel(LLVMIRParser.LabelContext ctx) {
-        String name = CurrentFunction.name + ctx.LocalIdent().getSymbol().getText().replaceAll(":", "");
+        String name = CurrentFunction.name + ctx.LocalIdent().getSymbol().getText().substring(1).replaceAll(":", "");
         if (valueMap.get(name) != null) {
             return valueMap.get(name);
         }
@@ -771,19 +764,18 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         IRGetElementPtrInst inst = new IRGetElementPtrInst(ctx.typeValue(0).accept(this), null, null, indices);
         inst.type = inst.headPointer().type;
 
-        for (int i = 0; i < inst.indicesNum(); ++i) {
-            if (i == 0) { // the first index always indexes the pointer
-                assert inst.type instanceof PointerType;
-                inst.type = ((PointerType) inst.type).pointedType;
+        assert inst.type instanceof PointerType;
+        inst.type = ((PointerType) inst.type).pointedType;
+        for (int i = 1; i < inst.indicesNum(); ++i) {
+
+            if (inst.type instanceof StructType) {
+                inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
+            } else if (inst.type instanceof ArrayType) {
+                inst.type = ((ArrayType) inst.type).elementType;
             } else {
-                if (inst.type instanceof StructType) {
-                    inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
-                } else if (inst.type instanceof ArrayType) {
-                    inst.type = ((ArrayType) inst.type).elementType;
-                } else {
-                    throw new InternalError("getelementptr in other types");
-                }
+                throw new InternalError("getelementptr in other types");
             }
+
         }
 
         // wrapped

@@ -40,7 +40,7 @@ public class AsmCallInst extends AsmBaseInst {
     @Override
     public String format() {
         // call symbol
-        return
+        return //todo is it 2?
                 "op add ra @counter 2" + "\n"
                         + String.format("\t%s %s", MLOG.CallInst, callFunc.entryBlock.identifier)
                 ;

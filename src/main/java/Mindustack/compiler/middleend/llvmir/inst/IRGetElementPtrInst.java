@@ -59,9 +59,9 @@ public class IRGetElementPtrInst extends IRBaseInst {
         return this.getIndex(0);
     }
 
-    public Value memberIndex() {
-        return this.getIndex(1);
-    }
+//    public Value memberIndex() {
+//        return this.getIndex(1);
+//    }
 
     @Override
     public String format() {
@@ -76,7 +76,8 @@ public class IRGetElementPtrInst extends IRBaseInst {
 
     // GetElementPtr: indices 1 or 2
     @Override
-    public IRBaseInst copy() {
+    public IRBaseInst copy() {//todo
+
         if (elementName == null) {
             if (indicesNum() == 1)
                 return new IRGetElementPtrInst(headPointer(), type, null, getIndex(0));

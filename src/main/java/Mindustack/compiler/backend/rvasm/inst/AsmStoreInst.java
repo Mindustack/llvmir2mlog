@@ -6,11 +6,11 @@ import Mindustack.compiler.backend.rvasm.operand.Register;
 import Mindustack.compiler.share.lang.MLOG;
 
 public class AsmStoreInst extends AsmBaseInst {
-    private final int byteWidth = 1;
+    private int byteWidth = 1;
 
-    public AsmStoreInst(int byteWidth, Register rs1, Register rs2, Immediate imm, AsmBlock parentBlock) {
-        super(null, rs1, rs2, imm, parentBlock);
-        // this.byteWidth = byteWidth;
+    public AsmStoreInst(int byteWidth, Register adr, Register rs2, Immediate imm, AsmBlock parentBlock) {
+        super(null, adr, rs2, imm, parentBlock);
+        this.byteWidth = byteWidth;
     }
 
     @Override

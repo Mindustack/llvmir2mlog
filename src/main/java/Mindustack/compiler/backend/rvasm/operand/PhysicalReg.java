@@ -14,21 +14,26 @@ public class PhysicalReg extends Register {
             MLOG.RV32Reg.forEach(regName -> put(regName, new PhysicalReg(regName)));
         }
     };
+
     // calling convention
-    public static ArrayList<PhysicalReg> callerSaved = new ArrayList<>();
-    public static ArrayList<PhysicalReg> calleeSaved = new ArrayList<>();
-    public static ArrayList<PhysicalReg> assignable = new ArrayList<>();
+    public static ArrayList<PhysicalReg> callerSaved = new ArrayList<>() {
+        {
+            MLOG.RV32RegCallerSaved.forEach(regName -> add(phyRegs.get(regName)));
+            add(reg("ra"));
+        }
+    };
+    public static ArrayList<PhysicalReg> calleeSaved = new ArrayList<>() {
+        {
+            MLOG.RV32RegCalleeSaved.forEach(regName -> add(phyRegs.get(regName)));
+        }
+    };
+    public static ArrayList<PhysicalReg> assignable = new ArrayList<>() {
+        {
+            addAll(callerSaved);
+            addAll(calleeSaved);
+        }
+    };
 
-    static {
-        for (int i = 0; i <= 6; ++i) callerSaved.add(t(i));
-        for (int i = 0; i <= 7; ++i) callerSaved.add(a(i));
-        callerSaved.add(reg("ra"));
-
-        for (int i = 0; i <= 11; ++i) calleeSaved.add(s(i));
-
-        assignable.addAll(callerSaved);
-        assignable.addAll(calleeSaved);
-    }
 
     public PhysicalReg(String identifier) {
         super(identifier);
@@ -40,6 +45,7 @@ public class PhysicalReg extends Register {
 
     public static PhysicalReg a(int index) {
         return phyRegs.get(MLOG.FuncArgRegPrefix + index);
+
     }
 
     public static PhysicalReg t(int index) {
@@ -49,4 +55,5 @@ public class PhysicalReg extends Register {
     public static PhysicalReg s(int index) {
         return phyRegs.get(MLOG.SavedRegPrefix + index);
     }
+
 }
