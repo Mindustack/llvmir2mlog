@@ -1,6 +1,5 @@
 import Mindustack.compiler.backend.optim.BackEndOptimizer;
 import Mindustack.compiler.backend.regalloc.RegisterAllocator;
-import Mindustack.compiler.backend.regalloc.StackAllocator;
 import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
@@ -37,10 +36,10 @@ public class Main {
         AsmModule module = builder.module;
 
 //         Graph Coloring
-        new RegisterAllocator().runOnModule(module);
+       new RegisterAllocator().runOnModule(module);
 //
         // Stack Allocate. Eliminate RawStackOffset
-        new StackAllocator().runOnModule(module);
+        // new StackAllocator().runOnModule(module);
 //
         // Optimize Assembly. Don't comment it directly because there are some necessary passes.
         new BackEndOptimizer().runOnModule(module);
@@ -51,6 +50,20 @@ public class Main {
 
                 printStream
         ).runOnModule(module);
+
+//import java.io.*;
+
+// ...
+
+String filePath = "Log/mlogOut.s";
+FileOutputStream fileOutput = new FileOutputStream(filePath, true); 
+ printStream = new PrintStream(fileOutput);
+
+AsmPrinter printer = new AsmPrinter(printStream);
+printer.runOnModule(module);
+
+printStream.close();
+fileOutput.close();
 
 
     }
