@@ -11,20 +11,20 @@ public class PhysicalReg extends Register {
      */
     public static final HashMap<String, PhysicalReg> phyRegs = new HashMap<>() {
         {
-            MLOG.RV32Reg.forEach(regName -> put(regName, new PhysicalReg(regName)));
+            MLOG.Reg.forEach(regName -> put(regName, new PhysicalReg(regName)));
         }
     };
 
     // calling convention
     public static ArrayList<PhysicalReg> callerSaved = new ArrayList<>() {
         {
-            MLOG.RV32RegCallerSaved.forEach(regName -> add(phyRegs.get(regName)));
+            MLOG.RegCallerSaved.forEach(regName -> add(phyRegs.get(regName)));
             add(reg("ra"));
         }
     };
     public static ArrayList<PhysicalReg> calleeSaved = new ArrayList<>() {
         {
-            MLOG.RV32RegCalleeSaved.forEach(regName -> add(phyRegs.get(regName)));
+            MLOG.RegCalleeSaved.forEach(regName -> add(phyRegs.get(regName)));
         }
     };
     public static ArrayList<PhysicalReg> assignable = new ArrayList<>() {

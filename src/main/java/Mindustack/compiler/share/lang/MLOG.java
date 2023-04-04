@@ -14,26 +14,38 @@ public class MLOG {
 
     // --- Register Related ---
 
-    public static final int MaxArgRegNum = 8;
+
     public static final String VirtualRegPrefix = "v";
     public static final String FuncArgRegPrefix = "a";
     public static final String TempRegPrefix = "t";
     public static final String SavedRegPrefix = "s";
 
 
-    public static final ArrayList<String> RV32RegCalleeSaved = new ArrayList<String>(List.of(
+    public static final ArrayList<String> RegCalleeSaved = new ArrayList<String>(List.of(
 
 
             "s0", "s1", "s2", "s3", "s4", "s5",
             "s6", "s7", "s8", "s9", "s10", "s11"
 
     ));
-    public static final ArrayList<String> RV32RegCallerSaved = new ArrayList<String>(List.of(
-            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"//FuncArgReg
-            , "t0", "t1",
-            "t2", "t3", "t4", "t5", "t6"//TempReg
+
+
+    public static final ArrayList<String> FuncArgReg = new ArrayList<String>(List.of(
+            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"//FuncArgReg//FuncArgReg
+
     ));
-    public static final ArrayList<String> RV32Reg = new ArrayList<String>(Arrays.asList(
+    public static final int MaxArgRegNum = FuncArgReg.size();
+
+    public static final ArrayList<String> RegCallerSaved = new ArrayList<String>(List.of(
+
+            "t0", "t1",
+            "t2", "t3", "t4", "t5", "t6"//TempReg
+    )) {
+        {
+            addAll(FuncArgReg);
+        }
+    };
+    public static final ArrayList<String> Reg = new ArrayList<String>(Arrays.asList(
             "zero",
             "ra"//return address
             , "sp" //top of stack
@@ -45,8 +57,8 @@ public class MLOG {
 
     )) {
         {
-            addAll(RV32RegCallerSaved);
-            addAll(RV32RegCalleeSaved);
+            addAll(RegCallerSaved);
+            addAll(RegCalleeSaved);
         }
     };
 
@@ -64,6 +76,8 @@ public class MLOG {
     //  public static final String ITypeSuffix = "i";
 
     public static final String BrInstPrefix = "jump";
+
+
     public static final String CallInst = "jump always";
     public static final String JmpInstPrefix = "jump always";
     public static final String LaInst = "set";//将地址值rot加载到寄存器rd
@@ -85,8 +99,9 @@ snez rd, rs1	如果rs1值不等于0，则rd置1，否则置0（伪指令）
 sltz rd, rs1	如果rs1值小于0，则rd置1，否则置0（伪指令）
 sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令） 
 */
-    public static final String TailInst = "tail";
+    public static final String TailInst = "jump always";
 
+    public static final String LabelForTailSuffix = "_LabelForTail";
 
     public static final String AddOperation = "add";
     public static final String SubOperation = "sub";

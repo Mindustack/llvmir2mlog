@@ -36,7 +36,7 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
                 if (inst.imm instanceof RawStackOffset) {
                     switch (((RawStackOffset) inst.imm).level) {
                         case callerArg: {
-                            inst.imm = new Immediate(inst.imm.value);
+                            inst.imm = new Immediate(inst.imm.value + 1);
                             break;
                         }
                         case alloca: {
@@ -48,7 +48,9 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
                             break;
                         }
                         case calleeArg: {
-                            inst.imm = new Immediate(inst.imm.value + function.totalStackUse);
+                            inst.imm = new Immediate(inst.imm.value
+                                    + function.totalStackUse
+                            );
                             break;
                         }
                         case lowerSp: {

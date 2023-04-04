@@ -80,11 +80,11 @@ public class TCO implements AsmFuncPass {
                 var inst = it.next();
                 // special judge: terminator must be ret
                 if (inst instanceof AsmCallInst && ((AsmCallInst) inst).isTailCall && block.terminator() instanceof AsmRetInst) {
-                    // Log.info("tail construct");
+                    // Log.info("tail construct"); yes here
                     it.remove();
                     assert block.terminator() instanceof AsmRetInst;
                     block.instructions.removeLast();
-                    new AsmTailInst(((AsmCallInst) inst).callFunc, block);//todo wtf
+                    new AsmTailInst(((AsmCallInst) inst).callFunc, block);
                     break;
                 }
             }
