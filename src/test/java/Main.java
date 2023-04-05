@@ -51,6 +51,20 @@ public class Main {
                 printStream
         ).runOnModule(module);
 
+//import java.io.*;
+
+// ...
+
+String filePath = "Log/mlogOut.s";
+FileOutputStream fileOutput = new FileOutputStream(filePath, true); 
+ printStream = new PrintStream(fileOutput);
+
+AsmPrinter printer = new AsmPrinter(printStream);
+printer.runOnModule(module);
+
+printStream.close();
+fileOutput.close();
+
 
     }
 }
