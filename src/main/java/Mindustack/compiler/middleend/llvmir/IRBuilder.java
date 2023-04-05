@@ -388,7 +388,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitFloatConst(LLVMIRParser.FloatConstContext ctx) {
-        return new NumConst(Integer.parseInt(ctx.FloatLit().getText()));
+        return new NumConst(Float.floatToIntBits(Float.parseFloat(ctx.FloatLit().getText())));//todo
     }
 
     @Override
