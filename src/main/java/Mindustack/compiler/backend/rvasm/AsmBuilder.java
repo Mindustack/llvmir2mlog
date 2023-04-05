@@ -624,6 +624,20 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
     @Override
     public void visit(IRPhiInst inst) {
+
+//        Register instReg = cur.toReg(inst);
+//
+//        var operands = inst.operands;
+//
+//        IRBlock irBlock =new IRBlock();
+//        AsmBlock block = new AsmBlock(irBlock.name);
+//                block.loopDepth = irBlock.loopDepth;
+//                irBlock.asmOperand = block;
+//                cur.func.blocks.add(block);
+        //Value branchData, IRBlock preBlock
+
+
+//it seems that phi is resolved in llvm
         throw new InternalError("Phi Inst appears in ASM");
     }
 

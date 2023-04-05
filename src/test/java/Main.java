@@ -4,23 +4,21 @@ import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
 import Mindustack.compiler.middleend.llvmir.IRBuilder;
+import Mindustack.compiler.middleend.optim.MiddleEndOptimizer;
 import org.antlr.v4.runtime.CharStreams;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         IRBuilder IRBuilder;
         //String s;
-        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test2.ll";
+        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test4.ll";
 
         IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
 
 
-        // new MiddleEndOptimizer().runOnModule(IRBuilder.irModule);
+        new MiddleEndOptimizer().runOnModule(IRBuilder.irModule);
 
 
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
@@ -45,7 +43,6 @@ public class Main {
         // new BackEndOptimizer().runOnModule(module);
 
 
-
         new AsmPrinter(
 
                 printStream
@@ -55,15 +52,16 @@ public class Main {
 
 // ...
 
-String filePath = "Log/mlogOut.s";
-FileOutputStream fileOutput = new FileOutputStream(filePath, true); 
- printStream = new PrintStream(fileOutput);
+        String filePath = "Log/MlogOut.s";
+        // FileOutputStream
+        FileOutputStream fileOutput = new FileOutputStream(filePath, true);
+        printStream = new PrintStream(fileOutput);
 
-AsmPrinter printer = new AsmPrinter(printStream);
-printer.runOnModule(module);
+        AsmPrinter printer = new AsmPrinter(printStream);
+        printer.runOnModule(module);
 
-printStream.close();
-fileOutput.close();
+        printStream.close();
+        fileOutput.close();
 
 
     }
