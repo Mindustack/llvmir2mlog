@@ -1,5 +1,5 @@
-import Mindustack.compiler.backend.optim.BackEndOptimizer;
 import Mindustack.compiler.backend.regalloc.RegisterAllocator;
+import Mindustack.compiler.backend.regalloc.StackAllocator;
 import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
@@ -39,10 +39,10 @@ public class Main {
        new RegisterAllocator().runOnModule(module);
 //
         // Stack Allocate. Eliminate RawStackOffset
-        // new StackAllocator().runOnModule(module);
+        new StackAllocator().runOnModule(module);
 //
         // Optimize Assembly. Don't comment it directly because there are some necessary passes.
-        new BackEndOptimizer().runOnModule(module);
+        // new BackEndOptimizer().runOnModule(module);
 
 
 

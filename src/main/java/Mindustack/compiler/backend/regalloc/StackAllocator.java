@@ -19,7 +19,7 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
 
     @Override
     public void runOnFunc(AsmFunction function) {
-        function.totalStackUse += function.callerArgStackUse + function.allocaStackUse + function.spillStackUse;
+        function.totalStackUse += function.callerArgStackUse + function.allocaStackUse + function.spillStackUse + 1;
 
         if (function.totalStackUse % MLOG.SpLowUnit != 0)
             function.totalStackUse = (function.totalStackUse / MLOG.SpLowUnit + 1) * MLOG.SpLowUnit;
@@ -37,14 +37,16 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
                     switch (((RawStackOffset) inst.imm).level) {
                         case callerArg: {
                             inst.imm = new Immediate(inst.imm.value + 1);
+
+                            // throw new RuntimeException("unsolved");
                             break;
                         }
                         case alloca: {
-                            inst.imm = new Immediate(inst.imm.value + function.callerArgStackUse);
+                            inst.imm = new Immediate(inst.imm.value + function.callerArgStackUse + 1).negative();
                             break;
                         }
                         case spill: {
-                            inst.imm = new Immediate(inst.imm.value + function.callerArgStackUse + function.allocaStackUse);
+                            inst.imm = new Immediate(inst.imm.value + function.callerArgStackUse + function.allocaStackUse + 1).negative();
                             break;
                         }
                         case calleeArg: {
