@@ -214,7 +214,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmMoveInst(PhysicalReg.reg("fp"), PhysicalReg.reg("sp"), cur.func.entryBlock);
 
 
-        new AsmLabel(cur.func.identifier + MLOG.LabelForTailSuffix, cur.func.entryBlock);
+      //  new AsmLabel(cur.func.identifier + MLOG.LabelForTailSuffix, cur.func.entryBlock);
 
         ArrayList<Register> calleeSaveTemp = new ArrayList<>();
         for (PhysicalReg phyReg : PhysicalReg.calleeSaved) {

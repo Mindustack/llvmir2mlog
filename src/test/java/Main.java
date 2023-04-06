@@ -1,10 +1,16 @@
+import Mindustack.compiler.backend.optim.BackEndOptimizer;
 import Mindustack.compiler.backend.regalloc.RegisterAllocator;
 import Mindustack.compiler.backend.regalloc.StackAllocator;
 import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
-import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
+import Mindustack.compiler.middleend.analyzer.CallGraphAnalyzer;
+import Mindustack.compiler.middleend.analyzer.LoopAnalyzer;
 import Mindustack.compiler.middleend.llvmir.IRBuilder;
-import Mindustack.compiler.middleend.optim.MiddleEndOptimizer;
+import Mindustack.compiler.middleend.llvmir.hierarchy.IRFunction;
+import Mindustack.compiler.middleend.llvmir.hierarchy.IRModule;
+import Mindustack.compiler.middleend.optim.*;
+import Mindustack.compiler.middleend.optim.ssa.Mem2Reg;
+import Mindustack.compiler.middleend.optim.ssa.SSADestructor;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.io.*;
@@ -16,9 +22,55 @@ public class Main {
         var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test4.ll";
 
         IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
+        IRModule module = IRBuilder.irModule;
 
 
-        new MiddleEndOptimizer().runOnModule(IRBuilder.irModule);
+        new CallGraphAnalyzer().runOnModule(module);
+
+        for (IRFunction function : module.functions) {
+            new Glo2Loc().runOnFunc(function);
+            new Mem2Reg().runOnFunc(function);
+        }
+
+        for (int i = 1; i <= 7; i++) {
+
+            new FuncInliner(false).runOnModule(module);
+
+//            for (IRFunction function : module.functions) {
+//                new CFGSimplifier().runOnFunc(function);
+//                new GVN().runOnFunc(function);
+//                new SCCP().runOnFunc(function);
+//               new ADCE().runOnFunc(function);
+//                new CFGSimplifier().runOnFunc(function);
+//                new IVTrans().runOnFunc(function);
+//                new LICM().runOnFunc(function);
+//                new LocalMO().runOnFunc(function);
+//                new CFGSimplifier().runOnFunc(function);
+//            }
+        }
+
+        new FuncInliner(true).runOnModule(module);
+//
+//        for (IRFunction function : module.functions) {
+//            new GVN().runOnFunc(function);
+//            new CFGSimplifier().runOnFunc(function);
+//           new ADCE().runOnFunc(function);
+//            new CFGSimplifier().runOnFunc(function);
+//            new LICM().runOnFunc(function);
+//            new CFGSimplifier().runOnFunc(function);
+//        }
+
+        // re-analyze info for asm
+        for (IRFunction function : module.functions) {
+            new SSADestructor().runOnFunc(function);
+            new CFGSimplifier().runOnFunc(function);
+            new LocalMO().runOnFunc(function);
+            new TRO().runOnFunc(function);
+            new LoopAnalyzer().runOnFunc(function);
+            new InstAdapter().runOnFunc(function);
+        }
+
+        //new MiddleEndOptimizer().runOnModule(module);
 
 
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
@@ -31,22 +83,21 @@ public class Main {
 
         AsmBuilder builder = new AsmBuilder();
         builder.runOnModule(IRBuilder.irModule);
-        AsmModule module = builder.module;
 
 //         Graph Coloring
-       new RegisterAllocator().runOnModule(module);
+        new RegisterAllocator().runOnModule(builder.module);
 //
         // Stack Allocate. Eliminate RawStackOffset
-        new StackAllocator().runOnModule(module);
+        new StackAllocator().runOnModule(builder.module);
 //
         // Optimize Assembly. Don't comment it directly because there are some necessary passes.
-        // new BackEndOptimizer().runOnModule(module);
+        new BackEndOptimizer().runOnModule(builder.module);
 
 
         new AsmPrinter(
 
                 printStream
-        ).runOnModule(module);
+        ).runOnModule(builder.module);
 
 //import java.io.*;
 
@@ -58,7 +109,7 @@ public class Main {
         printStream = new PrintStream(fileOutput);
 
         AsmPrinter printer = new AsmPrinter(printStream);
-        printer.runOnModule(module);
+        printer.runOnModule(builder.module);
 
         printStream.close();
         fileOutput.close();

@@ -684,6 +684,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     }
 
+
     @Override
     public Value visitExtractValueInst(LLVMIRParser.ExtractValueInstContext ctx) {
 
@@ -829,6 +830,18 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitTerminal(TerminalNode node) {
+
+        String name = CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", "");
+        if (valueMap.get(name) != null) {
+            return valueMap.get(name);
+        } else if (valueMap.get(node.getSymbol().getText()) != null) {
+            return valueMap.get(name);
+        }
+        return super.visitTerminal(node);
+    }
+
+    @Override
     public Value visitPhiInst(LLVMIRParser.PhiInstContext ctx) {
         //  String destName = ctx.instDest().LocalReg().getText().substring(1);
         IRPhiInst inst = new IRPhiInst(visitType(ctx.type()).type, null);
@@ -839,6 +852,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         //setNewValue(destName, inst);
         return inst;
     }
+
+//    @Override
+//    public Value visitInc(LLVMIRParser.IncContext ctx) {
+//        ctx.LocalIdent()
+//        return super.visitInc(ctx);
+//    }
 
     @Override
     public Value visitCallInst(LLVMIRParser.CallInstContext ctx) {
