@@ -155,3 +155,420 @@ mainexit:
 	set sp fp
 	read fp cell fp
 	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add a0 a0 2
+	set t0 10
+	jump lessThan a0 t0 mainmiddle
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t1 a0 2
+	set t0 10
+	jump lessThan t1 t0 mainmiddle
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t1 a0 2
+	set t0 10
+	jump lessThan t1 t0 mainmiddle
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp -1
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	op lessThan t0 t0 10
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	op lessThan t0 t0 10
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	op add a0 a0 1
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 2
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+
+
+time:3051279365
+mainentry:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	                              #move arguments 0~7 to reg
+	                              #load arguments in mem to reg
+	op sub sp fp 1
+	                              #start
+	jump always mainmiddle
+	                              #ra temp back
+	                              #sp and fp
+	op add sp sp 1
+mainmiddle:
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra
+mid:
+	set a0 t0
+	op add t0 a0 1
+	set t1 10
+	jump lessThan t0 t1 mid
+	set sp fp
+	read fp cell fp
+	set @counter ra

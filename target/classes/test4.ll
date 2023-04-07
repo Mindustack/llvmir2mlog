@@ -1,18 +1,18 @@
 
 
-define void @f() {
-0:
-	%1 = icmp eq i32 1, 2
-	br i1 %1, label %foo, label %baz
+define void @main (){
 
-foo:
-	%2 = icmp eq i32 1, 2
-	br i1 %2, label %bar, label %baz
+    LoopHeader:
 
-bar:
-	br label %baz
+    %s = add  i32 0,1
+    br label %Loop
+    Loop:
+  %indvar = phi i32 [ %s, %LoopHeader ], [ %nextindvar, %Loop ]
+  %nextindvar = add i32 %indvar, 1
+  br label %Loop
 
-baz:
-	%3 = phi i32 [ 10, %foo ], [ 20, %bar ], [ 30, %baz ]
-	ret void
+
+
 }
+
+

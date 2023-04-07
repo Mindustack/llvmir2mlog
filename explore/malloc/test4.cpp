@@ -2,8 +2,8 @@
 
 
 
-#include <iostream>
-using namespace std;
+//#include <iostream>
+//using namespace std;
 //#define SIZE 8 
 //#define NULL 0
 
@@ -50,7 +50,7 @@ void Mfree(void *ap)
         p->s.ptr = bp;
     freep = p;
  }
-#include <unistd.h>
+//#include <unistd.h>
 //int brk(void *addr);
 // #define intptr_t int;
 void *sbrk(intptr_t increment);
@@ -126,35 +126,35 @@ void *Mmalloc(unsigned nbytes)
 }
 
 
-void printMemory(const void* start, const void* end	) {
-    cout<<endl<<endl;
-    const char* startChar = static_cast<const char*>(start);
-    const char* endChar = static_cast<const char*>(end);
-    int byteCount = 0;
-    for (const char* i = startChar; i < endChar; i++) {
-    	if(byteCount%8==0)cout<<endl;
-        cout << static_cast< unsigned>(*i) <<' ';
-        
-        byteCount++;
-    }
-
-
-}
-void write(void* ptr, size_t size,char t) {
-	//cout << ptr << endl;
-    char* p = (char*)(ptr);
-    
-//    cout << p << endl;
-    for (size_t i = 0; i < size; ++i) {
-
-   //  cout << *p << endl;
-   //   cout << p << endl;
-             *p++ = t;
-    }
-//    for (size_t i = 0; i < size; ++i) {
-//    std::cout << static_cast<int>(p[i]) << " ";
+//void printMemory(const void* start, const void* end	) {
+//    cout<<endl<<endl;
+//    const char* startChar = static_cast<const char*>(start);
+//    const char* endChar = static_cast<const char*>(end);
+//    int byteCount = 0;
+//    for (const char* i = startChar; i < endChar; i++) {
+//    	if(byteCount%8==0)cout<<endl;
+//        //cout << static_cast< unsigned>(*i) <<' ';
+//
+//        byteCount++;
+//    }
+//
+//
 //}
-}
+//void write(void* ptr, size_t size,char t) {
+//	//cout << ptr << endl;
+//    char* p = (char*)(ptr);
+//
+////    cout << p << endl;
+//    for (size_t i = 0; i < size; ++i) {
+//
+//   //  cout << *p << endl;
+//   //   cout << p << endl;
+//             *p++ = t;
+//    }
+////    for (size_t i = 0; i < size; ++i) {
+////    std::cout << static_cast<int>(p[i]) << " ";
+////}
+//}
 
 
 
@@ -162,12 +162,12 @@ void write(void* ptr, size_t size,char t) {
 
 
 
-void* test(int size){
-	void * ip;
-ip= (void *)Mmalloc(size);
- write(ip,size,1);
- return ip;
-	}
+//void* test(int size){
+//	void * ip;
+//ip= (void *)Mmalloc(size);
+// write(ip,size,1);
+// return ip;
+//	}
  
 
 
@@ -178,47 +178,48 @@ ip= (void *)Mmalloc(size);
 
 //		出处：http://www.cnblogs.com/wuyuegb2312
 
-int main (){
-	
-	cout<<sizeof(Header);
-	
-	void * start=sbrk(0);
-void *a; void*b;void*c;void* d;void*e;
-a=test(4);
-
-b= test(8);
-
-c=  test(16);
-
-d=  test(32);
- 
-e= test(64);
-printMemory(start,sbrk(0));
-Mfree(a);
-write(a,4,0);
-Mfree(b);
-write(b,8,0);
-Mfree(c);
-write(c,16,0);
-Mfree(d);
-write(d,32,0);
-
-
-printMemory(start,sbrk(0));
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-test(4);
-printMemory(start,sbrk(0));
+int main (int size){
+void * ip= (void *)Mmalloc(size);
+//
+//	cout<<sizeof(Header);
+//
+//	void * start=sbrk(0);
+//void *a; void*b;void*c;void* d;void*e;
+//a=test(4);
+//
+//b= test(8);
+//
+//c=  test(16);
+//
+//d=  test(32);
+//
+//e= test(64);
+//printMemory(start,sbrk(0));
+//Mfree(a);
+//write(a,4,0);
+//Mfree(b);
+//write(b,8,0);
+//Mfree(c);
+//write(c,16,0);
+//Mfree(d);
+//write(d,32,0);
+//
+//
+//printMemory(start,sbrk(0));
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//test(4);
+//printMemory(start,sbrk(0));
  // cout << "Address stored in ip variable: ";
 //cout << ip << endl;
 // Mfree(ip);
@@ -233,6 +234,6 @@ printMemory(start,sbrk(0));
 //cout << *ip +2<< endl;
 // Mfree(ip);
 //cout << "计算十进制数值"<< endl;
-	return 0;
+	return ip;
 	
 	} 

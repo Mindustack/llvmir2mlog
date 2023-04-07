@@ -22,10 +22,11 @@ public class SSADestructor implements IRFuncPass {
     private void criticalEdgeSplit(IRFunction function) {
         ArrayList<IRBlock> midBlockLists = new ArrayList<>();
         HashMap<IRBlock, IRBlock> redirectPreLists = new HashMap<>();
-
+        HashMap<IRBlock, IRBlock> redirectSucLists = new HashMap<>();
         for (IRBlock fromBlock : function.blocks) {
             var successors = fromBlock.nexts;
             if (successors.size() <= 1) continue;
+
 
             for (IRBlock toBlock : successors) {
                 if (toBlock.prevs.size() <= 1) continue;
@@ -40,9 +41,12 @@ public class SSADestructor implements IRFuncPass {
 
                 midBlock.prevs.add(fromBlock);
                 midBlock.nexts.add(toBlock);
-                toBlock.redirectSucBlock(fromBlock, midBlock);
+                redirectSucLists.put(toBlock, midBlock);
+                //toBlock.redirectSucBlock(fromBlock, midBlock);
             }
 
+            redirectSucLists.forEach((toBlock, midBlock) -> toBlock.redirectSucBlock(fromBlock, midBlock));
+            redirectSucLists.clear();
             // from block suc fix
             redirectPreLists.forEach((to, mid) -> fromBlock.redirectPreBlock(to, mid));
             redirectPreLists.clear();
