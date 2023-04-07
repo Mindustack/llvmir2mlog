@@ -785,9 +785,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
                 inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
             } else if (inst.type instanceof ArrayType) {
                 inst.type = ((ArrayType) inst.type).elementType;
-            } else if (inst.type instanceof VoidType) {
-
-            } else {
+            } 
+ 
+		if (inst.type instanceof PointerType) {
+				inst.type=((PointerType) inst.type).pointedType;
+           }
+ else {
                 throw new InternalError("getelementptr in other types");
 
             }

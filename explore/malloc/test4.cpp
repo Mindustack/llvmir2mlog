@@ -179,7 +179,8 @@ void *Mmalloc(unsigned nbytes)
 
 //		出处：http://www.cnblogs.com/wuyuegb2312
 
-int main (int size){
+int main (){
+	int size=10;
 void * ip= (void *)Mmalloc(size);
 //
 //	cout<<sizeof(Header);
