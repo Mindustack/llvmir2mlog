@@ -12,7 +12,7 @@ main code from https://github.com/SiriusNEO/Masterball
 src/test/java/Main.java
 
 ## todo
-- [ ] full instruction phi insertvalue
+- [x] full instruction phi insertvalue
 - [ ] figure out where const data goto 
 - [ ] standard library 
 - [ ] make mdt function builtin
