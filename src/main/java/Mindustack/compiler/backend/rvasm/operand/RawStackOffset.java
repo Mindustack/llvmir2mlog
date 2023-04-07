@@ -12,7 +12,7 @@ public class RawStackOffset extends Immediate {
         this.level = level;
     }
 
-    public enum RawType {callerArg, alloca, spill, calleeArg, lowerSp, raiseSp}
+    public enum RawType {alloca, spill, SpFromFp, callerArg, calleeArg}
 
     /*
     @Override

@@ -256,6 +256,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             ;
 
         }
+        new AsmALUInst(MLOG.SubOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("fp")
+                , new RawStackOffset(0, RawStackOffset.RawType.SpFromFp), cur.func.entryBlock);
+
         new AsmExplainInst("start", cur.func.entryBlock);
 
         function.blocks.forEach(this::runOnBlock);

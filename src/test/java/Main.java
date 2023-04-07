@@ -3,14 +3,9 @@ import Mindustack.compiler.backend.regalloc.RegisterAllocator;
 import Mindustack.compiler.backend.regalloc.StackAllocator;
 import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
-import Mindustack.compiler.middleend.analyzer.CallGraphAnalyzer;
-import Mindustack.compiler.middleend.analyzer.LoopAnalyzer;
 import Mindustack.compiler.middleend.llvmir.IRBuilder;
-import Mindustack.compiler.middleend.llvmir.hierarchy.IRFunction;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRModule;
-import Mindustack.compiler.middleend.optim.*;
-import Mindustack.compiler.middleend.optim.ssa.Mem2Reg;
-import Mindustack.compiler.middleend.optim.ssa.SSADestructor;
+import Mindustack.compiler.middleend.optim.MiddleEndOptimizer;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.io.*;
@@ -19,58 +14,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         IRBuilder IRBuilder;
         //String s;
-        var file = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\test4.ll";
+        var file = "src/main/resources/malloc.ll";
 
         IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
         IRModule module = IRBuilder.irModule;
 
 
-        new CallGraphAnalyzer().runOnModule(module);
-
-        for (IRFunction function : module.functions) {
-            new Glo2Loc().runOnFunc(function);
-            new Mem2Reg().runOnFunc(function);
-        }
-
-        for (int i = 1; i <= 7; i++) {
-
-            new FuncInliner(false).runOnModule(module);
-
-//            for (IRFunction function : module.functions) {
-//                new CFGSimplifier().runOnFunc(function);
-//                new GVN().runOnFunc(function);
-//                new SCCP().runOnFunc(function);
-//               new ADCE().runOnFunc(function);
-//                new CFGSimplifier().runOnFunc(function);
-//                new IVTrans().runOnFunc(function);
-//                new LICM().runOnFunc(function);
-//                new LocalMO().runOnFunc(function);
-//                new CFGSimplifier().runOnFunc(function);
-//            }
-        }
-
-        new FuncInliner(true).runOnModule(module);
-//
-//        for (IRFunction function : module.functions) {
-//            new GVN().runOnFunc(function);
-//            new CFGSimplifier().runOnFunc(function);
-//           new ADCE().runOnFunc(function);
-//            new CFGSimplifier().runOnFunc(function);
-//            new LICM().runOnFunc(function);
-//            new CFGSimplifier().runOnFunc(function);
-//        }
-
-        // re-analyze info for asm
-        for (IRFunction function : module.functions) {
-            new SSADestructor().runOnFunc(function);
-            new CFGSimplifier().runOnFunc(function);
-            new LocalMO().runOnFunc(function);
-            new TRO().runOnFunc(function);
-            new LoopAnalyzer().runOnFunc(function);
-            new InstAdapter().runOnFunc(function);
-        }
-
-        //new MiddleEndOptimizer().runOnModule(module);
+        new MiddleEndOptimizer().runOnModule(module);
 
 
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
@@ -108,6 +58,7 @@ public class Main {
         FileOutputStream fileOutput = new FileOutputStream(filePath, true);
         printStream = new PrintStream(fileOutput);
 
+        printStream.println("\n\ntime:" + System.nanoTime() / 1000);
         AsmPrinter printer = new AsmPrinter(printStream);
         printer.runOnModule(builder.module);
 

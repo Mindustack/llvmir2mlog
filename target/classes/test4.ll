@@ -1,18 +1,17 @@
 
 
-define void @f() {
-0:
-	%1 = icmp eq i32 1, 2
-	br i1 %1, label %foo, label %baz
+define i32 @main(i32 %x){
+entry:
+    br label %middle
+middle:
 
-foo:
-	%2 = icmp eq i32 1, 2
-	br i1 %2, label %bar, label %baz
+    %y = phi i32 [ %x, %entry ], [ %x2, %middle ]
 
-bar:
-	br label %baz
+    %x2 = add i32 %y, 1
 
-baz:
-	%3 = phi i32 [ 10, %foo ], [ 20, %bar ], [ 30, %baz ]
-	ret void
+    %condition = icmp slt i32 %x2, 10
+	br i1 %condition, label %middle, label %exit
+
+exit:
+    ret i32 %y
 }

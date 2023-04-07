@@ -81,7 +81,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     private void deepToInst(LLVMIRParser.BasicBlockContext ctx, HashSet<IRBlock> visited) {
-        IRBlock block = (IRBlock) valueMap.get(CurrentFunction.name + ctx.LabelIdent().getText().replaceAll(":", ""));
+        IRBlock block = (IRBlock) valueMap.get(CurrentFunction.name + getBasicBlockLabel(ctx).replaceAll(":", ""));
 
         if (visited.contains(block)) return;
         visited.add(block);
@@ -312,11 +312,22 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitBasicBlock(LLVMIRParser.BasicBlockContext ctx) {
-        IRBlock block = new IRBlock(CurrentFunction.name + ctx.LabelIdent().getText().replaceAll(":", ""), null);
+        String label;
+
+        IRBlock block = new IRBlock(CurrentFunction.name + getBasicBlockLabel(ctx).replaceAll(":", ""), null);
 
 
         blockCtx.put(block, ctx);
         return block;
+    }
+
+    String getBasicBlockLabel(LLVMIRParser.BasicBlockContext ctx) {
+        if (ctx.LabelIdent() == null) {
+
+            return "0:";
+        } else {
+            return ctx.LabelIdent().getText();
+        }
     }
 
     @Override
@@ -537,7 +548,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     @Override
     public Value visitOpaquePointerType(LLVMIRParser.OpaquePointerTypeContext ctx) {
         // return super.visitOpaquePointerType(ctx);
-        TypePasser.type = new PointerType(new VoidType());
+        TypePasser.type = new PointerType(new VoidType());//todo how to do it
         return TypePasser;
     }
 
@@ -766,6 +777,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         inst.type = inst.headPointer().type;
 
         assert inst.type instanceof PointerType;
+
         inst.type = ((PointerType) inst.type).pointedType;
         for (int i = 1; i < inst.indicesNum(); ++i) {
 
@@ -773,8 +785,11 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
                 inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
             } else if (inst.type instanceof ArrayType) {
                 inst.type = ((ArrayType) inst.type).elementType;
+            } else if (inst.type instanceof VoidType) {
+
             } else {
                 throw new InternalError("getelementptr in other types");
+
             }
 
         }
@@ -832,11 +847,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     @Override
     public Value visitTerminal(TerminalNode node) {
 
-        String name = CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", "");
-        if (valueMap.get(name) != null) {
-            return valueMap.get(name);
+        if (CurrentFunction != null && valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", "")) != null) {
+            return valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", ""));
         } else if (valueMap.get(node.getSymbol().getText()) != null) {
-            return valueMap.get(name);
+            return valueMap.get(node.getSymbol().getText());
+        } else if (globalValueMap.get(node.getSymbol().getText()) != null) {
+            return globalValueMap.get(node.getSymbol().getText());
         }
         return super.visitTerminal(node);
     }

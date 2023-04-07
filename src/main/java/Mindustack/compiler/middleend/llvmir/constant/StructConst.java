@@ -11,6 +11,9 @@ public class StructConst extends BaseConst {
     public ArrayList<BaseConst> constData;
 
     public StructConst(IRBaseType type) {
+        // constData=new ArrayList<>();
         super(LLVM.ConstAnon, new StructType());
+
+        constData = new ArrayList<>();
     }
 }

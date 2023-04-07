@@ -11,5 +11,6 @@ public class ArrayConst extends BaseConst {
 
     public ArrayConst(IRBaseType type, int length) {
         super(LLVM.ConstAnon, new ArrayType(type, length));
+        constData = new ArrayList<>();
     }
 }

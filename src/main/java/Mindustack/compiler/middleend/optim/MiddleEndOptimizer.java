@@ -33,7 +33,7 @@ public class MiddleEndOptimizer implements IRModulePass {
                 new CFGSimplifier().runOnFunc(function);
                 new GVN().runOnFunc(function);
                 new SCCP().runOnFunc(function);
-           //     new ADCE().runOnFunc(function);
+                new ADCE().runOnFunc(function);
                 new CFGSimplifier().runOnFunc(function);
                 new IVTrans().runOnFunc(function);
                 new LICM().runOnFunc(function);
@@ -47,8 +47,8 @@ public class MiddleEndOptimizer implements IRModulePass {
         for (IRFunction function : module.functions) {
             new GVN().runOnFunc(function);
             new CFGSimplifier().runOnFunc(function);
-      //      new ADCE().runOnFunc(function);
-       //     new CFGSimplifier().runOnFunc(function);
+            new ADCE().runOnFunc(function);
+            new CFGSimplifier().runOnFunc(function);
             new LICM().runOnFunc(function);
             new CFGSimplifier().runOnFunc(function);
         }
