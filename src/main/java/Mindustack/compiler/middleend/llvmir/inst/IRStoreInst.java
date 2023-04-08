@@ -6,9 +6,11 @@ import Mindustack.compiler.middleend.llvmir.hierarchy.IRBlock;
 import Mindustack.compiler.middleend.llvmir.type.PointerType;
 import Mindustack.compiler.share.lang.LLVM;
 import Mindustack.compiler.share.pass.InstVisitor;
+import org.jetbrains.annotations.NotNull;
 
 public class IRStoreInst extends IRBaseInst {
-    public IRStoreInst(Value storePtr, Value storeValue, IRBlock parentBlock) {
+
+    public IRStoreInst(@NotNull Value storePtr, @NotNull Value storeValue, IRBlock parentBlock) {
         super(LLVM.StoreInst, storeValue.type, parentBlock);
         this.addOperand(storeValue);
         this.addOperand(storePtr);

@@ -504,14 +504,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
     }
 
-    /**
-     * step 1. calculate address
-     * only 1~2 indices presented in LLVM IR
-     * 2 indices means it is a class "GetElementPtr". Then the first index must be 0
-     * index * elementSize (if it is array)
-     * memberOffset (if it is class)
-     * do some constant folding (detail in @awesomeGEP)
-     */
+
     @Override
     public void visit(IRGetElementPtrInst inst) {
 
@@ -532,27 +525,29 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         int elementSize = curElement.size();
 
 
-        new AsmALUInst(MLOG.AddOperation, instReg, PhysicalReg.reg("fp")
-                , cur.toImm(inst.getOperand(0)), cur.block);
+//        new AsmALUInst(MLOG.AddOperation, instReg, PhysicalReg.reg("fp")
+//                , cur.toReg(inst.getOperand(0)), cur.block);
+        new AsmMoveInst(instReg, cur.toReg(inst.getOperand(0)), cur.block);
         //
 
 
-        for (int i = 0; i < inst.operandSize(); ++i) {
+        for (int i = 1; i < inst.operandSize(); ++i) {
 
 
             var operand = inst.getOperand(i);
 
 
 //todo heap then add
-
-            elementSize = i == inst.operandSize() ? 1 : elementSize;
-
-
-            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+//            elementSize=inst.operandSize();
 
 
-            new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                    virtualReg, cur.block);
+            // elementSize = i == inst.operandSize() ? 1 : elementSize;
+
+
+//            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+//
+//
+//
 
 
 //            if (i != inst.operandSize()) {
@@ -564,8 +559,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
             if (curElement instanceof ArrayType) {
 
+
                 curElement = ((ArrayType) curElement).elementType;
                 elementSize = curElement.size();
+                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+                        virtualReg, cur.block);
+
             } else if (curElement instanceof StructType) {
 
 
@@ -573,9 +573,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
 
                 var memberVarTypes = ((StructType) curElement).memberVarTypes;
-                elementSize = 0;
+//                elementSize = 0;
 
                 var constData = ((NumConst) operand).constData;
+
                 for (int j = 0; j < constData; j++) {
 
                     elementSize += memberVarTypes.get(j).size();
@@ -583,11 +584,18 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 curElement = memberVarTypes
                         .get(constData);
 
-
+//                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+                new AsmLiInst(virtualReg, cur.toImm(elementSize), cur.block);
+                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+                        virtualReg, cur.block);
                 // elementSize = ((StructType) curElement.type).size();
 
-            } else {
-                elementSize = curElement.size();
+            } else if (curElement instanceof PointerType) {
+
+                new AsmLiInst(virtualReg, cur.toImm(((NumConst) operand).constData), cur.block);
+                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+                        virtualReg, cur.block);
+                //  elementSize = curElement.size();
                 //curElement
             }
 
