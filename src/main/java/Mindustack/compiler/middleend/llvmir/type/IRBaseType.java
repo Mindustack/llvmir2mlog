@@ -8,4 +8,8 @@ public abstract class IRBaseType {
 
     @Override
     abstract public String toString();
+
+    public void setName(String name) {
+
+    }
 }

@@ -44,6 +44,20 @@ public abstract class IRBaseInst extends User {
         return false;
     }
 
+    //    @Override
+//    public String toString() {
+//        return "IRBaseInst{" +
+//                "parentBlock=" + parentBlock +
+//                ", instContent='" + this.format() + '\'' +
+//                '}';
+//    }
+    String SourceInfo;
+
+    public void addSourceInfo(String source) {
+        SourceInfo = source;
+    }
+
+
     public abstract String format();
 
     public boolean isTerminator() {

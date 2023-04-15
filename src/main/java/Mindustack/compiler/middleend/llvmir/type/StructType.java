@@ -55,4 +55,10 @@ public class StructType extends IRBaseType {
     }
 
 
+    @Override
+    public void setName(String name) {
+
+        structProto.name = name;
+
+    }
 }

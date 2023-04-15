@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class IRGetElementPtrInst extends IRBaseInst {
 
+    public IRBaseType SourseType;
     /**
      * headPointer is the field (struct* or a pointer)
      * yieldType / retType is the type of the result
@@ -77,26 +78,38 @@ public class IRGetElementPtrInst extends IRBaseInst {
     // GetElementPtr: indices 1 or 2
     @Override
     public IRBaseInst copy() {//todo
-
+        IRGetElementPtrInst irGetElementPtrInst;
         if (elementName == null) {
-            if (indicesNum() == 1)
-                return new IRGetElementPtrInst(headPointer(), type, null, getIndex(0));
-            else {
+            if (indicesNum() == 1) {
+                irGetElementPtrInst = new IRGetElementPtrInst(headPointer(), type, null, getIndex(0));
+
+                //return irGetElementPtrInst1;
+            } else {
                 assert indicesNum() == 2;
-                return new IRGetElementPtrInst(headPointer(), type, null, getIndex(0), getIndex(1));
+                irGetElementPtrInst = new IRGetElementPtrInst(headPointer(), type, null, getIndex(0), getIndex(1));
+                //return irGetElementPtrInst;
             }
         } else {
-            if (indicesNum() == 1)
-                return new IRGetElementPtrInst(elementName, headPointer(), type, null, getIndex(0));
-            else {
+            if (indicesNum() == 1) {
+                irGetElementPtrInst = new IRGetElementPtrInst(elementName, headPointer(), type, null, getIndex(0));
+//                return irGetElementPtrInst1;
+            } else {
                 assert indicesNum() == 2;
-                return new IRGetElementPtrInst(elementName, headPointer(), type, null, getIndex(0), getIndex(1));
+                irGetElementPtrInst = new IRGetElementPtrInst(elementName, headPointer(), type, null, getIndex(0), getIndex(1));
+
             }
         }
+        irGetElementPtrInst.addSourceInfo(this.SourceInfo);
+        irGetElementPtrInst.SourseType = SourseType;
+        return irGetElementPtrInst;
     }
 
     @Override
     public void accept(InstVisitor visitor) {
         visitor.visit(this);
     }
+
+//    public void setSourseType(IRBaseType type) {
+//        this.setSourseType=type;
+//    }
 }

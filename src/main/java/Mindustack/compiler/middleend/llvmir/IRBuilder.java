@@ -221,8 +221,8 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     public Value visitTypeDef(LLVMIRParser.TypeDefContext ctx) {
 
         String TypeName = ctx.LocalIdent().getText().substring(1);
-        var type = ctx.type().accept(this).type;
-
+        var type = visitType(ctx.type()).type;
+        type.setName(TypeName);
         var value = new Value(TypeName, type);
 
         globalValueMap.put(TypeName, value);
@@ -418,9 +418,9 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         var inst = visitChildren(ctx);
 
-        return new Value(CurrentBlock.name + counter++, inst.type)
 
-                ;
+        return setNewValue(destName, inst);
+        //new Value(CurrentBlock.name + counter++, inst.type)
 
 
     }
@@ -443,7 +443,9 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         IRGetElementPtrInst inst = new IRGetElementPtrInst(visitTypeConst(ctx.typeConst()), null, null, indices);
 
+        inst.addSourceInfo(ctx.getStart() + ctx.getText());
         inst.type = visitType(ctx.type()).type;
+        inst.SourseType = inst.type;
         //inst.headPointer().type;
 
         // assert inst.type instanceof PointerType;
@@ -474,7 +476,6 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         inst.setParentBlock(CurrentBlock);
 
-        //  setNewValue(destName, inst);
         return inst;
     }
 
@@ -674,13 +675,14 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         return ret;
     }
 
-    private void setNewValue(String name, Value value) {//cover rename
+    private Value setNewValue(String name, Value value) {//cover rename
         if (valueMap.containsKey(name)) {
             valueMap.remove(value.name);
         }
 
         value.name = name;
         valueMap.put(name, value);
+        return value;
     }
 //     private void setNewValue(Value Old, Value New) {//cover rename
 //        valueMap.remove(value.name);
@@ -884,7 +886,11 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         IRGetElementPtrInst inst = new IRGetElementPtrInst(visitTypeValue(typeValueContext0), null, null, indices);
 
+        inst.addSourceInfo(ctx.getStart() + ctx.getText());
+
         inst.type = visitType(type).type;
+        inst.SourseType = inst.type;
+
         //inst.headPointer().type;
 
         // assert inst.type instanceof PointerType;
@@ -971,6 +977,11 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         //visitSelectInst()
         //setNewValue(destName, inst);
         return inst;
+    }
+
+    @Override
+    public Value visitSelectInst(LLVMIRParser.SelectInstContext ctx) {//todo
+        return super.visitSelectInst(ctx);
     }
 
     @Override

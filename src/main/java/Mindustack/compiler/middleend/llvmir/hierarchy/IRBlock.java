@@ -173,4 +173,11 @@ public class IRBlock extends Value {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "IRBlock{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

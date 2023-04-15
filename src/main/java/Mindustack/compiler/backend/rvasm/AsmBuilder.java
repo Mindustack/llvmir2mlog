@@ -500,7 +500,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 break;
             }
             default:
-                throw new InternalError("unknown ASM compare op");
+                //todo
+                awesomeALU(MLOG.LessThanOperation, instReg, inst.lhs(), inst.rhs());
+                //throw new InternalError("unknown ASM compare op");
         }
     }
 
@@ -518,7 +520,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //
 
 
-        var curElement = ((PointerType) inst.headPointer().type).pointedType;
+        var curElement = inst.SourseType;
+        //((PointerType) inst.headPointer().type).pointedType;
+
+
         Register instReg = cur.toReg(inst);
 
         VirtualReg virtualReg = new VirtualReg();// = new VirtualReg();
@@ -529,12 +534,31 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //                , cur.toReg(inst.getOperand(0)), cur.block);
         new AsmMoveInst(instReg, cur.toReg(inst.getOperand(0)), cur.block);
         //
+        var operand = inst.getOperand(1);
 
 
-        for (int i = 1; i < inst.operandSize(); ++i) {
+        if (curElement instanceof ArrayType) {
 
 
-            var operand = inst.getOperand(i);
+            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
+
+            new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+                    virtualReg, cur.block);
+
+        } else if (curElement instanceof StructType) {
+
+            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
+
+            new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+                    virtualReg, cur.block);
+
+        }
+
+
+        for (int i = 2; i < inst.operandSize(); ++i) {
+
+
+            operand = inst.getOperand(i);
 
 
 //todo heap then add
@@ -562,6 +586,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
                 curElement = ((ArrayType) curElement).elementType;
                 elementSize = curElement.size();
+
                 awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
                 new AsmALUInst(MLOG.AddOperation, instReg, instReg,
                         virtualReg, cur.block);
@@ -590,13 +615,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                         virtualReg, cur.block);
                 // elementSize = ((StructType) curElement.type).size();
 
-            } else if (curElement instanceof PointerType) {
-
-                new AsmLiInst(virtualReg, cur.toImm(((NumConst) operand).constData), cur.block);
-                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                        virtualReg, cur.block);
-                //  elementSize = curElement.size();
-                //curElement
+//            } else if (curElement instanceof PointerType) {
+//
+//                new AsmLiInst(virtualReg, cur.toImm(((NumConst) operand).constData), cur.block);
+//                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+//                        virtualReg, cur.block);
+//                //  elementSize = curElement.size();
+//                //curElement
             }
 
 
