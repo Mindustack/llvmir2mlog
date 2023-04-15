@@ -1,8 +1,8 @@
-import Mindustack.compiler.backend.optim.BackEndOptimizer;
 import Mindustack.compiler.backend.regalloc.RegisterAllocator;
 import Mindustack.compiler.backend.regalloc.StackAllocator;
 import Mindustack.compiler.backend.rvasm.AsmBuilder;
 import Mindustack.compiler.backend.rvasm.AsmPrinter;
+import Mindustack.compiler.backend.rvasm.inst.AsmExplainInst;
 import Mindustack.compiler.middleend.llvmir.IRBuilder;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRModule;
 import Mindustack.compiler.middleend.optim.MiddleEndOptimizer;
@@ -13,6 +13,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         IRBuilder IRBuilder;
+        AsmExplainInst.ExplainShow = false;
         //String s;
         var file = "src/main/resources/malloc.ll";
 
@@ -41,7 +42,7 @@ public class Main {
         new StackAllocator().runOnModule(builder.module);
 //
         // Optimize Assembly. Don't comment it directly because there are some necessary passes.
-        new BackEndOptimizer().runOnModule(builder.module);
+        // new BackEndOptimizer().runOnModule(builder.module);
 
 
         new AsmPrinter(

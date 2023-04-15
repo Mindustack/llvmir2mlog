@@ -17,13 +17,6 @@ public class IRBitCastInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // %bitcast = bitcast i8** %a to i8*;
-        return this.identifier() + " = " + LLVM.BitCastInst + " " + this.fromValue().typedIdentifier()
-                + " to " + this.type;
-    }
-
-    @Override
     public IRBaseInst copy() {
         return new IRBitCastInst(fromValue(), type, null);
     }

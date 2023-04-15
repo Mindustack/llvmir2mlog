@@ -3,7 +3,6 @@ package Mindustack.compiler.middleend.llvmir.inst;
 import Mindustack.compiler.middleend.llvmir.Value;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRBlock;
 import Mindustack.compiler.middleend.llvmir.type.PointerType;
-import Mindustack.compiler.share.lang.LLVM;
 import Mindustack.compiler.share.pass.InstVisitor;
 
 public class IRLoadInst extends IRBaseInst {
@@ -25,13 +24,6 @@ public class IRLoadInst extends IRBaseInst {
     @Override
     public boolean mayHaveSideEffects() {
         return true;
-    }
-
-    @Override
-    public String format() {
-        // %load = load <type>, <type*> %destPtr, align <size>
-        return this.identifier() + " = " + LLVM.LoadInst + " " + this.type + ", " +
-                this.loadPtr().typedIdentifier() + ", align " + this.type.size();
     }
 
     @Override

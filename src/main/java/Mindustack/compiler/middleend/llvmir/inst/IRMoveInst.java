@@ -31,21 +31,6 @@ public class IRMoveInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        return LLVM.MoveInst + " " + this.dest().identifier() + ", " + this.source().identifier();
-        /*
-        IRBaseInst substitutedInst;
-        if (dest().type.match(IRTranslator.i32Type) || dest().type.match(IRTranslator.boolType)) {
-            substitutedInst = new IRBinaryInst(LLVM.AddInst, dest().type, source(), new NumConst(0), null);
-        }
-        else
-            substitutedInst = new IRGetElementPtrInst(source(), source().type, null, new NumConst(0));
-        substitutedInst.name = dest().name;
-        return substitutedInst.format();
-        */
-    }
-
-    @Override
     public IRBaseInst copy() {
         return new IRMoveInst(dest(), source(), null);
     }

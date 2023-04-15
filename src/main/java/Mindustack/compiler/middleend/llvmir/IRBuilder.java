@@ -102,11 +102,11 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             var visit = visit(instCtx);
             IRBaseInst inst = (IRBaseInst) visit;
             inst.setParentBlock(block);
-            rowMarker.put(inst, new RowMark(instCtx.getStart().getLine(), inst.format()));
+            rowMarker.put(inst, new RowMark(instCtx.getStart().getLine(), instCtx.getText()));
         }
         IRBaseInst inst = (IRBaseInst) ctx.terminator().accept(this);
         inst.setParentBlock(block);
-        rowMarker.put(inst, new RowMark(ctx.terminator().getStart().getLine(), inst.format()));
+        rowMarker.put(inst, new RowMark(ctx.terminator().getStart().getLine(), ctx.terminator().getText()));
 
 
         if (block.terminator() instanceof IRBrInst) {
@@ -119,15 +119,15 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         } else if (block.terminator() instanceof IRRetInst) {
             block.parentFunction.exitBlock = block;
         }
-    }    @Override
-    public Value visitPtrToIntInst(LLVMIRParser.PtrToIntInstContext ctx) {
+    }
+    @Override
+    public Value visitTruncInst(LLVMIRParser.TruncInstContext ctx) {
+        //String destName = ctx..LocalReg().getText().substring(1);
+
+        IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
 
 
-        IRTruncInst inst = new IRTruncInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
-//todo so it cant be printed correctly
         return inst;
-
-        //  return new IRMoveInst(newValue(destName,visitType( ctx.type()).type),visitTypeValue(ctx.typeValue()),null);
 
     }
 
@@ -924,24 +924,25 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitTruncInst(LLVMIRParser.TruncInstContext ctx) {
-        //String destName = ctx..LocalReg().getText().substring(1);
-
-        IRTruncInst inst = new IRTruncInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
-
-
-        return inst;
-
-    }
-
-    @Override
     public Value visitZExtInst(LLVMIRParser.ZExtInstContext ctx) {
         //String destName = ctx.instDest().LocalReg().getText().substring(1);
 //
-        IRZextInst inst = new IRZextInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
+        IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
 
 
         return inst;
+    }
+
+@Override
+    public Value visitPtrToIntInst(LLVMIRParser.PtrToIntInstContext ctx) {
+
+
+        IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
+//todo so it cant be printed correctly
+        return inst;
+
+        //  return new IRMoveInst(newValue(destName,visitType( ctx.type()).type),visitTypeValue(ctx.typeValue()),null);
+
     }
 
     @Override

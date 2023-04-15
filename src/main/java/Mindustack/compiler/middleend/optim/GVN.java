@@ -37,8 +37,8 @@ public class GVN implements IRFuncPass {
         return value instanceof IRBinaryInst ||
                 value instanceof IRBitCastInst ||
                 value instanceof IRICmpInst ||
-                value instanceof IRTruncInst ||
-                value instanceof IRZextInst ||
+                value instanceof IRCastInst ||
+//                value instanceof IRZextInst ||
                 value instanceof IRGetElementPtrInst ||
                 value instanceof IRLoadInst;
     }
@@ -181,9 +181,7 @@ public class GVN implements IRFuncPass {
             } else if (inst1 instanceof IRICmpInst) {
                 assert inst2 instanceof IRICmpInst;
                 return (Objects.equals(((IRICmpInst) inst1).op, ((IRICmpInst) inst2).op));
-            } else if (inst1 instanceof IRTruncInst) {
-                return inst1.type.match(inst2.type);
-            } else if (inst1 instanceof IRZextInst) {
+            } else if (inst1 instanceof IRCastInst) {
                 return inst1.type.match(inst2.type);
             } else if (inst1 instanceof IRGetElementPtrInst) {
                 return true;

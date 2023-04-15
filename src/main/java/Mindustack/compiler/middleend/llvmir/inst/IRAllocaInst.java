@@ -3,7 +3,6 @@ package Mindustack.compiler.middleend.llvmir.inst;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRBlock;
 import Mindustack.compiler.middleend.llvmir.type.IRBaseType;
 import Mindustack.compiler.middleend.llvmir.type.PointerType;
-import Mindustack.compiler.share.lang.LLVM;
 import Mindustack.compiler.share.pass.InstVisitor;
 
 public class IRAllocaInst extends IRBaseInst {
@@ -17,13 +16,6 @@ public class IRAllocaInst extends IRBaseInst {
 
         this.allocaName = allocaName;
         this.allocaType = allocaType;
-    }
-
-    @Override
-    public String format() {
-        // %alloca = alloca <type>, align <size>
-        return this.identifier() + " = " + LLVM.AllocaInst + " " +
-                this.allocaType + ", align " + this.allocaType.size();
     }
 
     @Override

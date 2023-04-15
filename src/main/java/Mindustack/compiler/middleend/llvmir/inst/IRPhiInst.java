@@ -25,20 +25,6 @@ public class IRPhiInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // %indvar = phi i32 [ 0, %LoopHeader ], [ %nextindvar, %Loop ]
-        String ret = this.identifier() + " = " + LLVM.PhiInst + " " + this.type + " ";
-
-
-//        for (int i = 0; i < this.operandSize(); i += 2) {
-//            ret += "[" + this.getOperand(i).identifier() + ", " + this.getOperand(i + 1).identifier() + "]";
-//            if (i < this.operandSize() - 2) ret += ", ";
-//        }
-
-        return ret;
-    }
-
-    @Override
     public IRBaseInst copy() {
         IRPhiInst ret = new IRPhiInst(type, null);
         for (int i = 0; i < this.operandSize(); i += 2)

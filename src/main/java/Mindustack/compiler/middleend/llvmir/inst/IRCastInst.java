@@ -6,9 +6,9 @@ import Mindustack.compiler.middleend.llvmir.type.IRBaseType;
 import Mindustack.compiler.share.lang.LLVM;
 import Mindustack.compiler.share.pass.InstVisitor;
 
-public class IRTruncInst extends IRBaseInst {
+public class IRCastInst extends IRBaseInst {
 
-    public IRTruncInst(Value fromValue, IRBaseType targetType, IRBlock parentBlock) {
+    public IRCastInst(Value fromValue, IRBaseType targetType, IRBlock parentBlock) {
         super(LLVM.TruncInst, targetType, parentBlock);
         this.addOperand(fromValue);
     }
@@ -18,15 +18,8 @@ public class IRTruncInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // %trunc = trunc i32 %a to i8;
-        return this.identifier() + " = " + LLVM.TruncInst + " " + this.fromValue().typedIdentifier()
-                + " to " + this.type;
-    }
-
-    @Override
     public IRBaseInst copy() {
-        return new IRTruncInst(fromValue(), type, null);
+        return new IRCastInst(fromValue(), type, null);
     }
 
     @Override

@@ -47,16 +47,6 @@ public class IRRetInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // ret i32 0
-        // ret void
-        String ret = LLVM.RetInst + " " + this.type;
-        if (!this.type.match(new VoidType()))
-            ret += " " + this.retVal().identifier();
-        return ret;
-    }
-
-    @Override
     public void accept(InstVisitor visitor) {
         visitor.visit(this);
     }

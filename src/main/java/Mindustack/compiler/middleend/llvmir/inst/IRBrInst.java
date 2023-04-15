@@ -70,19 +70,6 @@ public class IRBrInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // br i1 %comparison_result, label %A, label %B
-        // br label %A
-        if (!this.isJump()) {
-            return LLVM.BrInst + " " + this.condition().type + " " + this.condition().identifier()
-                    + ", " + this.ifTrueBlock().typedIdentifier()
-                    + ", " + this.ifFalseBlock().typedIdentifier();
-        } else {
-            return LLVM.BrInst + " " + this.destBlock().typedIdentifier();
-        }
-    }
-
-    @Override
     public void accept(InstVisitor visitor) {
         visitor.visit(this);
     }

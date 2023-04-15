@@ -4,7 +4,6 @@ import Mindustack.compiler.middleend.llvmir.Value;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRBlock;
 import Mindustack.compiler.middleend.llvmir.hierarchy.IRFunction;
 import Mindustack.compiler.middleend.llvmir.type.IRFuncType;
-import Mindustack.compiler.middleend.llvmir.type.VoidType;
 import Mindustack.compiler.share.lang.LLVM;
 import Mindustack.compiler.share.pass.InstVisitor;
 
@@ -59,21 +58,6 @@ public class IRCallInst extends IRBaseInst {
     public boolean isTailRecursive() {
         //    return false;
         return isTailCall && callFunc() == this.parentBlock.parentFunction;
-    }
-
-    @Override
-    public String format() {
-        // %call = call i32 @foo(i32 1)
-        StringBuilder ret = new StringBuilder((this.type.match(new VoidType())) ? "" : this.identifier() + " = ");
-        ret.append(LLVM.CallInst + " ");
-        if (noaliasFlag) ret.append("noalias ");
-        ret.append(this.callFunc().typedIdentifier()).append("(");
-        for (int i = 0; i < this.callFunc().getArgNum(); i++) {
-            ret.append(this.callFunc().getArgType(i)).append(" ").append(this.getArg(i).identifier());
-            if (i != this.callFunc().getArgNum() - 1) ret.append(", ");
-        }
-        ret.append(")");
-        return ret.toString();
     }
 
     @Override

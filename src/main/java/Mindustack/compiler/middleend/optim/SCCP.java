@@ -496,14 +496,14 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
     }
 
     @Override
-    public void visit(IRTruncInst inst) {
+    public void visit(IRCastInst inst) {
         assign(inst, inst.fromValue());
     }
 
-    @Override
-    public void visit(IRZextInst inst) {
-        assign(inst, inst.fromValue());
-    }
+//    @Override
+//    public void visit(IRZextInst inst) {
+//        assign(inst, inst.fromValue());
+//    }
 
     @Override
     public void visit(IRMoveInst inst) {

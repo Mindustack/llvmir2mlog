@@ -24,13 +24,6 @@ public class IRBinaryInst extends IRBaseInst {
     }
 
     @Override
-    public String format() {
-        // %add = add i32 %A, %B
-        return this.identifier() + " = " + this.op + " " + this.type + " " +
-                this.lhs().identifier() + ", " + this.rhs().identifier();
-    }
-
-    @Override
     public IRBaseInst copy() {
         return new IRBinaryInst(op, type, lhs(), rhs(), null);
     }

@@ -26,4 +26,9 @@ public class NumConst extends BaseConst {
     public String identifier() {
         return String.valueOf(constData);
     }
+
+    @Override
+    public String toString() {
+        return super.identifier();
+    }
 }

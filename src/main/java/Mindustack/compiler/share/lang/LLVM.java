@@ -98,9 +98,17 @@ public class LLVM {
 
     // compare inst type
     public static final String GreaterArg = "sgt";
+    public static final String GreaterArgUnsigned = "ugt";
     public static final String GreaterEqualArg = "sge";
+    public static final String GreaterEqualArgUnsigned = "uge";
+
     public static final String LessArg = "slt";
+    public static final String LessArgUnsigned = "ult";
+
     public static final String LessEqualArg = "sle";
+    public static final String LessEqualArgUnsigned = "ule";
+
+
     public static final String EqualArg = "eq";
     public static final String NotEqualArg = "ne";
 

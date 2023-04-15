@@ -58,8 +58,6 @@ public abstract class IRBaseInst extends User {
     }
 
 
-    public abstract String format();
-
     public boolean isTerminator() {
         return false;
     }

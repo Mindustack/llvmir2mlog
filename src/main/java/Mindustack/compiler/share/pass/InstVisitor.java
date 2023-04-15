@@ -25,9 +25,9 @@ public interface InstVisitor extends Pass {
 
     void visit(IRStoreInst inst);
 
-    void visit(IRTruncInst inst);
+    void visit(IRCastInst inst);
 
-    void visit(IRZextInst inst);
+//    void visit(IRZextInst inst);
 
     void visit(IRMoveInst inst);
 }

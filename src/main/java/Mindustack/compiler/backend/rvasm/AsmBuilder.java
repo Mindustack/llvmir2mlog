@@ -473,17 +473,23 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         Register instReg = cur.toReg(inst);
         switch (inst.op) {
+
             case LLVM.LessArg:
+            case LLVM.LessArgUnsigned:
                 awesomeALU(MLOG.LessThanOperation, instReg, inst.lhs(), inst.rhs());
                 break;
+
             case LLVM.GreaterArg:
+            case LLVM.GreaterArgUnsigned:
                 awesomeALU(MLOG.GreaterThanOperation, instReg, inst.rhs(), inst.lhs());
                 break;
-            case LLVM.GreaterEqualArg: // a >= b -> !(a < b)
+            case LLVM.GreaterEqualArg:
+            case LLVM.GreaterEqualArgUnsigned: // a >= b -> !(a < b)
                 awesomeALU(MLOG.GreaterThanEqOperation, instReg, inst.lhs(), inst.rhs());
                 //new AsmALUInst(MLOG.XorOperation, instReg, instReg, cur.toImm(1), cur.block);
                 break;
-            case LLVM.LessEqualArg: // a <= b -> !(b < a)
+            case LLVM.LessEqualArg:
+            case LLVM.LessEqualArgUnsigned:// a <= b -> !(b < a)
                 awesomeALU(MLOG.LessThanEqOperation, instReg, inst.rhs(), inst.lhs());
                 //new AsmALUInst(MLOG.XorOperation, instReg, instReg, cur.toImm(1), cur.block);
                 break;
@@ -500,9 +506,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 break;
             }
             default:
-                //todo
-                awesomeALU(MLOG.LessThanOperation, instReg, inst.lhs(), inst.rhs());
-                //throw new InternalError("unknown ASM compare op");
+
+                //  awesomeALU(MLOG.LessThanOperation, instReg, inst.lhs(), inst.rhs());
+                throw new InternalError("unknown ASM compare op");
         }
     }
 
@@ -725,14 +731,14 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     // awesome asm optimize
 
     @Override
-    public void visit(IRTruncInst inst) {
+    public void visit(IRCastInst inst) {
         awesomeMove(cur.toReg(inst), inst.getOperand(0));
     }
 
-    @Override
-    public void visit(IRZextInst inst) {
-        awesomeMove(cur.toReg(inst), inst.getOperand(0));
-    }
+//    @Override
+//    public void visit(IRZextInst inst) {
+//        awesomeMove(cur.toReg(inst), inst.getOperand(0));
+//    }
 
     @Override
     public void visit(IRMoveInst inst) {
