@@ -27,7 +27,7 @@ public class Log {
         Log.ps = ps;
     }
 
-    public static void setVerbose(Verbose verbose) {
+    public static void setVerbose(Verbose verbose) {//todo
         Log.verbose = verbose;
         infoOpen = markOpen = trackOpen = false;
 

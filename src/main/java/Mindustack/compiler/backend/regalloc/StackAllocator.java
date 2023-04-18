@@ -6,7 +6,6 @@ import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
 import Mindustack.compiler.backend.rvasm.inst.AsmBaseInst;
 import Mindustack.compiler.backend.rvasm.operand.Immediate;
 import Mindustack.compiler.backend.rvasm.operand.RawStackOffset;
-import Mindustack.compiler.share.lang.MLOG;
 import Mindustack.compiler.share.pass.AsmFuncPass;
 import Mindustack.compiler.share.pass.AsmModulePass;
 
@@ -20,9 +19,6 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
     @Override
     public void runOnFunc(AsmFunction function) {
         function.totalStackUse += function.callerArgStackUse + function.allocaStackUse + function.spillStackUse + 1;
-
-        if (function.totalStackUse % MLOG.SpLowUnit != 0)
-            function.totalStackUse = (function.totalStackUse / MLOG.SpLowUnit + 1) * MLOG.SpLowUnit;
 
 
 //        Log.report(function.identifier, function.totalStackUse, function.callerArgStackUse, function.allocaStackUse, function.spillStackUse);

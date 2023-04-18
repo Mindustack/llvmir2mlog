@@ -10,6 +10,7 @@ public class AsmStoreInst extends AsmBaseInst {
 
     public AsmStoreInst(int byteWidth, Register adr, Register rs2, Immediate imm, AsmBlock parentBlock) {
         super(null, adr, rs2, imm, parentBlock);
+      // System.out.println(rs1);
         this.byteWidth = byteWidth;
     }
 
