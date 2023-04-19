@@ -29,14 +29,14 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 //        ps.println("# fileName: " + irFileName + TAB + " compiled by @Masterball.");
 //        ps.println(TAB + ".text");
         module.functions.forEach(this::runOnFunc);
-        module.globalVarSeg.forEach(globalVar -> {
-            AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
-            ps.println();
-        });
-        module.stringConstSeg.forEach(stringConst -> {
-            AsmFormatter.stringConstFormat(stringConst).forEach(ps::println);
-            ps.println();
-        });
+//        module.globalVarSeg.forEach(globalVar -> {
+//            AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
+//            ps.println();
+//        });
+//        module.stringConstSeg.forEach(stringConst -> {
+//            AsmFormatter.stringConstFormat(stringConst).forEach(ps::println);
+//            ps.println();
+//        });
     }
 
     @Override

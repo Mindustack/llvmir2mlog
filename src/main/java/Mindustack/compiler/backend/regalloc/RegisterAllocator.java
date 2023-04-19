@@ -448,7 +448,7 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
                         // if it is also in defs()
                         VirtualReg temp = new VirtualReg(((VirtualReg) use).size);
                         AsmBaseInst loadInst = new AsmLoadInst(temp.size, temp, PhysicalReg.reg("fp"), use.stackOffset, null);
-                        AsmBaseInst storeInst = new AsmStoreInst(temp.size, temp, PhysicalReg.reg("fp"), use.stackOffset, null);
+                        AsmBaseInst storeInst = new AsmStoreInst(temp, PhysicalReg.reg("fp"), use.stackOffset, null);
                         inst.replaceUse(use, temp);
                         inst.replaceDef(use, temp);
                         it.previous();
@@ -464,12 +464,12 @@ public class RegisterAllocator implements AsmModulePass, AsmFuncPass {
 
                     if (inst.uses().contains(def)) continue; // has been considered previously
                     if (inst instanceof AsmMoveInst && inst.rs1.stackOffset == null) {
-                        AsmBaseInst storeInst = new AsmStoreInst(((VirtualReg) def).size, PhysicalReg.reg("fp"), inst.rs1, def.stackOffset, null);
+                        AsmBaseInst storeInst = new AsmStoreInst(PhysicalReg.reg("fp"), inst.rs1, def.stackOffset, null);
                         it.set(storeInst);
                     } else {
                         VirtualReg temp = new VirtualReg(((VirtualReg) def).size);
                         inst.replaceDef(def, temp);
-                        AsmBaseInst storeInst = new AsmStoreInst(((VirtualReg) def).size, PhysicalReg.reg("fp"), temp, def.stackOffset, null);
+                        AsmBaseInst storeInst = new AsmStoreInst(PhysicalReg.reg("fp"), temp, def.stackOffset, null);
                         it.add(storeInst);
                         introducedTemp.add(temp);
                     }

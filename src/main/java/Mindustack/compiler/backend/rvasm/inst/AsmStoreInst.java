@@ -8,15 +8,15 @@ import Mindustack.compiler.share.lang.MLOG;
 public class AsmStoreInst extends AsmBaseInst {
     private int byteWidth = 1;
 
-    public AsmStoreInst(int byteWidth, Register adr, Register rs2, Immediate imm, AsmBlock parentBlock) {
+    public AsmStoreInst(Register adr, Register rs2, Immediate imm, AsmBlock parentBlock) {
         super(null, adr, rs2, imm, parentBlock);
-      // System.out.println(rs1);
+        // System.out.println(rs1);
         this.byteWidth = byteWidth;
     }
 
     @Override
     public AsmBaseInst copy() {
-        return new AsmStoreInst(byteWidth, rs1, rs2, imm, null);
+        return new AsmStoreInst(rs1, rs2, imm, null);
     }
 
     @Override

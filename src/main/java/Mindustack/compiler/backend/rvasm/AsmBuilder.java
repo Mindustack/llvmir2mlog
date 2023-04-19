@@ -41,10 +41,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public AsmBuilder() {
     }
 
-    private static boolean validImm(Value value) {
-        return (value instanceof NumConst) || value instanceof BoolConst;
-    }
-
     private static boolean validImm(int value) {
         return true;
     }
@@ -135,6 +131,98 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
     }
 
+    private void globalDecl(IRModule irModule) {
+
+
+        AsmFunction function = new AsmFunction("init");
+        AsmBlock block = new AsmBlock("0");
+        cur.func = function;
+        cur.block = block;
+
+        //block.loopDepth = irBlock.loopDepth;
+        //irBlock.asmOperand = block;
+
+        //function.blocks.add(block);
+        int memUse = 0;
+
+        for (GlobalVariable globalVar : irModule.globalVarSeg) {
+
+            GlobalReg globalReg = new GlobalReg(globalVar.name);
+            var memOffset = new RawMemOffset(globalReg, memUse);
+            globalVar.asmOperand = memOffset;
+            // module.globalVarSeg.add(globalReg);//todo print
+            if (globalVar.initValue != null) {
+                memUse += parseConst(((BaseConst) globalVar.initValue), memUse);
+            }
+            //((StructType) globalVar.pointedType()).
+            // dataZoneSize += globalVar.pointedType().size();
+
+
+        }
+
+        //new AsmLiInst(PhysicalReg.reg(),cur.toImm(baseConst),cur.block);
+        new AsmRetInst(cur.block);
+        function.entryBlock = block;
+        function.exitBlock = block;
+        // builtinFunc.asmOperand = function;
+
+
+        //todo build library here
+
+
+//        for (StringConst strConst : irModule.stringConstSeg) {
+//            GlobalReg strReg = new GlobalReg(strConst.name, strConst.constData);
+//            strConst.asmOperand = strReg;
+//            module.stringConstSeg.add(strReg);
+//        }
+    }
+
+    private int parseConst(BaseConst baseConst, int adrs) {
+
+        if (baseConst instanceof NumConst || baseConst instanceof BoolConst) {
+
+            VirtualReg virtualReg;
+            virtualReg = new VirtualReg();
+            new AsmLiInst(virtualReg, cur.toImm(baseConst), cur.block);
+            new AsmStoreInst(PhysicalReg.reg("zero"), virtualReg, new Immediate(adrs), cur.block);
+//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
+
+
+        } else if (baseConst instanceof ArrayConst) {
+
+
+            for (BaseConst constData : ((ArrayConst) baseConst).constData) {
+                parseConst(constData, adrs);
+                adrs += constData.type.size();
+            }
+//            VirtualReg virtualReg;
+//            virtualReg = new VirtualReg();
+//        new AsmLiInst(virtualReg,cur.toImm(baseConst),cur.block);
+//        new AsmStoreInst(PhysicalReg.reg("zero"),virtualReg,new Immediate(++deep),cur.block);
+//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
+
+
+        } else if (baseConst instanceof StructConst) {
+
+
+            for (BaseConst constData : ((StructConst) baseConst).constData) {
+                parseConst(constData, adrs);
+                adrs += constData.type.size();
+            }
+//            VirtualReg virtualReg;
+//            virtualReg = new VirtualReg();
+//        new AsmLiInst(virtualReg,cur.toImm(baseConst),cur.block);
+//        new AsmStoreInst(PhysicalReg.reg("zero"),virtualReg,new Immediate(++deep),cur.block);
+//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
+
+
+        }
+
+
+        return adrs;
+
+    }
+
     // Builder
     @Override
     public void runOnModule(IRModule irModule) {
@@ -188,13 +276,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //    }
 
     @Override
-    public void runOnBlock(IRBlock block) {
-        cur.block = (AsmBlock) block.asmOperand;
-        cur.recordLi.clear();
-        block.instructions.forEach(inst -> inst.accept(this));
-    }
-
-    @Override
     public void runOnFunc(IRFunction function) {
         cur.func = (AsmFunction) function.asmOperand;
 
@@ -204,18 +285,16 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         //?
         new AsmALUInst(MLOG.AddOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 // new RawStackOffset(0, RawType.lowerSp)
-                new Immediate(-1)
-                , cur.func.entryBlock);
+                new Immediate(-1), cur.func.entryBlock);
 
 
-        new AsmStoreInst(1, PhysicalReg.reg("sp"),
-                PhysicalReg.reg("fp"), new Immediate(0), cur.func.entryBlock);
+        new AsmStoreInst(PhysicalReg.reg("sp"), PhysicalReg.reg("fp"), new Immediate(0), cur.func.entryBlock);
 
 
         new AsmMoveInst(PhysicalReg.reg("fp"), PhysicalReg.reg("sp"), cur.func.entryBlock);
 
 
-      //  new AsmLabel(cur.func.identifier + MLOG.LabelForTailSuffix, cur.func.entryBlock);
+        //  new AsmLabel(cur.func.identifier + MLOG.LabelForTailSuffix, cur.func.entryBlock);
 
         ArrayList<Register> calleeSaveTemp = new ArrayList<>();
         for (PhysicalReg phyReg : PhysicalReg.calleeSaved) {
@@ -245,20 +324,15 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         for (int i = MLOG.MaxArgRegNum; i < cur.func.arguments.size(); i++) {
 
             argInStack = new VirtualReg();
-            new AsmALUInst(MLOG.SubOperation, argInStack, PhysicalReg.reg("sp")
-                    , new Immediate(1 - MLOG.MaxArgRegNum + i), cur.func.entryBlock);
-            new AsmLoadInst(1, cur.func.arguments.get(i),
-                    argInStack
+            new AsmALUInst(MLOG.SubOperation, argInStack, PhysicalReg.reg("sp"), new Immediate(1 - MLOG.MaxArgRegNum + i), cur.func.entryBlock);
+            new AsmLoadInst(1, cur.func.arguments.get(i), argInStack
 
-                    ,
-                    new Immediate(0)
+                    , new Immediate(0)
 
-                    , cur.func.entryBlock)
-            ;
+                    , cur.func.entryBlock);
 
         }
-        new AsmALUInst(MLOG.SubOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("fp")
-                , new RawStackOffset(0, RawStackOffset.RawType.SpFromFp), cur.func.entryBlock);
+        new AsmALUInst(MLOG.SubOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("fp"), new RawStackOffset(0, RawStackOffset.RawType.SpFromFp), cur.func.entryBlock);
 
         new AsmExplainInst("start", cur.func.entryBlock);
 
@@ -293,13 +367,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
 
         new AsmMoveInst(PhysicalReg.reg("sp"), PhysicalReg.reg("fp"), cur.func.exitBlock);
-        new AsmLoadInst(1, PhysicalReg.reg("fp"),
-                PhysicalReg.reg("fp"), new Immediate(0), cur.func.exitBlock);
+        new AsmLoadInst(1, PhysicalReg.reg("fp"), PhysicalReg.reg("fp"), new Immediate(0), cur.func.exitBlock);
 
         new AsmALUInst(MLOG.AddOperation, PhysicalReg.reg("sp"), PhysicalReg.reg("sp"),
                 //new RawStackOffset(0, RawType.raiseSp)
-                new Immediate(1)
-                , cur.func.entryBlock);
+                new Immediate(1), cur.func.entryBlock);
 
 
         // return
@@ -317,6 +389,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     }
 
     @Override
+    public void runOnBlock(IRBlock block) {
+        cur.block = (AsmBlock) block.asmOperand;
+        cur.recordLi.clear();
+        block.instructions.forEach(inst -> inst.accept(this));
+    }
+
+    @Override
     public void visit(IRBinaryInst inst) {
         Register instReg = cur.toReg(inst);
         awesomeALU(AsmTranslator.translateArithmOp(inst.op), instReg, inst.lhs(), inst.rhs());
@@ -326,32 +405,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public void visit(IRBitCastInst inst) {
         // ignore type
         awesomeMove(cur.toReg(inst), inst.getOperand(0));
-    }
-
-    @Override
-    public void visit(IRBrInst inst) {
-        inst.asmOperand = null; // Br Type no inst reg
-
-        if (inst.isJump()) {
-            new AsmJmpInst((AsmBlock) inst.destBlock().asmOperand, cur.block);
-            return;
-        }
-
-        if (inst.condition() instanceof IRICmpInst && ((IRICmpInst) inst.condition()).forBr()) {
-            // coalesce cmp and br
-            Pair<String, Boolean> result = AsmTranslator.translateCmpOp(((IRICmpInst) inst.condition()).op);
-            if (result.second())
-                new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).rhs()), cur.toReg(((IRICmpInst) inst.condition()).lhs()),
-                        (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
-            else
-                new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).lhs()), cur.toReg(((IRICmpInst) inst.condition()).rhs()),
-                        (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
-        } else {
-            new AsmBrInst(MLOG.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new NumConst(0)),
-                    (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
-        }
-
-        new AsmJmpInst((AsmBlock) inst.ifFalseBlock().asmOperand, cur.block);
     }
 
     // InstSelector
@@ -372,6 +425,29 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }//todo if i can delete commom expression
 
 
+    }
+
+    @Override
+    public void visit(IRBrInst inst) {
+        inst.asmOperand = null; // Br Type no inst reg
+
+        if (inst.isJump()) {
+            new AsmJmpInst((AsmBlock) inst.destBlock().asmOperand, cur.block);
+            return;
+        }
+
+        if (inst.condition() instanceof IRICmpInst && ((IRICmpInst) inst.condition()).forBr()) {
+            // coalesce cmp and br
+            Pair<String, Boolean> result = AsmTranslator.translateCmpOp(((IRICmpInst) inst.condition()).op);
+            if (result.second())
+                new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).rhs()), cur.toReg(((IRICmpInst) inst.condition()).lhs()), (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
+            else
+                new AsmBrInst(result.first(), cur.toReg(((IRICmpInst) inst.condition()).lhs()), cur.toReg(((IRICmpInst) inst.condition()).rhs()), (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
+        } else {
+            new AsmBrInst(MLOG.NotEqualSuffix, cur.toReg(inst.condition()), cur.toReg(new NumConst(0)), (AsmBlock) inst.ifTrueBlock().asmOperand, cur.block);
+        }
+
+        new AsmJmpInst((AsmBlock) inst.ifFalseBlock().asmOperand, cur.block);
     }
 
     @Override
@@ -423,13 +499,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         for (int i = MLOG.MaxArgRegNum; i < callFunc.arguments.size(); i++) {
 
             argInStack = new VirtualReg();
-            new AsmALUInst(MLOG.SubOperation, argInStack, PhysicalReg.reg("sp")
-                    , new Immediate(2 - MLOG.MaxArgRegNum + i), cur.func.entryBlock);
-            new AsmStoreInst(inst.getArg(i).type.size(), argInStack,
+            new AsmALUInst(MLOG.SubOperation, argInStack, PhysicalReg.reg("sp"), new Immediate(2 - MLOG.MaxArgRegNum + i), cur.func.entryBlock);
+            new AsmStoreInst(argInStack,
                     // notice: here use the argument of CallInst, not the func
                     // and the RawStackOffset should use caller
-                    cur.toReg(inst.getArg(i)),
-                    new Immediate(0),//new RawStackOffset(callFunc.arguments.get(i).stackOffset.value, RawType.callerArg),
+                    cur.toReg(inst.getArg(i)), new Immediate(0),//new RawStackOffset(callFunc.arguments.get(i).stackOffset.value, RawType.callerArg),
                     cur.block);
         }
 
@@ -463,6 +537,189 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         new AsmExplainInst("call end", cur.func.entryBlock);
 
+    }
+
+    @Override
+    public void visit(IRGetElementPtrInst inst) {
+
+        // Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
+        //  StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
+//        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
+//
+//        Register instReg = cur.toReg(inst);
+//        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
+//        new AsmMvInst(instReg, gepReg, cur.block);
+//
+
+
+        var curElement = inst.SourseType;
+        //((PointerType) inst.headPointer().type).pointedType;
+
+
+        Register instReg = cur.toReg(inst);
+
+        VirtualReg virtualReg = new VirtualReg();// = new VirtualReg();
+        int elementSize = curElement.size();
+
+
+//        new AsmALUInst(MLOG.AddOperation, instReg, PhysicalReg.reg("fp")
+//                , cur.toReg(inst.getOperand(0)), cur.block);
+        new AsmMoveInst(instReg, cur.toReg(inst.getOperand(0)), cur.block);
+        //
+        var operand = inst.getOperand(1);
+
+
+        if (curElement instanceof ArrayType) {
+
+
+            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
+
+            new AsmALUInst(MLOG.AddOperation, instReg, instReg, virtualReg, cur.block);
+
+        } else if (curElement instanceof StructType) {
+
+            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
+
+            new AsmALUInst(MLOG.AddOperation, instReg, instReg, virtualReg, cur.block);
+
+        }
+
+
+        for (int i = 2; i < inst.operandSize(); ++i) {
+
+
+            operand = inst.getOperand(i);
+
+
+//todo heap then add
+//            elementSize=inst.operandSize();
+
+
+            // elementSize = i == inst.operandSize() ? 1 : elementSize;
+
+
+//            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+//
+//
+//
+
+
+//            if (i != inst.operandSize()) {
+//                //new AsmLoadInst(1, instReg, instReg, cur.toImm(0), cur.block);
+//
+//                return;
+//            }
+
+
+            if (curElement instanceof ArrayType) {
+
+
+                curElement = ((ArrayType) curElement).elementType;
+                elementSize = curElement.size();
+
+                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+                new AsmALUInst(MLOG.AddOperation, instReg, instReg, virtualReg, cur.block);
+
+            } else if (curElement instanceof StructType) {
+
+
+                assert operand instanceof NumConst;
+
+
+                var memberVarTypes = ((StructType) curElement).memberVarTypes;
+//                elementSize = 0;
+
+                var constData = ((NumConst) operand).constData;
+
+                for (int j = 0; j < constData; j++) {
+
+                    elementSize += memberVarTypes.get(j).size();
+                }
+                curElement = memberVarTypes.get(constData);
+
+//                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
+                new AsmLiInst(virtualReg, cur.toImm(elementSize), cur.block);
+                new AsmALUInst(MLOG.AddOperation, instReg, instReg, virtualReg, cur.block);
+                // elementSize = ((StructType) curElement.type).size();
+
+//            } else if (curElement instanceof PointerType) {
+//
+//                new AsmLiInst(virtualReg, cur.toImm(((NumConst) operand).constData), cur.block);
+//                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
+//                        virtualReg, cur.block);
+//                //  elementSize = curElement.size();
+//                //curElement
+            }
+
+
+//            if (i != inst.operandSize()) {
+//                new AsmLoadInst(1, instReg, instReg, cur.toImm(0), cur.block);
+//
+//            }
+
+
+        }
+        //  new AsmMoveInst(instReg, instReg,cur.block);
+
+//        Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
+//        StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
+//        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
+//
+//        // local & const && only for load/store
+//
+//        if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
+//            int offset = 0;
+//            if (classType != null) {
+//                offset = classType.memberOffset(((NumConst) index).constData);
+//            } else {
+//                offset = ((NumConst) index).constData * elementSize;
+//            }
+//
+//            inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
+//            return;
+//        }
+//
+//        Register instReg = cur.toReg(inst);
+//        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
+//        new AsmMoveInst(instReg, gepReg, cur.block);
+
+    }
+
+    @Override
+    public void visit(IRLoadInst inst) {
+        Register instReg = cur.toReg(inst);
+
+        if (inst.loadPtr() instanceof GlobalValue) {
+//            if (((GlobalValue) inst.loadPtr()).gpRegMark) {
+//                new AsmMoveInst(instReg, PhysicalReg.reg("gp"), cur.block);
+//            } else {
+//// todo               VirtualReg luiReg = new VirtualReg();
+//                GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
+//                // awesomeALU(RV32I.AddInst,instReg,);
+////                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
+//                // new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
+//                new AsmLoadInst(inst.type.size(), instReg, globalReg, cur.toImm(0), cur.block);
+//            }
+        } else {
+
+
+            // if it is not global, it must be loaded from stack, right? todo
+            if (inst.loadPtr().asmOperand instanceof RawStackOffset) {
+                new AsmLoadInst(inst.type.size(), instReg, PhysicalReg.reg("fp"), cur.toImm(inst.loadPtr()), cur.block);
+            } else if (inst.loadPtr().asmOperand instanceof RawMemOffset) {
+//                // must be produced by gep
+//                new AsmLoadInst(inst.type.size(), instReg,
+//                        null,
+//                        (Immediate) inst.loadPtr().asmOperand,
+//                        cur.block);
+            } else {
+                new AsmLoadInst(inst.type.size(), instReg, cur.toReg(inst.loadPtr()), cur.toImm(0), cur.block);
+            }
+
+
+            // new AsmLoadInst(inst.type.size(), instReg, cur.toReg(inst.loadPtr()), cur.toImm(0), cur.block);
+
+        }
     }
 
     @Override
@@ -513,158 +770,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         }
     }
 
-
-    @Override
-    public void visit(IRGetElementPtrInst inst) {
-
-        // Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
-        //  StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
-//        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
-//
-//        Register instReg = cur.toReg(inst);
-//        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
-//        new AsmMvInst(instReg, gepReg, cur.block);
-//
-
-
-        var curElement = inst.SourseType;
-        //((PointerType) inst.headPointer().type).pointedType;
-
-
-        Register instReg = cur.toReg(inst);
-
-        VirtualReg virtualReg = new VirtualReg();// = new VirtualReg();
-        int elementSize = curElement.size();
-
-
-//        new AsmALUInst(MLOG.AddOperation, instReg, PhysicalReg.reg("fp")
-//                , cur.toReg(inst.getOperand(0)), cur.block);
-        new AsmMoveInst(instReg, cur.toReg(inst.getOperand(0)), cur.block);
-        //
-        var operand = inst.getOperand(1);
-
-
-        if (curElement instanceof ArrayType) {
-
-
-            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
-
-            new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                    virtualReg, cur.block);
-
-        } else if (curElement instanceof StructType) {
-
-            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(curElement.size()));
-
-            new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                    virtualReg, cur.block);
-
-        }
-
-
-        for (int i = 2; i < inst.operandSize(); ++i) {
-
-
-            operand = inst.getOperand(i);
-
-
-//todo heap then add
-//            elementSize=inst.operandSize();
-
-
-            // elementSize = i == inst.operandSize() ? 1 : elementSize;
-
-
-//            awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
-//
-//
-//
-
-
-//            if (i != inst.operandSize()) {
-//                //new AsmLoadInst(1, instReg, instReg, cur.toImm(0), cur.block);
-//
-//                return;
-//            }
-
-
-            if (curElement instanceof ArrayType) {
-
-
-                curElement = ((ArrayType) curElement).elementType;
-                elementSize = curElement.size();
-
-                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
-                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                        virtualReg, cur.block);
-
-            } else if (curElement instanceof StructType) {
-
-
-                assert operand instanceof NumConst;
-
-
-                var memberVarTypes = ((StructType) curElement).memberVarTypes;
-//                elementSize = 0;
-
-                var constData = ((NumConst) operand).constData;
-
-                for (int j = 0; j < constData; j++) {
-
-                    elementSize += memberVarTypes.get(j).size();
-                }
-                curElement = memberVarTypes
-                        .get(constData);
-
-//                awesomeALU(MLOG.MulOperation, virtualReg, operand, new NumConst(elementSize));
-                new AsmLiInst(virtualReg, cur.toImm(elementSize), cur.block);
-                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-                        virtualReg, cur.block);
-                // elementSize = ((StructType) curElement.type).size();
-
-//            } else if (curElement instanceof PointerType) {
-//
-//                new AsmLiInst(virtualReg, cur.toImm(((NumConst) operand).constData), cur.block);
-//                new AsmALUInst(MLOG.AddOperation, instReg, instReg,
-//                        virtualReg, cur.block);
-//                //  elementSize = curElement.size();
-//                //curElement
-            }
-
-
-//            if (i != inst.operandSize()) {
-//                new AsmLoadInst(1, instReg, instReg, cur.toImm(0), cur.block);
-//
-//            }
-
-
-        }
-        //  new AsmMoveInst(instReg, instReg,cur.block);
-
-//        Value index = inst.isGetMember() ? inst.memberIndex() : inst.ptrMoveIndex();
-//        StructType classType = inst.isGetMember() ? (StructType) ((PointerType) inst.headPointer().type).pointedType : null;
-//        int elementSize = ((PointerType) inst.headPointer().type).pointedType.size(); // well... quite interesting
-//
-//        // local & const && only for load/store
-//
-//        if (index instanceof NumConst && !(inst.headPointer() instanceof GlobalValue) && specialGEPCheck(inst)) {
-//            int offset = 0;
-//            if (classType != null) {
-//                offset = classType.memberOffset(((NumConst) index).constData);
-//            } else {
-//                offset = ((NumConst) index).constData * elementSize;
-//            }
-//
-//            inst.asmOperand = new RawMemOffset(cur.toReg(inst.headPointer()), offset);
-//            return;
-//        }
-//
-//        Register instReg = cur.toReg(inst);
-//        Register gepReg = awesomeGEP(inst.headPointer(), index, elementSize, classType);
-//        new AsmMoveInst(instReg, gepReg, cur.block);
-
-    }
-
     @Override
     public void visit(IRPhiInst inst) {
 
@@ -684,83 +789,43 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         throw new InternalError("Phi Inst appears in ASM");
     }
 
+    // private method tools
+
     @Override
     public void visit(IRRetInst inst) {
         if (inst.isVoid()) return;
         awesomeMove(PhysicalReg.reg("a0"), inst.retVal());
     }
 
-    // private method tools
-
     @Override
-    public void visit(IRLoadInst inst) {
-        Register instReg = cur.toReg(inst);
+    public void visit(IRStoreInst inst) {
+        if (inst.storePtr() instanceof GlobalValue) {
+            if (((GlobalValue) inst.storePtr()).gpRegMark) {
+                new AsmMoveInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
+            } else {
+//  todo              VirtualReg luiReg = new VirtualReg();
+                // GlobalReg globalReg = module.globalVarSeg.;
 
-        if (inst.loadPtr() instanceof GlobalValue) {
-//            if (((GlobalValue) inst.loadPtr()).gpRegMark) {
-//                new AsmMoveInst(instReg, PhysicalReg.reg("gp"), cur.block);
-//            } else {
-//// todo               VirtualReg luiReg = new VirtualReg();
-//                GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
-//                // awesomeALU(RV32I.AddInst,instReg,);
-////                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-//                // new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
-//                new AsmLoadInst(inst.type.size(), instReg, globalReg, cur.toImm(0), cur.block);
-//            }
+//                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
+                new AsmStoreInst((Register) inst.storePtr().asmOperand, cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
+            }
         } else {
 
-
-            // if it is not global, it must be loaded from stack, right? todo
-            if (inst.loadPtr().asmOperand instanceof RawStackOffset) {
-                new AsmLoadInst(inst.type.size(), instReg, PhysicalReg.reg("fp"), cur.toImm(inst.loadPtr()), cur.block);
-            } else if (inst.loadPtr().asmOperand instanceof RawMemOffset) {
-//                // must be produced by gep
-//                new AsmLoadInst(inst.type.size(), instReg,
+            if (inst.storePtr().asmOperand instanceof RawStackOffset) {
+                // must be stack
+                new AsmStoreInst(PhysicalReg.reg("fp"), cur.toReg(inst.storeValue()), cur.toImm(inst.storePtr()), cur.block);
+            } else if (inst.storePtr().asmOperand instanceof RawMemOffset) {
+                //todo
+                // must be produced by gep
+//                new AsmStoreInst(inst.storeValue().type.size(),
 //                        null,
-//                        (Immediate) inst.loadPtr().asmOperand,
+//                        cur.toReg(inst.storeValue()),
+//                        (Immediate) inst.storePtr().asmOperand,
 //                        cur.block);
             } else {
-                new AsmLoadInst(inst.type.size(), instReg, cur.toReg(inst.loadPtr()), cur.toImm(0), cur.block);
+                new AsmStoreInst(cur.toReg(inst.storePtr()), cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
             }
-
-
-            // new AsmLoadInst(inst.type.size(), instReg, cur.toReg(inst.loadPtr()), cur.toImm(0), cur.block);
-
         }
-    }
-
-    private void globalDecl(IRModule irModule) {
-
-        AsmFunction function = new AsmFunction("init");
-        AsmBlock block = new AsmBlock("0");
-        //block.loopDepth = irBlock.loopDepth;
-        //irBlock.asmOperand = block;
-
-        function.blocks.add(block);
-
-        for (GlobalVariable globalVar : irModule.globalVarSeg) {
-
-
-            globalVar.pointedType().size();
-
-
-            GlobalReg globalReg = new GlobalReg(globalVar.name);
-            globalVar.asmOperand = globalReg;
-            module.globalVarSeg.add(globalReg);
-        }
-
-        function.entryBlock = block;
-        // builtinFunc.asmOperand = function;
-
-
-        //todo build library here
-
-
-//        for (StringConst strConst : irModule.stringConstSeg) {
-//            GlobalReg strReg = new GlobalReg(strConst.name, strConst.constData);
-//            strConst.asmOperand = strReg;
-//            module.stringConstSeg.add(strReg);
-//        }
     }
     // awesome asm optimize
 
@@ -778,45 +843,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     public void visit(IRMoveInst inst) {
         awesomeMove(cur.toReg(inst.dest()), inst.source());
     }
-
-    @Override
-    public void visit(IRStoreInst inst) {
-        if (inst.storePtr() instanceof GlobalValue) {
-            if (((GlobalValue) inst.storePtr()).gpRegMark) {
-                new AsmMoveInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
-            } else {
-//  todo              VirtualReg luiReg = new VirtualReg();
-                // GlobalReg globalReg = module.globalVarSeg.;
-
-//                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmStoreInst(inst.storeValue().type.size(), (Register) inst.storePtr().asmOperand, cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
-            }
-        } else {
-
-            if (inst.storePtr().asmOperand instanceof RawStackOffset) {
-                // must be stack
-                new AsmStoreInst(inst.storeValue().type.size(), PhysicalReg.reg("fp"),
-                        cur.toReg(inst.storeValue()), cur.toImm(inst.storePtr()), cur.block);
-            } else if (inst.storePtr().asmOperand instanceof RawMemOffset) {
-                //todo
-                // must be produced by gep
-//                new AsmStoreInst(inst.storeValue().type.size(),
-//                        null,
-//                        cur.toReg(inst.storeValue()),
-//                        (Immediate) inst.storePtr().asmOperand,
-//                        cur.block);
-            } else {
-                new AsmStoreInst(inst.storeValue().type.size(), cur.toReg(inst.storePtr()), cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
-            }
-        }
-    }
-
-    //    private boolean specialGEPCheck(IRGetElementPtrInst inst) {
-//        if (inst.asmOperand != null) return false;
-//        for (User user : inst.users)
-//            if (!(user instanceof IRLoadInst || user instanceof IRStoreInst)) return false;
-//        return true;
-//    }
 
     private void awesomeALU(String rvOp, Register dest, Value lhs, Value rhs) {
         // now support:
@@ -855,12 +881,23 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmALUInst(rvOp, dest, cur.toReg(lhs), cur.toReg(rhs), cur.block);
     }
 
+    //    private boolean specialGEPCheck(IRGetElementPtrInst inst) {
+//        if (inst.asmOperand != null) return false;
+//        for (User user : inst.users)
+//            if (!(user instanceof IRLoadInst || user instanceof IRStoreInst)) return false;
+//        return true;
+//    }
+
     public void awesomeMove(Register dest, Value source) {
         if (validImm(source)) {
             new AsmLiInst(dest, cur.toImm(source), cur.block);
         } else {
             new AsmMoveInst(dest, cur.toReg(source), cur.block);
         }
+    }
+
+    private static boolean validImm(Value value) {
+        return (value instanceof NumConst) || value instanceof BoolConst;
     }
 
 

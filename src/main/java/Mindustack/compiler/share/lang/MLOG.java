@@ -50,7 +50,7 @@ public class MLOG {
             "ra"//return address
             , "sp" //top of stack
             , "fp" //The address of the frame stack
-            , "gp" //start address of data zone
+            //  , "gp" //start address of data zone  0 ok
             , "tp"//treads
 
             , "pc"
