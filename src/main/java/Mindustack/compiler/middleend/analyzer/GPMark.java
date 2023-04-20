@@ -32,7 +32,10 @@ public class GPMark implements IRModulePass {
 
         GlobalValue marked = null;
 
+
+//        useCount.entrySet().stream().sorted()//todo
         for (var entry : useCount.entrySet()) {
+
             if (marked == null) marked = entry.getKey();
             else {
                 if (entry.getValue() > useCount.get(marked)) marked = entry.getKey();
@@ -41,7 +44,9 @@ public class GPMark implements IRModulePass {
 
         if (marked != null) {
             Log.info("gp mark: ", marked.identifier());
-            marked.gpRegMark = true;
+            marked.gpRegMark = 1;
         }
+
+
     }
 }

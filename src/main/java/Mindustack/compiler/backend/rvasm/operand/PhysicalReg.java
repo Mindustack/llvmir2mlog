@@ -56,4 +56,7 @@ public class PhysicalReg extends Register {
         return phyRegs.get(MLOG.SavedRegPrefix + index);
     }
 
+    public static PhysicalReg gp(int index) {
+        return phyRegs.get(MLOG.GPRegPrefix + index);
+    }
 }

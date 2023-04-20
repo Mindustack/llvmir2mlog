@@ -132,7 +132,7 @@ public class IVTrans implements IRFuncPass, IRLoopPass {
 
             Value newStep = null;
 
-            if (biv.invariant instanceof NumConst && ((NumConst) biv.invariant).constData == 1)
+            if (biv.invariant instanceof NumConst && ((NumConst) biv.invariant).getConstData() == 1)
                 newStep = iv.invariant;
             else {
                 newStep = new IRBinaryInst(LLVM.MulInst, IRTranslator.i32Type, iv.invariant, biv.invariant, null);
@@ -140,7 +140,7 @@ public class IVTrans implements IRFuncPass, IRLoopPass {
             }
 
             if (iv.invariant instanceof NumConst && biv.init instanceof NumConst) {
-                newInit = new NumConst(((NumConst) iv.invariant).constData * ((NumConst) biv.init).constData);
+                newInit = new NumConst(((NumConst) iv.invariant).getConstData() * ((NumConst) biv.init).getConstData());
             } else {
                 newInit = new IRBinaryInst(LLVM.MulInst, IRTranslator.i32Type, biv.init, iv.invariant, null);
                 biv.initBLock.tAddBeforeTerminator((IRBaseInst) newInit);

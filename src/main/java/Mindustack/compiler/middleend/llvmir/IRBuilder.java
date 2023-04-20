@@ -187,6 +187,8 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             } else if (context.globalDef() != null) {
 
                 irModule.globalVarSeg.add((GlobalVariable) visit(context.globalDef()));
+
+
             } else if (context.metadataDef() != null) {
                 //todo
             } else if (context.typeDef() != null) {
@@ -454,7 +456,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         for (int i = 1; i < inst.indicesNum(); ++i) {
 
             if (inst.type instanceof StructType) {
-                inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
+                inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).getConstData());
             } else if (inst.type instanceof ArrayType) {
                 inst.type = ((ArrayType) inst.type).elementType;
             } else if (inst.type instanceof PointerType) {
@@ -899,7 +901,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         for (int i = 1; i < inst.indicesNum(); ++i) {
 
             if (inst.type instanceof StructType) {
-                inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).constData);
+                inst.type = ((StructType) inst.type).memberVarTypes.get(((NumConst) indices.get(i)).getConstData());
             } else if (inst.type instanceof ArrayType) {
                 inst.type = ((ArrayType) inst.type).elementType;
             } else if (inst.type instanceof PointerType) {

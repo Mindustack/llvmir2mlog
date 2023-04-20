@@ -10,6 +10,7 @@ public class MLOG {
     public static final int SpLowUnit = 1;
     public static final int I32Unit = 1;
     public static final int MaxStackSize = Integer.MAX_VALUE;
+    public static final int MaxDataZoneSize = 0x200;
 
 
     // --- Register Related ---
@@ -50,7 +51,10 @@ public class MLOG {
             "ra"//return address
             , "sp" //top of stack
             , "fp" //The address of the frame stack
-            //  , "gp" //start address of data zone  0 ok
+            , "gp1"
+            , "gp2"
+            , "gp3"
+            //start address of data zone  0 ok
             , "tp"//treads
 
             , "pc"
@@ -143,6 +147,7 @@ sgtz rd, rs1	如果rs1值大于0，则rd置1，否则置0（伪指令）
     public static final String GreaterThanEqOperation = "greaterThanEq";
     public static final String EqualOperation = "equal";
     public static final String NotEqualOperation = "notEqual";
+    public static final String GPRegPrefix = "gp";
 }
 /*
 ## Native functions:

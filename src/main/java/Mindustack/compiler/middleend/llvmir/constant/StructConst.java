@@ -16,4 +16,8 @@ public class StructConst extends BaseConst {
 
         constData = new ArrayList<>();
     }
+
+    public int size() {
+        return this.type.size();
+    }
 }

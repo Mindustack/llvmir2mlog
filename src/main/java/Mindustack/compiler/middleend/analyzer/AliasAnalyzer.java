@@ -86,7 +86,7 @@ public class AliasAnalyzer implements IRFuncPass {
                     Value index1 = ((IRGetElementPtrInst) addr1).ptrMoveIndex();
                     Value index2 = ((IRGetElementPtrInst) addr2).ptrMoveIndex();
 
-                    if (index1 instanceof NumConst && index2 instanceof NumConst && ((NumConst) index1).constData != ((NumConst) index2).constData) {
+                    if (index1 instanceof NumConst && index2 instanceof NumConst && ((NumConst) index1).getConstData() != ((NumConst) index2).getConstData()) {
                         return false;
                     }
                 }

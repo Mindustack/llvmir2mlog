@@ -21,6 +21,28 @@ public class AsmCurrent {
 
     public Map<Integer, Register> recordLi = new HashMap<>();
 
+    public Immediate toImm(Value value) {
+        if (value.asmOperand instanceof RawStackOffset || value.asmOperand instanceof RawMemOffset)
+            return (Immediate) value.asmOperand;
+
+        if (value instanceof NumConst) return new Immediate(((NumConst) value).getConstData());
+        if (value instanceof BoolConst) return new Immediate(((BoolConst) value).constData ? 1 : 0);
+        throw new UnimplementedError(this);
+    }
+
+    public Immediate toImm(int value) {
+      //  if (value < -1 * RV32I.ImmBound || value > RV32I.ImmBound)
+        //    throw new InternalError("invalid immediate detected");
+        return new Immediate(value);
+    }
+
+    public double toRawData(Value value) {
+        // if (value.asmOperand instanceof RawStackOffset) return (Immediate) value.asmOperand;
+        if (value instanceof NumConst) return ((NumConst) value).getConstData();
+        if (value instanceof BoolConst) return ((BoolConst) value).constData ? 1 : 0;
+        throw new UnimplementedError(this);
+    }
+
     public Register toReg(@NotNull Value value) {
         if (value.asmOperand != null) {
 
@@ -39,7 +61,7 @@ public class AsmCurrent {
             return (Register) value.asmOperand;
         }
         Integer intValue = null;
-        if (value instanceof NumConst) intValue = ((NumConst) value).constData;
+        if (value instanceof NumConst) intValue = ((NumConst) value).getConstData();
         else if (value instanceof BoolConst) intValue = ((BoolConst) value).constData ? 1 : 0;
         else if (value instanceof NullptrConst) intValue = 0;
 
@@ -63,18 +85,5 @@ public class AsmCurrent {
         // const info is memorized by Li
         if (!(value instanceof NumConst || value instanceof BoolConst)) value.asmOperand = ret;
         return ret;
-    }
-
-    public Immediate toImm(int value) {
-      //  if (value < -1 * RV32I.ImmBound || value > RV32I.ImmBound)
-        //    throw new InternalError("invalid immediate detected");
-        return new Immediate(value);
-    }
-
-    public Immediate toImm(Value value) {
-        if (value.asmOperand instanceof RawStackOffset) return (Immediate) value.asmOperand;
-        if (value instanceof NumConst) return new Immediate(((NumConst) value).constData);
-        if (value instanceof BoolConst) return new Immediate(((BoolConst) value).constData ? 1 : 0);
-        throw new UnimplementedError(this);
     }
 }

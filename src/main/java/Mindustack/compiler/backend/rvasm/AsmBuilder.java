@@ -46,14 +46,14 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     }
 
     private static boolean equalZero(Value value) {
-        return value instanceof NullptrConst || (value instanceof NumConst && ((NumConst) value).constData == 0) || (value instanceof BoolConst && !((BoolConst) value).constData);
+        return value instanceof NullptrConst || (value instanceof NumConst && ((NumConst) value).getConstData() == 0) || (value instanceof BoolConst && !((BoolConst) value).constData);
     }
 
     // check an immediate: whether it is a valid two power, return imm log2
     // if not a valid 2power immediate, return null
     private static Immediate twoPowerCheck(Value value) {
         if (!(value instanceof NumConst)) return null;
-        int log2 = 0, valData = ((NumConst) value).constData;
+        int log2 = 0, valData = ((NumConst) value).getConstData();
         if (valData <= 0) return null;
         while (valData > 1) {
             if (valData % 2 != 0) return null;
@@ -134,10 +134,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     private void globalDecl(IRModule irModule) {
 
 
-        AsmFunction function = new AsmFunction("init");
-        AsmBlock block = new AsmBlock("0");
-        cur.func = function;
-        cur.block = block;
+//        AsmFunction function = new AsmFunction("init");
+//        AsmBlock block = new AsmBlock("0");
+//        cur.func = function;
+//        cur.block = block;
 
         //block.loopDepth = irBlock.loopDepth;
         //irBlock.asmOperand = block;
@@ -145,6 +145,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         //function.blocks.add(block);
         int memUse = 0;
 
+//        int dataZoneSize=0;
+//        for (GlobalVariable globalVariable : irModule.globalVarSeg) {
+//
+//            dataZoneSize+=globalVariable.type.size();
+//        }
+//
+//        module.dataZone=new ArrayList<>(dataZoneSize);
         for (GlobalVariable globalVar : irModule.globalVarSeg) {
 
             GlobalReg globalReg = new GlobalReg(globalVar.name);
@@ -160,10 +167,11 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         }
 
+
         //new AsmLiInst(PhysicalReg.reg(),cur.toImm(baseConst),cur.block);
-        new AsmRetInst(cur.block);
-        function.entryBlock = block;
-        function.exitBlock = block;
+//        new AsmRetInst(cur.block);
+//        function.entryBlock = block;
+//        function.exitBlock = block;
         // builtinFunc.asmOperand = function;
 
 
@@ -181,10 +189,12 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         if (baseConst instanceof NumConst || baseConst instanceof BoolConst) {
 
-            VirtualReg virtualReg;
-            virtualReg = new VirtualReg();
-            new AsmLiInst(virtualReg, cur.toImm(baseConst), cur.block);
-            new AsmStoreInst(PhysicalReg.reg("zero"), virtualReg, new Immediate(adrs), cur.block);
+//            VirtualReg virtualReg;
+//            virtualReg = new VirtualReg();
+
+            module.dataZone.add(new Pair<>(cur.toRawData(baseConst), adrs));
+            //new AsmLiInst(virtualReg, cur.toImm(baseConst), cur.block);
+            // new AsmStoreInst(PhysicalReg.reg("zero"), virtualReg, new Immediate(adrs), cur.block);
 //new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
 
 
@@ -193,7 +203,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
             for (BaseConst constData : ((ArrayConst) baseConst).constData) {
                 parseConst(constData, adrs);
-                adrs += constData.type.size();
+                adrs += constData.size();
             }
 //            VirtualReg virtualReg;
 //            virtualReg = new VirtualReg();
@@ -207,7 +217,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
             for (BaseConst constData : ((StructConst) baseConst).constData) {
                 parseConst(constData, adrs);
-                adrs += constData.type.size();
+                adrs += constData.size();
             }
 //            VirtualReg virtualReg;
 //            virtualReg = new VirtualReg();
@@ -486,9 +496,9 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         // 0~7
         for (int i = 0; i < Integer.min(inst.callFunc().getArgNum(), MLOG.MaxArgRegNum); i++) {
             if (inst.getArg(i) instanceof GlobalValue) {
-                if (((GlobalValue) inst.getArg(i)).gpRegMark) {
+                if (((GlobalValue) inst.getArg(i)).gpRegMark != 0) {
                     //todo
-                    // new AsmMoveInst(PhysicalReg.a(i), PhysicalReg.reg("gp"), cur.block);
+                    new AsmMoveInst(PhysicalReg.a(i), PhysicalReg.gp(((GlobalValue) inst.getArg(i)).gpRegMark), cur.block);
                 } else {
                     // new AsmLaInst(PhysicalReg.a(i), inst.getArg(i).asmOperand.identifier, cur.block);
                 }
@@ -629,7 +639,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 var memberVarTypes = ((StructType) curElement).memberVarTypes;
 //                elementSize = 0;
 
-                var constData = ((NumConst) operand).constData;
+                var constData = ((NumConst) operand).getConstData();
 
                 for (int j = 0; j < constData; j++) {
 
@@ -690,15 +700,18 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         Register instReg = cur.toReg(inst);
 
         if (inst.loadPtr() instanceof GlobalValue) {
-//            if (((GlobalValue) inst.loadPtr()).gpRegMark) {
-//                new AsmMoveInst(instReg, PhysicalReg.reg("gp"), cur.block);
-//            } else {
+            if (((GlobalValue) inst.loadPtr()).gpRegMark != 0) {
+                new AsmMoveInst(instReg, PhysicalReg.gp(((GlobalValue) inst.loadPtr()).gpRegMark), cur.block);
+            } else {
+                new AsmLoadInst(inst.type.size(), instReg, PhysicalReg.reg("zero"), cur.toImm(inst.loadPtr()), cur.block);
+
+
+            }
 //// todo               VirtualReg luiReg = new VirtualReg();
 //                GlobalReg globalReg = (GlobalReg) cur.toReg(inst.loadPtr());
 //                // awesomeALU(RV32I.AddInst,instReg,);
 ////                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
 //                // new AsmLiInst(instReg, new GlobalAddr(globalReg), cur.block);
-//                new AsmLoadInst(inst.type.size(), instReg, globalReg, cur.toImm(0), cur.block);
 //            }
         } else {
 
@@ -800,14 +813,14 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     @Override
     public void visit(IRStoreInst inst) {
         if (inst.storePtr() instanceof GlobalValue) {
-            if (((GlobalValue) inst.storePtr()).gpRegMark) {
-                new AsmMoveInst(PhysicalReg.reg("gp"), cur.toReg(inst.storeValue()), cur.block);
+            if (((GlobalValue) inst.storePtr()).gpRegMark != 0) {
+                new AsmMoveInst(PhysicalReg.gp(((GlobalValue) inst.storePtr()).gpRegMark), cur.toReg(inst.storeValue()), cur.block);
             } else {
 //  todo              VirtualReg luiReg = new VirtualReg();
                 // GlobalReg globalReg = module.globalVarSeg.;
 
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmStoreInst((Register) inst.storePtr().asmOperand, cur.toReg(inst.storeValue()), cur.toImm(0), cur.block);
+                new AsmStoreInst((Register) inst.storePtr().asmOperand, cur.toReg(inst.storeValue()), cur.toImm(inst.storePtr()), cur.block);
             }
         } else {
 

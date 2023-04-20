@@ -13,4 +13,9 @@ public class ArrayConst extends BaseConst {
         super(LLVM.ConstAnon, new ArrayType(type, length));
         constData = new ArrayList<>();
     }
+
+    @Override
+    public int size() {
+        return this.type.size();
+    }
 }

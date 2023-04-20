@@ -222,7 +222,7 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
             if (getConst(dest) == null) {
                 int result;
                 BaseConst replace = null;
-                if (srcConst instanceof NumConst) result = ((NumConst) srcConst).constData;
+                if (srcConst instanceof NumConst) result = ((NumConst) srcConst).getConstData();
                 else if (srcConst instanceof BoolConst) result = ((BoolConst) srcConst).constData ? 1 : 0;
                 else return;
                 if (dest.type instanceof NumType) replace = new NumConst(result);
@@ -264,8 +264,8 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
         if (lhsConst == uncertain || rhsConst == uncertain) {
 
             if (Objects.equals(inst.op, LLVM.MulInst) || Objects.equals(inst.op, LLVM.AndInst)) {
-                if ((lhsConst instanceof NumConst && ((NumConst) lhsConst).constData == 0) ||
-                        (rhsConst instanceof NumConst && ((NumConst) rhsConst).constData == 0)) {
+                if ((lhsConst instanceof NumConst && ((NumConst) lhsConst).getConstData() == 0) ||
+                        (rhsConst instanceof NumConst && ((NumConst) rhsConst).getConstData() == 0)) {
                     replace = new NumConst(0);
                 }
 
@@ -284,7 +284,7 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
         } else if (lhsConst != null && rhsConst != null && getConst(inst) == null) {
             if (lhsConst instanceof NumConst) {
                 assert rhsConst instanceof NumConst;
-                int lhsNum = ((NumConst) lhsConst).constData, rhsNum = ((NumConst) rhsConst).constData;
+                int lhsNum = ((NumConst) lhsConst).getConstData(), rhsNum = ((NumConst) rhsConst).getConstData();
                 int result = 0;
                 switch (inst.op) {
                     case LLVM.AddInst:
@@ -406,7 +406,7 @@ public class SCCP implements IRFuncPass, IRBlockPass, InstVisitor {
             boolean result = false;
             if (lhsConst instanceof NumConst) {
                 assert rhsConst instanceof NumConst;
-                int lhsNum = ((NumConst) lhsConst).constData, rhsNum = ((NumConst) rhsConst).constData;
+                int lhsNum = ((NumConst) lhsConst).getConstData(), rhsNum = ((NumConst) rhsConst).getConstData();
                 switch (inst.op) {
                     case LLVM.LessArg:
                         result = lhsNum < rhsNum;

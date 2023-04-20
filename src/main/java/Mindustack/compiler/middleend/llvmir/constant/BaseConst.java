@@ -8,4 +8,8 @@ public class BaseConst extends User {
     public BaseConst(String name, IRBaseType type) {
         super(name, type);
     }
+
+    public int size() {
+        return 1;
+    }
 }
