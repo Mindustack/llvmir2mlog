@@ -29,12 +29,21 @@ public class AsmStoreInst extends AsmBaseInst {
                     MLOG.StoreInstPrefix
                     , rs2, rs1);
         }
+        if (rs1.toString() == "zero") {
+
+            return String.format("%s %s cell %s",
+                    MLOG.StoreInstPrefix
+
+                    //+ AsmTranslator.translateByteWidth(byteWidth)
+                    , rd, imm);
+        } else {
+            return String.format("op add tf %s %s\n", imm, rs1) +
+                    String.format("\t%s %s cell tf",
+                            MLOG.StoreInstPrefix
+                            //  + AsmTranslator.translateByteWidth(byteWidth)
+                            , rs2);
+        }
 
 
-        return String.format("op add tf %s %s\n", imm, rs1) +
-                String.format("\t%s %s cell tf",
-                        MLOG.StoreInstPrefix
-                        //  + AsmTranslator.translateByteWidth(byteWidth)
-                        , rs2);
     }
 }

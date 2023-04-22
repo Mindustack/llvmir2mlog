@@ -6,7 +6,8 @@
 @base = internal global %union.header zeroinitializer, align 8
 @heapcap = internal global ptr null, align 8
 @llvm.global_ctors = appending global [1 x { i32, ptr, ptr }] [{ i32, ptr, ptr } { i32 65535, ptr @_GLOBAL__sub_I_test4.cpp, ptr null }]
-
+declare ptr @malloc(i32 %size)
+declare ptr @toString(i32 %size)
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define dso_local void @"?Mfree@@YAXPEAX@Z"(ptr noundef %0) #0 {
   %2 = alloca ptr, align 8

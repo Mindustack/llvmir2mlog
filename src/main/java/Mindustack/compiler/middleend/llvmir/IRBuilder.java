@@ -49,9 +49,100 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         // clear onlyName
 
-        RawOnlyName.workList.clear();
-
         Log.info("Build Module finish from .ll file.");
+    }
+
+    //    public void solveReference(ListIterator<LLVMIRParser.TopLevelEntityContext> iterator){
+//         if (iterator.hasNext()){
+//            var context = iterator.next();
+//
+//            if (context.funcDecl() != null) {
+//                var irFunction = (IRFunction) visit(context.funcDecl());
+//                irFunction.entryBlock = new IRBlock(irFunction.name + '0', irFunction);
+//                //funcDeclContexts.add(context.funcDecl());
+//                // global map added in each visit
+//                irModule.builtinFunctions.add(irFunction);
+//
+//            } else if (context.funcDef() != null) {
+//
+//                // funcDefContexts.add(context.funcDef());
+//                IRFunction function = (IRFunction) visit(context.funcDef());
+//                CurrentFunction = function;
+//                function.parentModule = irModule;
+//                irModule.functions.add(function);
+//                SolveFunctions.add(function);
+//            } else if (context.globalDef() != null) {
+//
+//                irModule.globalVarSeg.add((GlobalVariable) visit(context.globalDef()));
+//
+//
+//            } else if (context.metadataDef() != null) {
+//                //todo
+//            } else if (context.typeDef() != null) {
+//
+//                context.typeDef().accept(this);
+//            }
+//        }
+//    }
+    @Override
+    public Value visitCompilationUnit(LLVMIRParser.CompilationUnitContext ctx) {
+
+        ///  var funcDeclContexts = new ArrayList<LLVMIRParser.FuncDeclContext>();
+        //var funcDefContexts = new ArrayList<LLVMIRParser.FuncDefContext>();
+        // var globalDefContexts = new ArrayList<LLVMIRParser.GlobalDefContext>();
+
+        ListIterator<LLVMIRParser.TopLevelEntityContext> iterator;
+        iterator = ctx.topLevelEntity().listIterator();
+        while (iterator.hasNext()) {
+            var context = iterator.next();
+
+            if (context.funcDecl() != null) {
+                var irFunction = (IRFunction) visit(context.funcDecl());
+                irFunction.entryBlock = new IRBlock(irFunction.name + '0', irFunction);
+                //funcDeclContexts.add(context.funcDecl());
+                // global map added in each visit
+                irModule.builtinFunctions.add(irFunction);
+
+            } else if (context.funcDef() != null) {
+
+                // funcDefContexts.add(context.funcDef());
+                IRFunction function1 = (IRFunction) visit(context.funcDef());
+                CurrentFunction = function1;
+                function1.parentModule = irModule;
+                irModule.functions.add(function1);
+                SolveFunctions.add(function1);
+            } else if (context.globalDef() != null) {
+
+                irModule.globalVarSeg.add((GlobalVariable) visit(context.globalDef()));
+
+
+            } else if (context.metadataDef() != null) {
+                //todo
+            } else if (context.typeDef() != null) {
+
+                context.typeDef().accept(this);
+            }
+        }
+
+        solveRawOnlyName(globalValueMap);
+
+//        for (var classDecl : ctx.classDecl()) {
+//            StructType classType = new StructType(classDecl.LocalReg().getText().substring(1 + LLVM.StructPrefix.length()));
+//            irModule.classes.add(classType.structProto);
+//            setNewValue(classType.structName, classType.structProto);
+//        }
+//        for (var classDecl : ctx.classDecl()) {
+//            visit(classDecl);
+//        }
+
+
+        // start
+        for (var function : SolveFunctions) {
+            deepToInst(function);
+        }
+
+
+        return null;
     }
 
     private void deepToInst(IRFunction function) {
@@ -159,64 +250,15 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 //                IRTranslator.boolType, IRTranslator.stringType, IRTranslator.stringType));
     }
 
-    @Override
-    public Value visitCompilationUnit(LLVMIRParser.CompilationUnitContext ctx) {
-
-        ///  var funcDeclContexts = new ArrayList<LLVMIRParser.FuncDeclContext>();
-        //var funcDefContexts = new ArrayList<LLVMIRParser.FuncDefContext>();
-        // var globalDefContexts = new ArrayList<LLVMIRParser.GlobalDefContext>();
-
-        for (int i = 0; i < ctx.topLevelEntity().size(); i++) {
-            var context = ctx.topLevelEntity(i);
-
-            if (context.funcDecl() != null) {
-                var irFunction = (IRFunction) visit(context.funcDecl());
-                irFunction.entryBlock = new IRBlock(irFunction.name + '0', irFunction);
-                //funcDeclContexts.add(context.funcDecl());
-                // global map added in each visit
-                irModule.builtinFunctions.add(irFunction);
-
-            } else if (context.funcDef() != null) {
-
-                // funcDefContexts.add(context.funcDef());
-                IRFunction function = (IRFunction) visit(context.funcDef());
-                CurrentFunction = function;
-                function.parentModule = irModule;
-                irModule.functions.add(function);
-                SolveFunctions.add(function);
-            } else if (context.globalDef() != null) {
-
-                irModule.globalVarSeg.add((GlobalVariable) visit(context.globalDef()));
-
-
-            } else if (context.metadataDef() != null) {
-                //todo
-            } else if (context.typeDef() != null) {
-
-                context.typeDef().accept(this);
+    private void solveRawOnlyName(LinkedHashMap<String, Value> map) {
+        for (RawOnlyName onlyName : RawOnlyName.workList) {
+            var userList = new ArrayList<>(onlyName.users);
+            for (User user : userList) {
+                user.resetOperand(user.operands.indexOf(onlyName), map.get(onlyName.name));
             }
-
-
         }
 
-
-//        for (var classDecl : ctx.classDecl()) {
-//            StructType classType = new StructType(classDecl.LocalReg().getText().substring(1 + LLVM.StructPrefix.length()));
-//            irModule.classes.add(classType.structProto);
-//            setNewValue(classType.structName, classType.structProto);
-//        }
-//        for (var classDecl : ctx.classDecl()) {
-//            visit(classDecl);
-//        }
-
-
-        // start
-        for (var function : SolveFunctions) {
-            deepToInst(function);
-        }
-
-
-        return null;
+        RawOnlyName.workList.clear();
     }
 
     @Override
@@ -232,6 +274,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
 
     }
+
 
     @Override
     public Value visitGlobalDef(LLVMIRParser.GlobalDefContext ctx) {
@@ -249,6 +292,23 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         globalValueMap.put(glbName, glbVar);
 
         return glbVar;
+
+    }
+
+@Override
+    public Value visitConstant(LLVMIRParser.ConstantContext ctx) {
+
+        if (ctx.GlobalIdent() != null) {
+            String name = ctx.GlobalIdent().getText().substring(1);
+//visitLocalDefInst()
+
+
+            return getGlobalValue(name);
+
+
+        }
+        return visitChildren(ctx);
+
 
     }
 
@@ -389,30 +449,46 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         return null;
     }
 
+        @Override
+    public Value visitStructConst(LLVMIRParser.StructConstContext ctx) {
+        var structConst = new StructConst(TypePasser.type);
+        for (var c : ctx.typeConst()) {
+            var value = visit(c);
+            if (value instanceof BaseConst) {
+                structConst.constData.add((BaseConst) value);
+            } else {
+                var e = new NullptrConst();//todo it maybe a function name
+
+                structConst.constData.add(e);
+            }
+        }//todo
+
+        return structConst;
+    }
     @Override
+    public Value visitZeroInitializerConst(LLVMIRParser.ZeroInitializerConstContext ctx) {
+        return new NullptrConst();//todo will it ok?
+    }
+
+    @Override
+    public Value visitNamedType(LLVMIRParser.NamedTypeContext ctx) {
+
+        TypePasser.type = getGlobalValue(ctx.LocalIdent().getText().substring(1)).type;
+        return TypePasser;
+    }
+
+@Override
     public Value visitTerminal(TerminalNode node) {
 
         if (CurrentFunction != null && valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", "")) != null) {
             return valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", ""));
         } else if (valueMap.get(node.getSymbol().getText()) != null) {
             return valueMap.get(node.getSymbol().getText());
-        } else if (globalValueMap.get(node.getSymbol().getText()) != null) {
-            return globalValueMap.get(node.getSymbol().getText());
+        } else if (getGlobalValue(node.getSymbol().getText()) != null) {
+            return getGlobalValue(node.getSymbol().getText());
         }
         return super.visitTerminal(node);
-    }    @Override
-    public Value visitConstant(LLVMIRParser.ConstantContext ctx) {
-        if (ctx.GlobalIdent() != null) {
-            String name = ctx.GlobalIdent().getText().substring(1);
-//visitLocalDefInst()
-            return globalValueMap.get(name);
-
-        }
-        return visitChildren(ctx);
-
-
     }
-
 
 
     @Override
@@ -497,19 +573,19 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         return new NumConst(Float.floatToIntBits(Float.parseFloat(ctx.FloatLit().getText())));//todo
     }
 
+
     @Override
     public Value visitNullConst(LLVMIRParser.NullConstContext ctx) {
         return new NullptrConst();
     }
 
-    @Override
-    public Value visitStructConst(LLVMIRParser.StructConstContext ctx) {
-        var structConst = new StructConst(TypePasser.type);
-        for (var c : ctx.typeConst()) {
-            structConst.constData.add((BaseConst) visit(c));
+    private Value getGlobalValue(String name) {
+        if (globalValueMap.get(name) == null) {
+            return new RawOnlyName(name);
         }
 
-        return structConst;
+
+        return globalValueMap.get(name);
     }
 
     @Override
@@ -627,11 +703,14 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     }
 
-    @Override
-    public Value visitNamedType(LLVMIRParser.NamedTypeContext ctx) {
+    // this is used to handle forward reference
+    public static class RawOnlyName extends Value {
+        public static ArrayList<RawOnlyName> workList = new ArrayList<>();
 
-        TypePasser.type = globalValueMap.get(ctx.LocalIdent().getText().substring(1)).type;
-        return TypePasser;
+        public RawOnlyName(String name) {
+            super(name, null);
+            workList.add(this);
+        }
     }
 
     @Override
@@ -1026,12 +1105,5 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
 
     // this is used to handle forward reference
-    public static class RawOnlyName extends Value {
-        public static ArrayList<RawOnlyName> workList = new ArrayList<>();
 
-        public RawOnlyName(String name) {
-            super(name, null);
-            workList.add(this);
-        }
-    }
 }

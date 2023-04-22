@@ -28,6 +28,8 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
 //        ps.println("# fileName: " + irFileName + TAB + " compiled by @Masterball.");
 //        ps.println(TAB + ".text");
+
+        AsmFormatter.RegInitFormat().forEach(ps::println);
         AsmFormatter.DataInitFormat(module.dataZone).forEach(ps::println);
 
         module.functions.forEach(this::runOnFunc);

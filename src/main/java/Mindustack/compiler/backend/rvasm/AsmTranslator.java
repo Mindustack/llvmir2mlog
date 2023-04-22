@@ -46,6 +46,11 @@ public class AsmTranslator {
                 return new Pair<>(MLOG.LessSuffix, false);
             case LLVM.LessEqualArg:
                 return new Pair<>(MLOG.GreaterEqualSuffix, true);
+            case LLVM.EqualArg:
+                return new Pair<>(MLOG.EqualSuffix, true);
+            case LLVM.NotEqualArg:
+                return new Pair<>(MLOG.NotEqualSuffix, true);
+
             default:
                 return new Pair<>(irOp, false);
         }

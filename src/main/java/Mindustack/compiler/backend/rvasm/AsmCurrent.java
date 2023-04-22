@@ -3,6 +3,7 @@ package Mindustack.compiler.backend.rvasm;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmFunction;
 import Mindustack.compiler.backend.rvasm.inst.AsmLiInst;
+import Mindustack.compiler.backend.rvasm.inst.AsmLoadInst;
 import Mindustack.compiler.backend.rvasm.operand.*;
 import Mindustack.compiler.middleend.llvmir.Value;
 import Mindustack.compiler.middleend.llvmir.constant.BoolConst;
@@ -57,7 +58,17 @@ public class AsmCurrent {
 //                        , new Immediate(0), this.block);
 //                return virtualReg1;
 //            }
-
+            if (value.asmOperand instanceof RawMemOffset) {
+//
+                var virtualReg = new VirtualReg();
+//
+//                var virtualReg1 = new VirtualReg();
+//                new AsmALUInst(MLOG.SubOperation, virtualReg, PhysicalReg.reg("fp"),
+//                        ((RawStackOffset) value.asmOperand), this.block);
+                new AsmLoadInst(1, virtualReg, PhysicalReg.reg("zero")
+                        , toImm(value), this.block);
+                return virtualReg;
+            }
             return (Register) value.asmOperand;
         }
         Integer intValue = null;

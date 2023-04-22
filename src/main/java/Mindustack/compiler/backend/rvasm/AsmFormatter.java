@@ -1,6 +1,7 @@
 package Mindustack.compiler.backend.rvasm;
 
 import Mindustack.compiler.backend.rvasm.inst.AsmBaseInst;
+import Mindustack.compiler.backend.rvasm.operand.PhysicalReg;
 import Mindustack.compiler.share.lang.MLOG;
 import Mindustack.compiler.share.misc.Pair;
 
@@ -36,6 +37,18 @@ public class AsmFormatter {
         return ret;
     }
 
+    public static ArrayList<String> RegInitFormat() {
+        ArrayList<String> ret = new ArrayList<>();
+
+        ret.add(String.format("%s %s %s",
+                MLOG.MvInst
+                , PhysicalReg.reg("fp"), 64));//todo 512?
+        ret.add(String.format("%s %s %s",
+                MLOG.MvInst
+                , PhysicalReg.reg("sp"), PhysicalReg.reg("fp")));
+
+        return ret;
+    }
 //    public static ArrayList<String> globalVariableFormat(GlobalReg globalReg) {
 //        /*
 //        	.type	glb,@object             # @glb

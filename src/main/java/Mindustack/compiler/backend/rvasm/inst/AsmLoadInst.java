@@ -28,12 +28,23 @@ public class AsmLoadInst extends AsmBaseInst {
                     MLOG.LoadInstPrefix
                     , rd, rs1);
         }
-        return String.format("op add tf %s %s\n", imm, rs1) +
-                "\t" +
-                String.format("%s %s cell tf",
-                        MLOG.LoadInstPrefix
 
-                        //+ AsmTranslator.translateByteWidth(byteWidth)
-                        , rd);
+        if (rs1.toString() == "zero") {
+
+            return String.format("%s %s cell %s",
+                    MLOG.LoadInstPrefix
+
+                    //+ AsmTranslator.translateByteWidth(byteWidth)
+                    , rd, imm);
+        } else {
+            return String.format("op add tf %s %s\n", imm, rs1) +
+                    "\t" +
+                    String.format("\t%s %s cell tf",
+                            MLOG.LoadInstPrefix
+
+                            //+ AsmTranslator.translateByteWidth(byteWidth)
+                            , rd);
+        }
+
     }
 }

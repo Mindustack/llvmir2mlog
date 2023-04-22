@@ -820,7 +820,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 // GlobalReg globalReg = module.globalVarSeg.;
 
 //                new AsmLuiInst(luiReg, new GlobalAddr(globalReg, GlobalAddr.HiLo.hi), cur.block);
-                new AsmStoreInst((Register) inst.storePtr().asmOperand, cur.toReg(inst.storeValue()), cur.toImm(inst.storePtr()), cur.block);
+                new AsmStoreInst(PhysicalReg.reg("zero"), cur.toReg(inst.storeValue()), cur.toImm(inst.storePtr()), cur.block);
             }
         } else {
 
