@@ -27,7 +27,7 @@ public class MiddleEndOptimizer implements IRModulePass {
 
         for (int i = 1; i <= 7; i++) {
 
-           new FuncInliner(false).runOnModule(module);
+//          new FuncInliner(false).runOnModule(module);
 
             for (IRFunction function : module.functions) {
                 new CFGSimplifier().runOnFunc(function);
@@ -42,7 +42,7 @@ public class MiddleEndOptimizer implements IRModulePass {
             }
         }
 
-        new FuncInliner(true).runOnModule(module);
+//        new FuncInliner(true).runOnModule(module);
 
         for (IRFunction function : module.functions) {
             new GVN().runOnFunc(function);

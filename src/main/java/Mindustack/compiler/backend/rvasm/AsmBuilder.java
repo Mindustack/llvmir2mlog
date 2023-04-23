@@ -93,7 +93,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
 
             }
-            //todo build library here
+
         }
 
         for (IRFunction irFunc : irModule.functions) {
@@ -129,74 +129,36 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
             function.entryBlock = (AsmBlock) irFunc.entryBlock.asmOperand;
             function.exitBlock = (AsmBlock) irFunc.exitBlock.asmOperand;
         }
+
+        module.mainFunction = module.functions.stream().filter(asmFunction -> asmFunction.identifier.equals(MLOG.MainFunctionIdentifier)).findFirst().get();
+
+
     }
 
     private void globalDecl(IRModule irModule) {
-
-
-//        AsmFunction function = new AsmFunction("init");
-//        AsmBlock block = new AsmBlock("0");
-//        cur.func = function;
-//        cur.block = block;
-
-        //block.loopDepth = irBlock.loopDepth;
-        //irBlock.asmOperand = block;
-
-        //function.blocks.add(block);
         int memUse = 0;
 
-//        int dataZoneSize=0;
-//        for (GlobalVariable globalVariable : irModule.globalVarSeg) {
-//
-//            dataZoneSize+=globalVariable.type.size();
-//        }
-//
-//        module.dataZone=new ArrayList<>(dataZoneSize);
         for (GlobalVariable globalVar : irModule.globalVarSeg) {
 
             GlobalReg globalReg = new GlobalReg(globalVar.name);
             var memOffset = new RawMemOffset(globalReg, memUse);
             globalVar.asmOperand = memOffset;
-            // module.globalVarSeg.add(globalReg);//todo print
+            module.globalVarSeg.add(globalReg);
             if (globalVar.initValue != null) {
                 memUse += parseConst(((BaseConst) globalVar.initValue), memUse);
             }
-            //((StructType) globalVar.pointedType()).
-            // dataZoneSize += globalVar.pointedType().size();
 
 
         }
 
 
-        //new AsmLiInst(PhysicalReg.reg(),cur.toImm(baseConst),cur.block);
-//        new AsmRetInst(cur.block);
-//        function.entryBlock = block;
-//        function.exitBlock = block;
-        // builtinFunc.asmOperand = function;
-
-
-        //todo build library here
-
-
-//        for (StringConst strConst : irModule.stringConstSeg) {
-//            GlobalReg strReg = new GlobalReg(strConst.name, strConst.constData);
-//            strConst.asmOperand = strReg;
-//            module.stringConstSeg.add(strReg);
-//        }
     }
 
     private int parseConst(BaseConst baseConst, int adrs) {
 
         if (baseConst instanceof NumConst || baseConst instanceof BoolConst) {
 
-//            VirtualReg virtualReg;
-//            virtualReg = new VirtualReg();
-
             module.dataZone.add(new Pair<>(cur.toRawData(baseConst), adrs));
-            //new AsmLiInst(virtualReg, cur.toImm(baseConst), cur.block);
-            // new AsmStoreInst(PhysicalReg.reg("zero"), virtualReg, new Immediate(adrs), cur.block);
-//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
-
 
         } else if (baseConst instanceof ArrayConst) {
 
@@ -205,12 +167,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 parseConst(constData, adrs);
                 adrs += constData.size();
             }
-//            VirtualReg virtualReg;
-//            virtualReg = new VirtualReg();
-//        new AsmLiInst(virtualReg,cur.toImm(baseConst),cur.block);
-//        new AsmStoreInst(PhysicalReg.reg("zero"),virtualReg,new Immediate(++deep),cur.block);
-//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
-
 
         } else if (baseConst instanceof StructConst) {
 
@@ -219,12 +175,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 parseConst(constData, adrs);
                 adrs += constData.size();
             }
-//            VirtualReg virtualReg;
-//            virtualReg = new VirtualReg();
-//        new AsmLiInst(virtualReg,cur.toImm(baseConst),cur.block);
-//        new AsmStoreInst(PhysicalReg.reg("zero"),virtualReg,new Immediate(++deep),cur.block);
-//new AsmALUInst(MLOG.AddOperation,PhysicalReg.reg("fp"),PhysicalReg.reg("fp"),new Immediate(1),cur.block);
-
 
         }
 

@@ -8,7 +8,7 @@ public class Log {
 
     public enum Verbose {off, all, infoOnly, markOnly, trackOnly, assertOnly}
 
-    private static final String logHint = "<masterball log>: ";
+    private static final String logHint = "<Mindustack log>: ";
 
     private static final Map<String, Integer> markCnt = new HashMap<>();
 

@@ -3,6 +3,7 @@ package Mindustack.compiler.backend.rvasm;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmFunction;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmModule;
+import Mindustack.compiler.share.lang.MLOG;
 import Mindustack.compiler.share.pass.AsmBlockPass;
 import Mindustack.compiler.share.pass.AsmFuncPass;
 import Mindustack.compiler.share.pass.AsmModulePass;
@@ -12,10 +13,11 @@ import java.io.PrintStream;
 
 public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
-    private final static String TAB = "\t";
     private final PrintStream ps;
 
-    public int funcEndCounter = 0;
+    public int funcCounter = 0;
+    public int blockCounter = 0;
+    public int instructionCounter = 0;
 
     public AsmPrinter(PrintStream ps) {
         this.ps = ps;
@@ -26,42 +28,57 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
     public void runOnModule(AsmModule module) {
         Log.info("Asm Printer Start Sucess");
 
-//        ps.println("# fileName: " + irFileName + TAB + " compiled by @Masterball.");
-//        ps.println(TAB + ".text");
+        ps.println("# compiled by @Mindustack");
+
 
         AsmFormatter.RegInitFormat().forEach(ps::println);
+
         AsmFormatter.DataInitFormat(module.dataZone).forEach(ps::println);
 
-        module.functions.forEach(this::runOnFunc);
-//        module.globalVarSeg.forEach(globalVar -> {
-//            AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
-//            ps.println();
-//        });
-//        module.stringConstSeg.forEach(stringConst -> {
-//            AsmFormatter.stringConstFormat(stringConst).forEach(ps::println);
-//            ps.println();
-//        });
+
+        module.globalVarSeg.forEach(globalVar -> {
+            AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
+            ps.println();
+        });
+
+        printBuildinFunction();
+
+        runOnFunc(module.mainFunction);
+
+        module.functions.stream().filter(asmFunction -> !asmFunction.identifier.equals(MLOG.MainFunctionIdentifier)).forEach(this::runOnFunc);
+
+
+        printCompileRecord();
+        Log.info("Asm Print Sucess");
+    }
+
+    private void printBuildinFunction() {
+        ps.println(MLOG.BuildinFunction);
     }
 
     @Override
     public void runOnFunc(AsmFunction function) {
-        // some invalid print in ravel
 
-//        AsmFormatter.functionHeaderFormat(function).forEach(ps::println);
-//        ps.println(function.identifier + ":");
-//        // ps.println(TAB + ".cfi_startproc");
+        AsmFormatter.functionHeaderFormat(function).forEach(ps::println);
         function.blocks.forEach(this::runOnBlock);
-//        // ps.println(".Lfunc_end" + funcEndCounter + ":");
-//        ps.println(TAB + ".size" + TAB + function + ", .-" + function);
-        funcEndCounter++;
-        // ps.println(TAB + ".cfi_endproc");
-//        ps.println("                                        # -- End function");
+        funcCounter++;
+        ps.println("\t\t# -- End function\n");
+    }
+
+    private void printCompileRecord() {
+        ps.println("\t\t\t\t\t# -- End Compile");
+        ps.println("\t\t\t\t\t#\t\t total func:" + funcCounter);
+        ps.println("\t\t\t\t\t#\t\t total block:" + blockCounter);
+        ps.println("\t\t\t\t\t#\t\t total inst:" + instructionCounter);
     }
 
     @Override
     public void runOnBlock(AsmBlock block) {
         ps.println(block.identifier + ":");
-        block.instructions.forEach(inst -> ps.println(AsmFormatter.instFormat(inst)));
-        // block.instructions.forEach(inst -> System.out.println(AsmFormatter.instFormat(inst)) );
+        block.instructions.forEach(inst -> {
+            ps.println(AsmFormatter.instFormat(inst));
+            instructionCounter++;
+        });
+        blockCounter++;
     }
 }

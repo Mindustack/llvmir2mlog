@@ -15,7 +15,6 @@ public class BackEndOptimizer implements AsmModulePass {
             new BlockMerge().runOnFunc(function);
             new ReorderBlock().runOnFunc(function);
             new RedundantInst().runOnFunc(function);
-            //todo
             new LoadStorePeephole().runOnFunc(function);
         }
     }

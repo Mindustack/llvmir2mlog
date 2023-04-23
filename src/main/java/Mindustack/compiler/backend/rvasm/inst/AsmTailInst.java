@@ -16,7 +16,7 @@ public class AsmTailInst extends AsmBaseInst {
         super(null, null, null, null, parentBlock);
         this.callFunc = callFunc;
     }
-
+//todo wanna give up this but...
     @Override
     public HashSet<Register> uses() {
         HashSet<Register> ret = new HashSet<>();
@@ -38,7 +38,7 @@ public class AsmTailInst extends AsmBaseInst {
     @Override
     public String format() {
         // tail symbol
-        return String.format("%s %s%s", MLOG.TailInst, callFunc.identifier, MLOG.LabelForTailSuffix);
+        return String.format("%s %s %s", MLOG.TailInst, callFunc.identifier, MLOG.LabelForTailSuffix);
     }
 
 }

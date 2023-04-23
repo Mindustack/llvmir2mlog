@@ -28,7 +28,7 @@ public class AsmTranslator {
             case LLVM.ShiftLeftInst:
                 return MLOG.ShiftLeftOperation;
             case LLVM.ShiftRightInst:
-                return MLOG.ShiftOperation;
+                return MLOG.ShiftRightOperation;
             // notice: LLVM IR and RV32 Asm have many in common
             default:
                 return irOp;
@@ -62,7 +62,7 @@ public class AsmTranslator {
             case MLOG.DivOperation:
             case MLOG.ModOpertion:
             case MLOG.ShiftLeftOperation:
-            case MLOG.ShiftOperation:
+            case MLOG.ShiftRightOperation:
             case MLOG.LessThanOperation:
 //            case MLOG.NotEqualOperation:
 //            case MLOG.EqualOperation:
