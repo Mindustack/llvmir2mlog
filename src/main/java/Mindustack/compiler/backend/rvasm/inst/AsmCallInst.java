@@ -41,7 +41,7 @@ public class AsmCallInst extends AsmBaseInst {
     public String format() {
         // call symbol
         return //todo is it 2?
-                "op add ra @counter 2" + "\n"
+                "op add ra @counter 1" + "\n"
                         + String.format("\tjump %s always", callFunc.entryBlock.identifier)
                 ;
     }
