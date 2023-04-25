@@ -24,26 +24,26 @@ public class AsmLoadInst extends AsmBaseInst {
         //yes it is
         if (imm.value == 0) {
 
-            return String.format("%s %s cell %s",
-                    MLOG.LoadInstPrefix
-                    , rd, rs1);
+            return String.format("read %s %s %s"
+
+                    , rd, MLOG.DefaultMemmory, rs1);
         }
 
         if (rs1.toString() == "zero") {
 
-            return String.format("%s %s cell %s",
-                    MLOG.LoadInstPrefix
+            return String.format("read %s %s %s",
+
 
                     //+ AsmTranslator.translateByteWidth(byteWidth)
-                    , rd, imm);
+                    rd, MLOG.DefaultMemmory, imm);
         } else {
             return String.format("op add tf %s %s\n", imm, rs1) +
-                    "\t" +
-                    String.format("\t%s %s cell tf",
-                            MLOG.LoadInstPrefix
+
+                    String.format("\tread %s %s tf",
+
 
                             //+ AsmTranslator.translateByteWidth(byteWidth)
-                            , rd);
+                            rd, MLOG.DefaultMemmory);
         }
 
     }

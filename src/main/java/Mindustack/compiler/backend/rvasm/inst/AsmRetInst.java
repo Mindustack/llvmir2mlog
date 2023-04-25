@@ -3,7 +3,6 @@ package Mindustack.compiler.backend.rvasm.inst;
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.operand.PhysicalReg;
 import Mindustack.compiler.backend.rvasm.operand.Register;
-import Mindustack.compiler.share.lang.MLOG;
 
 import java.util.HashSet;
 
@@ -27,6 +26,6 @@ public class AsmRetInst extends AsmBaseInst {
 
     @Override
     public String format() {
-        return MLOG.RetInst;
+        return "set @counter ra";
     }
 }

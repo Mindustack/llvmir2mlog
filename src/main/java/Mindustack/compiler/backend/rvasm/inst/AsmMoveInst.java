@@ -2,7 +2,6 @@ package Mindustack.compiler.backend.rvasm.inst;
 
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.operand.Register;
-import Mindustack.compiler.share.lang.MLOG;
 
 public class AsmMoveInst extends AsmBaseInst {
     public AsmMoveInst(Register rd, Register rs1, AsmBlock parentBlock) {
@@ -17,6 +16,6 @@ public class AsmMoveInst extends AsmBaseInst {
     @Override
     public String format() {
         // mv rd, rs1
-        return String.format("%s %s %s", MLOG.MvInst, rd, rs1);
+        return String.format("set %s %s", rd, rs1);
     }
 }

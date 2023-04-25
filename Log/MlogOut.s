@@ -7453,3 +7453,1696 @@ _GLOBAL__sub_I_test4.cpp0:
 					#		 total func:6
 					#		 total block:23
 					#		 total inst:448
+
+
+time:3245541451
+# compiled by @Mindustack
+set fp 64
+set sp fp
+		#globlvar "?sto@@3HA"
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	set a0 0
+	op add tf -1 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function "?fib@@YAHH@Z"
+"?fib@@YAHH@Z"0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump lessThan s0 t0 "?fib@@YAHH@Z"6
+	jump always "?fib@@YAHH@Z"8
+	op add sp sp 1
+"?fib@@YAHH@Z"6:
+	set a0 s0
+	op add tf -2 fp
+		read s0 cell tf
+	op add tf -1 fp
+		read s1 cell tf
+	op add tf -3 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+"?fib@@YAHH@Z"8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	op add a0 s1 a0
+	op add tf -2 fp
+		read s0 cell tf
+	op add tf -1 fp
+		read s1 cell tf
+	op add tf -3 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:45
+
+
+time:3399083547
+# compiled by @Mindustack
+set fp 64
+set sp fp
+		#globlvar "?OUTPUT@@3HA"
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	set a0 0
+	op add tf -1 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function "?fib@@YAHH@Z"
+"?fib@@YAHH@Z"0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump lessThan s0 t0 "?fib@@YAHH@Z"6
+	jump always "?fib@@YAHH@Z"8
+	op add sp sp 1
+"?fib@@YAHH@Z"6:
+	set a0 s0
+	op add tf -2 fp
+		read s0 cell tf
+	op add tf -1 fp
+		read s1 cell tf
+	op add tf -3 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+"?fib@@YAHH@Z"8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump always "?fib@@YAHH@Z"0
+	op add a0 s1 a0
+	op add tf -2 fp
+		read s0 cell tf
+	op add tf -1 fp
+		read s1 cell tf
+	op add tf -3 fp
+		read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:45
+
+
+time:4518536441
+# compiled by @Mindustack
+set fp 64
+set sp fp
+		#globlvar "?OUTPUT@@3HA"
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump "?fib@@YAHH@Z"0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function "?fib@@YAHH@Z"
+"?fib@@YAHH@Z"0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump "?fib@@YAHH@Z"6 lessThan s0 t0
+	jump "?fib@@YAHH@Z"8 always
+	op add sp sp 1
+"?fib@@YAHH@Z"6:
+	set a0 s0
+"?fib@@YAHH@Z"16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+"?fib@@YAHH@Z"8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump "?fib@@YAHH@Z"0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump "?fib@@YAHH@Z"0 always
+	op add a0 s1 a0
+	jump "?fib@@YAHH@Z"16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:5114022537
+# compiled by @Mindustack
+set fp 64
+set sp fp
+		#globlvar  ?OUTPUT@@3HA 
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump  ?fib@@YAHH@Z 0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function  ?fib@@YAHH@Z 
+ ?fib@@YAHH@Z 0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump  ?fib@@YAHH@Z 6 lessThan s0 t0
+	jump  ?fib@@YAHH@Z 8 always
+	op add sp sp 1
+ ?fib@@YAHH@Z 6:
+	set a0 s0
+ ?fib@@YAHH@Z 16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+ ?fib@@YAHH@Z 8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump  ?fib@@YAHH@Z 0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump  ?fib@@YAHH@Z 0 always
+	op add a0 s1 a0
+	jump  ?fib@@YAHH@Z 16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:5626191358
+# compiled by @Mindustack
+set fp 64
+set sp fp
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6000987108
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6177838471
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6199662369
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6292619991
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6323911277
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6331567286
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6399371114
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set a0 0
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:40
+
+
+time:6418314985
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write ra cell tf
+	op sub sp fp 2
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add tf -1 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:39
+
+
+time:6664618663
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write s0 cell tf
+	op add tf -2 fp
+	write ra cell tf
+	op sub sp fp 3
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 cell tf
+	op add tf -2 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:6719267037
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -1 fp
+	write s0 cell tf
+	op add tf -2 fp
+	write ra cell tf
+	op sub sp fp 3
+	write zero cell t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 cell tf
+	op add tf -2 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp cell sp
+	set fp sp
+	op add tf -2 fp
+	write s0 cell tf
+	op add tf -1 fp
+	write s1 cell tf
+	op add tf -3 fp
+	write ra cell tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 cell tf
+	op add tf -1 fp
+	read s1 cell tf
+	op add tf -3 fp
+	read ra cell tf
+	set sp fp
+	read fp cell fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:7428200908
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write s0 bank1 tf
+	op add tf -2 fp
+	write ra bank1 tf
+	op sub sp fp 3
+	write zero bank1 t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 bank1 tf
+	op add tf -2 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	op add tf -3 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:7541290296
+# compiled by @Mindustack
+set fp 64
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write s0 bank1 tf
+	op add tf -2 fp
+	write ra bank1 tf
+	op sub sp fp 3
+	write zero bank1 t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 bank1 tf
+	op add tf -2 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	op add tf -3 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:8618366240
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write s0 bank1 tf
+	op add tf -2 fp
+	write ra bank1 tf
+	op sub sp fp 3
+	write zero bank1 t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 bank1 tf
+	op add tf -2 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	op add tf -3 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:8880020910
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write s0 bank1 tf
+	op add tf -2 fp
+	write ra bank1 tf
+	op sub sp fp 3
+	write zero bank1 t0
+	set a0 5
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 bank1 tf
+	op add tf -2 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+jump @counter @counter
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	op add tf -3 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:8909787921
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+write 10.0 cell 0
+		#globlvar ?OUTPUT@@3HA
+
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write s0 bank1 tf
+	op add tf -2 fp
+	write ra bank1 tf
+	op sub sp fp 3
+	write zero bank1 t0
+	set a0 8
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s0 a0
+	set a0 s0
+	op add ra @counter 2
+	jump print0 always
+	set a0 s0
+	op add tf -1 fp
+	read s0 bank1 tf
+	op add tf -2 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+jump @counter @counter
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+	jump ?fib@@YAHH@Z8 always
+	op add sp sp 1
+?fib@@YAHH@Z6:
+	set a0 s0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	op add tf -3 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 2
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:45
+
+
+time:9650865769
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	set a0 6
+	op add ra @counter 2
+	jump fib0 always
+	op add ra @counter 2
+	jump fib0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+set @counter @counter
+		# -- Start function fib
+fib0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	set t0 2
+	jump fib9 lessThan a0 t0
+	jump fib8 always
+	op add sp sp 1
+fib8:
+	set a0 5
+fib9:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:25

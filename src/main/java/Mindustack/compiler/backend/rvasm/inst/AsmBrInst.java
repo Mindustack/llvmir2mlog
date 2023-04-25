@@ -2,7 +2,6 @@ package Mindustack.compiler.backend.rvasm.inst;
 
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
 import Mindustack.compiler.backend.rvasm.operand.Register;
-import Mindustack.compiler.share.lang.MLOG;
 
 // no beqz now
 
@@ -24,6 +23,6 @@ public class AsmBrInst extends AsmBaseInst {
     @Override
     public String format() {
         // beq rs1, rs2, dest
-        return String.format("%s %s %s %s %s", MLOG.BrInstPrefix, op, rs1, rs2, dest);
+        return String.format("jump %s %s %s %s", dest, op, rs1, rs2);
     }
 }

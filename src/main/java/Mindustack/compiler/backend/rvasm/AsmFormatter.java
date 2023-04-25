@@ -17,7 +17,7 @@ public class AsmFormatter {
 
             if (data.first() == 0) continue;
             ret.add(String.format("%s %s cell %s",
-                    MLOG.StoreInstPrefix
+                    "write"
                     , data.first(), data.second()));//todo cell?
         }
         return ret;
@@ -26,12 +26,14 @@ public class AsmFormatter {
     public static ArrayList<String> RegInitFormat() {
         ArrayList<String> ret = new ArrayList<>();
 
-        ret.add(String.format("%s %s %s",
-                MLOG.MvInst
-                , PhysicalReg.reg("fp"), 64));//todo 512?
-        ret.add(String.format("%s %s %s",
-                MLOG.MvInst
+        ret.add(String.format(
+                "set %s %s"
+                , PhysicalReg.reg("fp"), MLOG.MaxMemory));//todo 512?
+        ret.add(String.format("set %s %s"
                 , PhysicalReg.reg("sp"), PhysicalReg.reg("fp")));
+        ret.add(String.format(
+                "set %s %s"
+                , PhysicalReg.reg("zero"), 0));
 
         return ret;
     }

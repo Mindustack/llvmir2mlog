@@ -9,6 +9,7 @@ import Mindustack.compiler.share.pass.IRBlockPass;
 import Mindustack.compiler.share.pass.IRFuncPass;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * InstAdapter Pass
@@ -52,7 +53,7 @@ public class InstAdapter implements IRFuncPass, IRBlockPass {
                 }
             }*/
 
-            if (inst instanceof IRCallInst && ((IRCallInst) inst).callFunc() == module.getBuiltinFunction("toString")) {
+            if (inst instanceof IRCallInst && Objects.equals(((IRCallInst) inst).callFunc(), module.getBuiltinFunction("toString"))) {
                 if (inst.users.size() == 1 && inst.users.get(0) instanceof IRCallInst) {
                     if (((IRCallInst) inst.users.get(0)).callFunc() == module.getBuiltinFunction("print")) {
                         inst.removedFromAllUsers();

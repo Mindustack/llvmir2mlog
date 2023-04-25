@@ -1,7 +1,6 @@
 package Mindustack.compiler.backend.rvasm.inst;
 
 import Mindustack.compiler.backend.rvasm.hierarchy.AsmBlock;
-import Mindustack.compiler.share.lang.MLOG;
 
 public class AsmJmpInst extends AsmBaseInst {
     public AsmBlock dest;
@@ -19,6 +18,6 @@ public class AsmJmpInst extends AsmBaseInst {
     @Override
     public String format() {
         // j offset
-        return String.format("%s %s", MLOG.JmpInstPrefix, dest);
+        return String.format("jump %s always", dest);
     }
 }

@@ -25,23 +25,23 @@ public class AsmStoreInst extends AsmBaseInst {
 
         if (imm.value == 0) {
 
-            return String.format("%s %s cell %s",
-                    MLOG.StoreInstPrefix
-                    , rs2, rs1);
+            return String.format("write %s %s %s"
+
+                    , rs2, MLOG.DefaultMemmory, rs1);
         }
         if (rs1.toString() == "zero") {
 
-            return String.format("%s %s cell %s",
-                    MLOG.StoreInstPrefix
+            return String.format("write %s %s %s"
+
 
                     //+ AsmTranslator.translateByteWidth(byteWidth)
-                    , rd, imm);
+                    , rd, MLOG.DefaultMemmory, imm);
         } else {
             return String.format("op add tf %s %s\n", imm, rs1) +
-                    String.format("\t%s %s cell tf",
-                            MLOG.StoreInstPrefix
+                    String.format("\twrite %s %s tf"
+
                             //  + AsmTranslator.translateByteWidth(byteWidth)
-                            , rs2);
+                            , rs2, MLOG.DefaultMemmory);
         }
 
 

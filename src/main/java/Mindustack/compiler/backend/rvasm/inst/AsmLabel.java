@@ -18,6 +18,6 @@ public class AsmLabel extends AsmBaseInst {
 
     @Override
     public String format() {
-        return String.format("    %s:", this.label);
+        return String.format("%s:", this.label);
     }
 }

@@ -162,12 +162,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             deepToInst(blockCtx.get(block), visited);
         }
         function.entryBlock = function.blocks.get(0);
-        for (RawOnlyName onlyName : RawOnlyName.workList) {
-            var userList = new ArrayList<>(onlyName.users);
-            for (User user : userList) {
-                user.resetOperand(user.operands.indexOf(onlyName), valueMap.get(onlyName.name));
-            }
-        }
+        solveRawOnlyName(valueMap);
 
     }
 
@@ -211,16 +206,19 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             block.parentFunction.exitBlock = block;
         }
     }
-    @Override
-    public Value visitTruncInst(LLVMIRParser.TruncInstContext ctx) {
-        //String destName = ctx..LocalReg().getText().substring(1);
 
-        IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
+@Override
+    public Value visitTerminal(TerminalNode node) {
 
-
-        return inst;
-
+    if (CurrentFunction != null && valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll("\"", "").replaceAll(":", "")) != null) {
+        return valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll("\"", "").replaceAll(":", ""));
+    } else if (valueMap.get(node.getSymbol().getText()) != null) {
+        return valueMap.get(node.getSymbol().getText());
+    } else if (getGlobalValue(node.getSymbol().getText()) != null) {
+        return getGlobalValue(node.getSymbol().getText());
     }
+    return super.visitTerminal(node);
+}
 
     public void setBottomFunctions() {
 
@@ -264,7 +262,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     @Override
     public Value visitTypeDef(LLVMIRParser.TypeDefContext ctx) {
 
-        String TypeName = ctx.LocalIdent().getText().substring(1);
+        String TypeName = ctx.LocalIdent().getText().substring(1).replaceAll("\"", "");
         var type = visitType(ctx.type()).type;
         type.setName(TypeName);
         var value = new Value(TypeName, type);
@@ -278,7 +276,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitGlobalDef(LLVMIRParser.GlobalDefContext ctx) {
-        String glbName = ctx.GlobalIdent().getText().substring(1);
+        String glbName = ctx.GlobalIdent().getText().substring(1).replaceAll("\"", "");
 
 
         GlobalVariable glbVar = new GlobalVariable(glbName, visitType(ctx.type()).type);
@@ -295,29 +293,38 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     }
 
-@Override
-    public Value visitConstant(LLVMIRParser.ConstantContext ctx) {
+    @Override
+    public Value visitFuncHeader(LLVMIRParser.FuncHeaderContext ctx) {
+        String funcName = ctx.GlobalIdent().getText().substring(1).replaceAll("\"", ""); // emit @ and " "
 
-        if (ctx.GlobalIdent() != null) {
-            String name = ctx.GlobalIdent().getText().substring(1);
-//visitLocalDefInst()
+        IRBaseType retType = visitType(ctx.type()).type;
 
+        // use bottom function constructor
+        // "method" is unnecessary to concern
+        var function = new IRFunction(funcName, retType);
 
-            return getGlobalValue(name);
+        List<LLVMIRParser.ParamContext> params = ctx.params().param();
+        for (int i = 0; i < params.size(); ++i) {
 
+            String name = params.get(i).LocalIdent().getText().substring(1).replaceAll("\"", "");
+//
+            IRBaseType argType = visitType(params.get(i).type()).type;
 
+            ((IRFuncType) function.type).argTypes.add(argType);
+
+            function.addArg(newValue(function, name, argType));
         }
-        return visitChildren(ctx);
 
 
+        globalValueMap.put(funcName, function);
+        //  setNewValue(funcName, function);
+        return function;
     }
 
     @Override
     public Value visitFuncDecl(LLVMIRParser.FuncDeclContext ctx) {
         return visit(ctx.funcHeader());
     }
-    // this part is a Symbol Collector.
-    // They will not go to instructions.
 
     @Override
     public Value visitFuncDef(LLVMIRParser.FuncDefContext ctx) {
@@ -341,31 +348,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitFuncHeader(LLVMIRParser.FuncHeaderContext ctx) {
-        String funcName = ctx.GlobalIdent().getText().substring(1); // emit @
-
-        IRBaseType retType = visitType(ctx.type()).type;
-
-        // use bottom function constructor
-        // "method" is unnecessary to concern
-        var function = new IRFunction(funcName, retType);
-
-        List<LLVMIRParser.ParamContext> params = ctx.params().param();
-        for (int i = 0; i < params.size(); ++i) {
-
-            String name = params.get(i).LocalIdent().getText().substring(1);
-//
-            IRBaseType argType = visitType(params.get(i).type()).type;
-
-            ((IRFuncType) function.type).argTypes.add(argType);
-
-            function.addArg(newValue(function, name, argType));
+    public Value visitLabel(LLVMIRParser.LabelContext ctx) {
+        String name = CurrentFunction.name + ctx.LocalIdent().getSymbol().getText().substring(1).replaceAll("\"", "").replaceAll(":", "");
+        if (valueMap.get(name) != null) {
+            return valueMap.get(name);
         }
-
-
-        globalValueMap.put(funcName, function);
-        //  setNewValue(funcName, function);
-        return function;
+        return null;
     }
 
     private Value newValue(IRFunction function, String name, IRBaseType type) {//new get
@@ -440,13 +428,21 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     }
 
-    @Override
-    public Value visitLabel(LLVMIRParser.LabelContext ctx) {
-        String name = CurrentFunction.name + ctx.LocalIdent().getSymbol().getText().substring(1).replaceAll(":", "");
-        if (valueMap.get(name) != null) {
-            return valueMap.get(name);
+@Override
+    public Value visitConstant(LLVMIRParser.ConstantContext ctx) {
+
+        if (ctx.GlobalIdent() != null) {
+            String name = ctx.GlobalIdent().getText().substring(1).replaceAll("\"", "");
+//visitLocalDefInst()
+
+
+            return getGlobalValue(name);
+
+
         }
-        return null;
+        return visitChildren(ctx);
+
+
     }
 
         @Override
@@ -471,23 +467,26 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitNamedType(LLVMIRParser.NamedTypeContext ctx) {
+    public Value visitValue(LLVMIRParser.ValueContext ctx) {
+        //  var type = ctx.firstClassType().concreteType();
 
-        TypePasser.type = getGlobalValue(ctx.LocalIdent().getText().substring(1)).type;
-        return TypePasser;
+        if (ctx.LocalIdent() != null) {
+            String name = ctx.LocalIdent().getText().substring(1).replaceAll("\"", "");
+            if (valueMap.get(name) == null) {
+                return new RawOnlyName(name);
+            }
+            return valueMap.get(name);
+
+        }
+        return visitChildren(ctx);
+
     }
 
-@Override
-    public Value visitTerminal(TerminalNode node) {
+    @Override
+    public Value visitNamedType(LLVMIRParser.NamedTypeContext ctx) {
 
-        if (CurrentFunction != null && valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", "")) != null) {
-            return valueMap.get(CurrentFunction.name + node.getSymbol().getText().substring(1).replaceAll(":", ""));
-        } else if (valueMap.get(node.getSymbol().getText()) != null) {
-            return valueMap.get(node.getSymbol().getText());
-        } else if (getGlobalValue(node.getSymbol().getText()) != null) {
-            return getGlobalValue(node.getSymbol().getText());
-        }
-        return super.visitTerminal(node);
+        TypePasser.type = getGlobalValue(ctx.LocalIdent().getText().substring(1).replaceAll("\"", "")).type;
+        return TypePasser;
     }
 
 
@@ -614,18 +613,31 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitValue(LLVMIRParser.ValueContext ctx) {
-        //  var type = ctx.firstClassType().concreteType();
+    public Value visitLocalDefInst(LLVMIRParser.LocalDefInstContext ctx) {
 
-        if (ctx.LocalIdent() != null) {
-            String name = ctx.LocalIdent().getText().substring(1);
-            if (valueMap.get(name) == null) {
-                return new RawOnlyName(name);
-            }
-            return valueMap.get(name);
 
-        }
-        return visitChildren(ctx);
+        destName = ctx.LocalIdent().getText().substring(1).replaceAll("\"", "");
+
+//        IRAllocaInst inst = new IRAllocaInst(
+//                destName,
+//                translateType(ctx.valueInstruction().allocaInst().type()),
+//                null
+//        );
+        var value = visit(ctx.valueInstruction());
+
+//        if (value instanceof IRBaseInst){
+        newValue(destName, value.type);
+        setNewValue(destName, value);
+//        }else {
+//             setNewValue(destName, value);
+//
+//        }
+
+//        if (inst.type!=null){
+//            setNewValue(inst.type,);
+//        }
+
+        return value;
 
     }
 
@@ -721,31 +733,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitLocalDefInst(LLVMIRParser.LocalDefInstContext ctx) {
+    public Value visitAddInst(LLVMIRParser.AddInstContext ctx) {
+        // String destName = ctx.instDest().LocalReg().getText().substring(1).replaceAll("\"","");
 
 
-        destName = ctx.LocalIdent().getText().substring(1);
+        return visitBinary("add", ctx.typeValue(), ctx.value());
 
-//        IRAllocaInst inst = new IRAllocaInst(
-//                destName,
-//                translateType(ctx.valueInstruction().allocaInst().type()),
-//                null
-//        );
-        var value = visit(ctx.valueInstruction());
-
-//        if (value instanceof IRBaseInst){
-        newValue(destName, value.type);
-        setNewValue(destName, value);
-//        }else {
-//             setNewValue(destName, value);
-//
-//        }
-
-//        if (inst.type!=null){
-//            setNewValue(inst.type,);
-//        }
-
-        return value;
 
     }
 
@@ -787,13 +780,13 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitAddInst(LLVMIRParser.AddInstContext ctx) {
-        // String destName = ctx.instDest().LocalReg().getText().substring(1);
+    public Value visitLoadInst(LLVMIRParser.LoadInstContext ctx) {
+        // String destName = ctx.typeValue().value().LocalIdent().getText().substring(1).replaceAll("\"","");
 
+        IRLoadInst inst = new IRLoadInst(visit(ctx.typeValue()), null);
 
-        return visitBinary("add", ctx.typeValue(), ctx.value());
-
-
+        // setNewValue(destName, inst);
+        return inst;
     }
 
     @Override
@@ -942,13 +935,14 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitLoadInst(LLVMIRParser.LoadInstContext ctx) {
-        // String destName = ctx.typeValue().value().LocalIdent().getText().substring(1);
+    public Value visitTruncInst(LLVMIRParser.TruncInstContext ctx) {
+        //String destName = ctx..LocalReg().getText().substring(1).replaceAll("\"","");
 
-        IRLoadInst inst = new IRLoadInst(visit(ctx.typeValue()), null);
+        IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
 
-        // setNewValue(destName, inst);
+
         return inst;
+
     }
 
     @Override
@@ -1006,7 +1000,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitZExtInst(LLVMIRParser.ZExtInstContext ctx) {
-        //String destName = ctx.instDest().LocalReg().getText().substring(1);
+        //String destName = ctx.instDest().LocalReg().getText().substring(1).replaceAll("\"","");
 //
         IRCastInst inst = new IRCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
 
@@ -1028,7 +1022,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitBitCastInst(LLVMIRParser.BitCastInstContext ctx) {
-//         String destName = ctx.instDest().LocalReg().getText().substring(1);
+//         String destName = ctx.instDest().LocalReg().getText().substring(1).replaceAll("\"","");
 
 
         IRBitCastInst inst = new IRBitCastInst(visit(ctx.typeValue()), visitType(ctx.type()).type, null);
@@ -1050,7 +1044,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitPhiInst(LLVMIRParser.PhiInstContext ctx) {
-        //  String destName = ctx.instDest().LocalReg().getText().substring(1);
+        //  String destName = ctx.instDest().LocalReg().getText().substring(1).replaceAll("\"","");
         IRPhiInst inst = new IRPhiInst(visitType(ctx.type()).type, null);
 
         for (var phi : ctx.inc()) {

@@ -38,7 +38,7 @@ public class AsmTailInst extends AsmBaseInst {
     @Override
     public String format() {
         // tail symbol
-        return String.format("%s %s %s", MLOG.TailInst, callFunc.identifier, MLOG.LabelForTailSuffix);
+        return String.format("%s %s %s", "jump always", callFunc.identifier, "_LabelForTail");
     }
 
 }

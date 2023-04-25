@@ -12,7 +12,7 @@ public class MLOG {
     public static final int MaxStackSize = Integer.MAX_VALUE;
     public static final int MaxDataZoneSize = 0x200;
 
-
+public static final String DefaultMemmory = "bank1";
     // --- Register Related ---
 
 
@@ -72,21 +72,6 @@ public class MLOG {
     public static final String WordKeyword = "w";
 
 
-    public static final String BrInstPrefix = "jump";
-
-
-    public static final String CallInst = "jump always";
-    public static final String JmpInstPrefix = "jump always";
-    public static final String LiInst = "set";//将立即数imm加载到寄存器rd
-    public static final String LoadInstPrefix = "read";
-    public static final String StoreInstPrefix = "write";
-    // public static final String LuiInst = "lui";// 加载立即数到高位（lui）将 20 位常量加载到寄存器的高 20 位。
-    public static final String MvInst = "set";
-    public static final String RetInst = "set @counter ra";
-    public static final String TailInst = "jump always";
-
-    public static final String LabelForTailSuffix = "_LabelForTail";
-
     public static final String AddOperation = "add";
     public static final String SubOperation = "sub";
     public static final String MulOperation = "mul";
@@ -119,5 +104,6 @@ public class MLOG {
     public static final String GPRegPrefix = "gp";
     public static final String MainFunctionIdentifier = "main";
 
-    public static final String BuildinFunction = "";
+    public static final String BuildinFunction = "print0:\nprint a0\nprintflush message1\nset @counter ra";
+    public static int MaxMemory = 512;
 }

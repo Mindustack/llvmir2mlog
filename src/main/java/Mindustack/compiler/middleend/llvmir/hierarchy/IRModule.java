@@ -19,10 +19,6 @@ public class IRModule {
 
 
 
-    public IRFunction getMalloc() {
-        return builtinFunctions.get(0);
-    }
-
     public IRFunction getBuiltinFunction(String name) {
         for (IRFunction builtinFunction : builtinFunctions) {
             if (Objects.equals(builtinFunction.name, LLVM.BottomStrFuncPrefix + name))
@@ -30,7 +26,8 @@ public class IRModule {
             if (Objects.equals(builtinFunction.name, name))
                 return builtinFunction;
         }
-        throw new InternalError(name);
+        return null;
+        //todo throw new InternalError(name);
     }
 
     public IRFunction getStrMethod(String op) {

@@ -17,7 +17,7 @@ public class Main {
         IRBuilder IRBuilder;
         AsmExplainInst.ExplainShow = false;
         //String s;
-        var file = "src/main/resources/malloc.ll";
+        var file = "src/main/resources/test.ll";
         Log.setVerbose(Log.Verbose.all);
         IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
         IRModule module = IRBuilder.irModule;

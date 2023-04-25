@@ -1,0 +1,7 @@
+clang -S -emit-llvm
+
+
+
+declare void @print(i32 %s)
+
+call void @print(i32 %2)

@@ -14,6 +14,7 @@ import Mindustack.compiler.share.pass.IRFuncPass;
 import Mindustack.debug.Log;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * simple alias analyzer implemented
@@ -57,7 +58,7 @@ public class AliasAnalyzer implements IRFuncPass {
 
         for (IRBlock block : function.blocks)
             for (IRBaseInst inst : block.instructions) {
-                if (inst instanceof IRCallInst && ((IRCallInst) inst).callFunc() == function.parentModule.getMalloc())
+                if (inst instanceof IRCallInst && Objects.equals(((IRCallInst) inst).callFunc(), function.parentModule.getBuiltinFunction("malloc")))//todo maybe it is called this
                     certain.add(inst);
                 if (inst instanceof IRBitCastInst && ((IRBitCastInst) inst).fromValue().type instanceof PointerType) {
                     // Log.info("bslink", inst.format());
