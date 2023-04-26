@@ -13,6 +13,8 @@ public class AsmFormatter {
 
     public static ArrayList<String> DataInitFormat(ArrayList<Pair<Double, Integer>> value) {
         ArrayList<String> ret = new ArrayList<>();
+
+
         for (Pair<Double, Integer> data : value) {
 
             if (data.first() == 0) continue;

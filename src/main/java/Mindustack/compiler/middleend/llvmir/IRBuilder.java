@@ -305,8 +305,14 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
         List<LLVMIRParser.ParamContext> params = ctx.params().param();
         for (int i = 0; i < params.size(); ++i) {
+            String name;
+            if (params.get(i).LocalIdent() != null) {
+                name = params.get(i).LocalIdent().getText().substring(1).replaceAll("\"", "");
 
-            String name = params.get(i).LocalIdent().getText().substring(1).replaceAll("\"", "");
+            } else {
+                name = "arg" + i;
+            }
+
 //
             IRBaseType argType = visitType(params.get(i).type()).type;
 

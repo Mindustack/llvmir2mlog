@@ -1,5 +1,4 @@
-
-int fib(int n);
+extern "C" void print(int n);
 int fib(int n) {
     if (n < 2) {
         return n;
@@ -8,6 +7,6 @@ int fib(int n) {
 }
 
 int main(){
-
-return fib(8);
+print(fib(8));
+return 0;
 }

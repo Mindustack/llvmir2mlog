@@ -34,7 +34,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
         AsmFormatter.RegInitFormat().forEach(ps::println);
 
         AsmFormatter.DataInitFormat(module.dataZone).forEach(ps::println);
-
+        ps.println("jump 0 strictEqual ra 0");
 
         module.globalVarSeg.forEach(globalVar -> {
             AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
@@ -42,6 +42,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
         });
 
         ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
+
         printBuildinFunction();
 
 
