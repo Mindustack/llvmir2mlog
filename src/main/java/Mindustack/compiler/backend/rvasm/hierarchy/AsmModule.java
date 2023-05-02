@@ -16,5 +16,7 @@ public class AsmModule {
     public ArrayList<Pair<Double, Integer>> dataZone = new ArrayList<>();
 
     public ArrayList<GlobalReg> globalVarSeg = new ArrayList<>();
+    public ArrayList<AsmFunction> builtinFunctions = new ArrayList<>();
+
 //    public ArrayList<GlobalReg> stringConstSeg = new ArrayList<>();
 }

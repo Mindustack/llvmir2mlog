@@ -9906,3 +9906,371 @@ min0leftleft:
 					#		 total func:2
 					#		 total block:6
 					#		 total inst:23
+
+
+time:4956880778
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	op add sp sp 1
+	jump min0left lessThan a0 a1
+cmp_iffalse_result1:
+	set a0 a1
+min0left:
+	set t0 10
+	jump min0leftleft lessThan a0 t0
+cmp1_iffalse_result:
+	set a0 10
+min0leftleft:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:6
+					#		 total inst:23
+
+
+time:5352590391
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set a0 8
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	op add ra @counter 1
+	jump print0 always
+	set a0 0
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	op add sp sp 1
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add tf -3 fp
+	read ra bank1 tf
+	set @counter ra
+?fib@@YAHH@Z6:
+	set a0 s0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:38
+
+
+time:5443550506
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set a0 8
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	print0:
+print a0
+printflush message1
+	set a0 0
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	op add sp sp 1
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add tf -3 fp
+	read ra bank1 tf
+	set @counter ra
+?fib@@YAHH@Z6:
+	set a0 s0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:38
+
+
+time:5493663202
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set a0 8
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+		print a0
+	printflush message1
+	set a0 0
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	op add sp sp 1
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add tf -3 fp
+	read ra bank1 tf
+	set @counter ra
+?fib@@YAHH@Z6:
+	set a0 s0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:38
+
+
+time:5508942644
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set a0 8
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	print a0
+	printflush message1
+	set a0 0
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function ?fib@@YAHH@Z
+?fib@@YAHH@Z0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -2 fp
+	write s0 bank1 tf
+	op add tf -1 fp
+	write s1 bank1 tf
+	op add tf -3 fp
+	write ra bank1 tf
+	set s0 a0
+	op sub sp fp 4
+	op add sp sp 1
+	set t0 2
+	jump ?fib@@YAHH@Z6 lessThan s0 t0
+?fib@@YAHH@Z8:
+	op add a0 s0 -1
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	set s1 a0
+	op add a0 s0 -2
+	op add ra @counter 1
+	jump ?fib@@YAHH@Z0 always
+	op add a0 s1 a0
+?fib@@YAHH@Z16:
+	op add tf -2 fp
+	read s0 bank1 tf
+	op add tf -1 fp
+	read s1 bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add tf -3 fp
+	read ra bank1 tf
+	set @counter ra
+?fib@@YAHH@Z6:
+	set a0 s0
+	jump ?fib@@YAHH@Z16 always
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:5
+					#		 total inst:38

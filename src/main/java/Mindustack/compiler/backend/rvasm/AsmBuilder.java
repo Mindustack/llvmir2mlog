@@ -69,6 +69,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         for (IRFunction builtinFunc : irModule.builtinFunctions) {
             AsmFunction function = new AsmFunction(builtinFunc.name);
+            function.inline = true;
             builtinFunc.asmOperand = function;
             for (int i = 0; i < ((IRFuncType) builtinFunc.type).argTypes.size(); i++) {
                 VirtualReg reg = new VirtualReg(builtinFunc.getArgType(i).size());
@@ -93,7 +94,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
 
             }
-
+            module.builtinFunctions.add(function);
         }
 
         for (IRFunction irFunc : irModule.functions) {
@@ -415,7 +416,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
     @Override
     public void visit(IRCallInst inst) {
 
-        new AsmExplainInst("call start", cur.func.entryBlock);
+//        new AsmExplainInst("call start", cur.func.entryBlock);
 
         AsmFunction callFunc = (AsmFunction) inst.callFunc().asmOperand;
 
@@ -442,7 +443,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //        }
 
 
-        new AsmExplainInst("pass param", cur.func.entryBlock);
+//        new AsmExplainInst("pass param", cur.func.entryBlock);
 
 
         // 0~7
@@ -471,8 +472,13 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         // callerArg space = max calleeArg space
         //cur.func.callerArgStackUse = max(cur.func.callerArgStackUse, callFunc.calleeArgStackUse);
+        if (callFunc.inline) {
+            new AsmInlineCallInst(callFunc, cur.block, inst.isTailCall);
+        } else {
+            new AsmCallInst(callFunc, cur.block, inst.isTailCall);
+        }
 
-        new AsmCallInst(callFunc, cur.block, inst.isTailCall);
+
         if (!inst.callFunc().isVoid()) {
             // return value
             new AsmMoveInst(cur.toReg(inst), PhysicalReg.reg("a0"), cur.block);
@@ -497,7 +503,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 //        }
 
 
-        new AsmExplainInst("call end", cur.func.entryBlock);
+//        new AsmExplainInst("call end", cur.func.entryBlock);
 
     }
 

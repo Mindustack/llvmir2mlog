@@ -12,6 +12,8 @@ public class AsmFunction extends BaseOperand {
 
     public AsmBlock entryBlock, exitBlock;
 
+    public boolean inline = false;
+
     public int callerArgStackUse = 0,
             allocaStackUse = 0,
             spillStackUse = 0,

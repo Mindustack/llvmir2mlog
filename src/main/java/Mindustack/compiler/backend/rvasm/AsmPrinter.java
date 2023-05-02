@@ -24,6 +24,10 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     }
 
+    private void printBuildinFunction() {
+
+    }
+
     @Override
     public void runOnModule(AsmModule module) {
         Log.info("Asm Printer Start Sucess");
@@ -43,7 +47,12 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
         ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
 
-        printBuildinFunction();
+        ps.println("\t# -- Start BuiltinFunction\n");
+        module.builtinFunctions.forEach(function -> {
+            var x = MLOG.BuildinFunctionConfig.get(function.identifier);
+            if (!((boolean) x.get("inline"))) ps.println(x);
+        });
+        ps.println("\t# -- End BuiltinFunction\n");
 
 
         runOnFunc(module.mainFunction);
@@ -55,12 +64,6 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
         printCompileRecord();
         Log.info("Asm Print Sucess");
-    }
-
-    private void printBuildinFunction() {
-        ps.println("\t# -- Start BuiltinFunction\n");
-        ps.println(MLOG.BuildinFunction);
-        ps.println("\t# -- End BuiltinFunction\n");
     }
 
     @Override

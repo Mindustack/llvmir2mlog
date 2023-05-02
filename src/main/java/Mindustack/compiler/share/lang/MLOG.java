@@ -2,6 +2,7 @@ package Mindustack.compiler.share.lang;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MLOG {
@@ -104,6 +105,20 @@ public static final String DefaultMemmory = "bank1";
     public static final String GPRegPrefix = "gp";
     public static final String MainFunctionIdentifier = "main";
 
-    public static final String BuildinFunction = "print0:\nprint a0\nprintflush message1\nset @counter ra";
+    public static final HashMap<String, HashMap<String, Object>> BuildinFunctionConfig = new HashMap<>();
+    //set @counter ra
     public static int MaxMemory = 512;
+
+    static {
+        addBuildFunction("print", "print a0\n\tprintflush message1", true);
+
+    }
+
+    public static void addBuildFunction(String name, String code, boolean inline) {
+        var stringObjectHashMap = new HashMap<String, Object>();
+        stringObjectHashMap.put("code", code);
+        stringObjectHashMap.put("inline", inline);
+        BuildinFunctionConfig.put(name, stringObjectHashMap);
+
+    }
 }

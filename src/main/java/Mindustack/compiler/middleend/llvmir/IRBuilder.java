@@ -94,8 +94,8 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         if (visited.contains(block)) return;
         visited.add(block);
         var ctx = blockCtx.get(block);
+         CurrentBlock = block;
         if (ctx != null) {
-            CurrentBlock = block;
 
 
             var size = ctx.instruction().size();
