@@ -88,7 +88,7 @@ public class IRGetElementPtrInst extends IRBaseInst {
 
             }
         }
-        irGetElementPtrInst.addSourceInfo(this.SourceInfo);
+//        irGetElementPtrInst.addSourceInfo(this.SourceInfo);
         irGetElementPtrInst.SourseType = SourseType;
         return irGetElementPtrInst;
     }

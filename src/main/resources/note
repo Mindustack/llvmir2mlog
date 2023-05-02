@@ -1,5 +1,6 @@
 clang -S -emit-llvm
 
+extern "C"
 
 
 declare void @print(i32 %s)

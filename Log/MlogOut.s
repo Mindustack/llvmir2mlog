@@ -9397,3 +9397,512 @@ main0:
 					#		 total func:2
 					#		 total block:5
 					#		 total inst:40
+
+
+time:14085984075
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual ra 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:14166754832
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual ra 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:14507367853
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:14784171206
+# compiled by @Mindustack
+
+
+time:15531191727
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:15577372453
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:15757226390
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:15823248033
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	op sub sp fp 2
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	jump min0left lessThan a0 a1
+	jump cmp_iffalse_result always
+	op add sp sp 1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:22
+
+
+time:16075909784
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	op add sp sp 1
+	jump min0left lessThan a0 a1
+cmp_iffalse_result:
+	set a0 a1
+min0left:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:4
+					#		 total inst:20
+
+
+time:16995409075
+# compiled by @Mindustack
+set fp 512
+set sp fp
+set zero 0
+jump 0 strictEqual zero 0
+jump main0 always
+	# -- Start BuiltinFunction
+
+print0:
+print a0
+printflush message1
+set @counter ra
+	# -- End BuiltinFunction
+
+		# -- Start function main
+main0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op add tf -1 fp
+	write ra bank1 tf
+	set sp fp
+	read fp bank1 fp
+	op add sp sp 1
+	op add ra @counter 1
+	jump min0 always
+	op add tf -1 fp
+	read ra bank1 tf
+	set @counter ra
+		# -- End function
+
+		# -- Start function min
+min0:
+	op add sp sp -1
+	write fp bank1 sp
+	set fp sp
+	op sub sp fp 1
+	op add sp sp 1
+	jump min0left lessThan a0 a1
+cmp_iffalse_result1:
+	set a0 a1
+min0left:
+	set t0 10
+	jump min0leftleft lessThan a0 t0
+cmp1_iffalse_result:
+	set a0 10
+min0leftleft:
+	set sp fp
+	read fp bank1 fp
+	set @counter ra
+		# -- End function
+
+					# -- End Compile
+					#		 total func:2
+					#		 total block:6
+					#		 total inst:23

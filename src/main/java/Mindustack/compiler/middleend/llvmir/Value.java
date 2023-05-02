@@ -81,12 +81,12 @@ public class Value {
         }
     }
 
-    public String typedIdentifier() {
-        return type + " " + identifier();
-    }
-
-    public String commentFormat() {
-        if (comment == null) return "";
-        return LLVM.CommentPrefix + comment;
-    }
+//    public String typedIdentifier() {
+//        return type + " " + identifier();
+//    }
+//
+//    public String commentFormat() {
+//        if (comment == null) return "";
+//        return LLVM.CommentPrefix + comment;
+//    }
 }

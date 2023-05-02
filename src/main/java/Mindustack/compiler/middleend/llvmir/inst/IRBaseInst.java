@@ -11,6 +11,8 @@ public abstract class IRBaseInst extends User {
     public IRBlock parentBlock;
     public String instName;
 
+    public Object temp;
+
     public IRBaseInst(String name, IRBaseType type, IRBlock parentBlock) {
         super(name, type);
         setParentBlock(parentBlock);
@@ -51,11 +53,11 @@ public abstract class IRBaseInst extends User {
 //                ", instContent='" + this.format() + '\'' +
 //                '}';
 //    }
-    String SourceInfo;
+//    String SourceInfo;
 
-    public void addSourceInfo(String source) {
-        SourceInfo = source;
-    }
+//    public void addSourceInfo(String source) {
+//        SourceInfo = source;
+//    }
 
 
     public boolean isTerminator() {

@@ -13,4 +13,9 @@ public class GlobalValue extends BaseConst {
     public String identifier() {
         return "@" + this.name;
     }
+
+    @Override
+    public String toString() {
+        return identifier();
+    }
 }

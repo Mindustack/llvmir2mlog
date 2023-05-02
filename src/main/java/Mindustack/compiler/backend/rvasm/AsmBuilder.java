@@ -296,7 +296,6 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         new AsmExplainInst("start", cur.func.entryBlock);
 
-        function.blocks.forEach(this::runOnBlock);
 
         //
         for (int i = 0; i < PhysicalReg.calleeSaved.size(); i++) {
@@ -308,7 +307,7 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
         new AsmExplainInst("ra temp back", cur.func.entryBlock);
 
 
-        new AsmMoveInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
+
 
 
         //  new AsmTailInst();
@@ -333,7 +332,10 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
                 //new RawStackOffset(0, RawType.raiseSp)
                 new Immediate(1), cur.func.entryBlock);
 
+        function.blocks.forEach(this::runOnBlock);
 
+
+        new AsmMoveInst(PhysicalReg.reg("ra"), raTemp, cur.func.exitBlock);
         // return
         new AsmRetInst(cur.func.exitBlock);
 
