@@ -48,7 +48,10 @@ test(file);
         System.out.println(file+"not found");
         return;
         	}
-        
+        catch(IOException e){
+        	return;
+        	}
+       
         IRModule module = IRBuilder.irModule;
 
 
@@ -87,14 +90,25 @@ test(file);
 
         String filePath = "Log/MlogOut.s";
         // FileOutputStream
-        FileOutputStream fileOutput = new FileOutputStream(filePath, true);
+        try{
+        	FileOutputStream fileOutput = new FileOutputStream(filePath, true);
         printStream = new PrintStream(fileOutput);
 
         printStream.println("\n\ntime:" + System.nanoTime() / 1000);
         AsmPrinter printer = new AsmPrinter(printStream);
         printer.runOnModule(builder.module);
 
-        printStream.close();
+        	}
+        catch(FileNotFoundException e){
+        	}
+        
+        catch(IOException e){
+        	
+        	}
+       finally{        printStream.close();
         fileOutput.close();
+       	
+       	}
+
 }
 }
