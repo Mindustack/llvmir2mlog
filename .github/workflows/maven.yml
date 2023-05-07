@@ -32,5 +32,10 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Test with Maven
       run: mvn -B test --file pom.xml
+      - name: Print test reports
+  run: |
+    ls -R target/surefire-reports/
+
+     
 
   

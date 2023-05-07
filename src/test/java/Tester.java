@@ -28,17 +28,14 @@ test(file);
         Log.setVerbose(Log.Verbose.all);
     	}
     
-        @DisplayName("我的第一个测试")
+        @DisplayName("测试function Call")
     @Test
-    void testFirstTest() {
-        System.out.println("我的第一个测试开始测试");
+    void testFunctionCall() {
+        var file = "src/test/resources/test.ll";
+test(file);
     }
 
-    @DisplayName("我的第二个测试")
-    @Test
-    void testSecondTest() {
-        System.out.println("我的第二个测试开始测试");
-    }
+
   static  void test(String file){
   	try{
     	        IRBuilder.run(CharStreams.fromStream(new FileInputStream(new File(file))));
