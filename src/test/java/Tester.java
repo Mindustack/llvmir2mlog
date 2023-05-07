@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import java.io.*;
 
 public class Tester {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 init();
 var file = "src/test/resources/test.ll";
 test(file);
@@ -40,8 +40,12 @@ test(file);
         System.out.println("我的第二个测试开始测试");
     }
   static  void test(String file){
+  	try{
     	        IRBuilder.run(CharStreams.fromStream(new FileInputStream(new File(file))));
-        
+        }
+        catch(  Exception e){
+        	      e.printStackTrace();
+        	}
         
         IRModule module = IRBuilder.irModule;
 
