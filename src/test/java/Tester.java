@@ -98,17 +98,13 @@ test(file);
         AsmPrinter printer = new AsmPrinter(printStream);
         printer.runOnModule(builder.module);
 
-        	}
-        catch(FileNotFoundException e){
-        	}
-        
-        catch(IOException e){
-        	
-        	}
-       finally{        printStream.close();
-        fileOutput.close();
-       	
-       	}
+printStream.close();
+    fileOutput.close();
 
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+} catch (IOException e) {
+    e.printStackTrace();
+}
 }
 }
