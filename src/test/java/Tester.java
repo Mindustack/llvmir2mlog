@@ -43,8 +43,10 @@ test(file);
   	try{
     	        IRBuilder.run(CharStreams.fromStream(new FileInputStream(new File(file))));
         }
-        catch(  Exception e){
+        catch(  FileNotFoundException e){
         	      e.printStackTrace();
+        System.out.println(file+"not found");
+        return;
         	}
         
         IRModule module = IRBuilder.irModule;
