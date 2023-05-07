@@ -9,17 +9,40 @@ import Mindustack.compiler.middleend.llvmir.hierarchy.IRModule;
 import Mindustack.compiler.middleend.optim.MiddleEndOptimizer;
 import Mindustack.debug.Log;
 import org.antlr.v4.runtime.CharStreams;
-
+import org.junit.jupiter.api.*;
 import java.io.*;
 
-public class Main {
+public class Tester {
     public static void main(String[] args) throws IOException {
-        IRBuilder IRBuilder;
-        AsmExplainInst.ExplainShow = false;
+init();
+var file = "src/test/resources/test.ll";
+test(file);
+    }
+ static   IRBuilder IRBuilder;
+     @BeforeAll
+   static void init(){
+    	IRBuilder = new IRBuilder();
+    	AsmExplainInst.ExplainShow = false;
         //String s;
-        var file = "src/main/resources/test.ll";
+        
         Log.setVerbose(Log.Verbose.all);
-        IRBuilder = new IRBuilder(CharStreams.fromStream(new FileInputStream(new File(file))));
+    	}
+    
+        @DisplayName("我的第一个测试")
+    @Test
+    void testFirstTest() {
+        System.out.println("我的第一个测试开始测试");
+    }
+
+    @DisplayName("我的第二个测试")
+    @Test
+    void testSecondTest() {
+        System.out.println("我的第二个测试开始测试");
+    }
+  static  void test(String file){
+    	        IRBuilder.run(CharStreams.fromStream(new FileInputStream(new File(file))));
+        
+        
         IRModule module = IRBuilder.irModule;
 
 
@@ -67,7 +90,5 @@ public class Main {
 
         printStream.close();
         fileOutput.close();
-
-
-    }
+}
 }

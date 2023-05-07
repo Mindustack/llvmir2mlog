@@ -35,8 +35,14 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     public IRBuilder(CharStream charStream) throws IOException {
 
 
+			run(charStream);
         // lexer
-        LLVMIRLexer irLexer = new LLVMIRLexer(charStream);
+        
+    }
+    public IRBuilder() {
+    }
+    public void run(CharStream charStream){
+    	LLVMIRLexer irLexer = new LLVMIRLexer(charStream);
         irLexer.removeErrorListeners();
         // irLexer.addErrorListener(new ParseErrorListener());
 
@@ -52,7 +58,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
         // clear onlyName
 
         Log.info("Build Module finish from .ll file.");
-    }
+    	}
     IRPhiInst SelectInstToSolve = null;
 
     private void deepToInst(IRFunction function) {
