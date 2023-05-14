@@ -4,7 +4,7 @@
 (Of course, you can also use LLVM's own optimization tools)
 ### Generating assembly code
 
-## The ultimate goal of Mindustack is to generate a blueprint
+## The ultimate goal of llvm2mlog is to generate a blueprint
 ### This blueprint will include
 * Main program processor
 * Stack
