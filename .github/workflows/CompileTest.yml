@@ -26,4 +26,5 @@ jobs:
       run: mvn -B test --file pom.xml
     - name: Print test reports
       run: |
-         ls -R target/surefire-reports/
+         cat target/surefire-reports/*.xml
+
