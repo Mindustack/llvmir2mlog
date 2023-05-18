@@ -1,5 +1,6 @@
 package llvm2mlog.compiler.backend.rvasm.inst;
 
+import llvm2mlog.compiler.backend.rvasm.hierarchy.ASMBuildinFunction;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
 import llvm2mlog.compiler.backend.rvasm.operand.PhysicalReg;
@@ -39,9 +40,13 @@ public class AsmCallInst extends AsmBaseInst {
 
     @Override
     public String format() {
-        return
-                "op add ra @counter 1" + "\n"
-                        + String.format("\tjump %s always", callFunc.entryBlock.identifier)
-                ;
+        if (callFunc instanceof ASMBuildinFunction && ((ASMBuildinFunction) callFunc).inline) {
+            return ((ASMBuildinFunction) callFunc).getInlineCode();
+        } else {
+            return
+                    String.format("op add ra @counter 1\n\tjump %s always", callFunc.entryBlock.identifier)
+                    ;
+        }
+
     }
 }

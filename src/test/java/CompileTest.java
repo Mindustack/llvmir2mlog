@@ -1,5 +1,4 @@
 import llvm2mlog.llvm2mlog;
-import org.junit.jupiter.api.DisplayName;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,10 +17,17 @@ public class CompileTest {
         }
     }
 
-    @DisplayName("测试function Call")
+
     @org.junit.jupiter.api.Test
     void testFunctionCall() {
         var file = "src/test/resources/test.ll";
         test(file);
+    }
+
+    @org.junit.jupiter.api.Test
+    void testRecursion() {
+        var file = "src/test/resources/fib.ll";
+        test(file);
+
     }
 }

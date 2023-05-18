@@ -9,6 +9,7 @@ import llvm2mlog.compiler.middleend.llvmir.IRBuilder;
 import llvm2mlog.compiler.middleend.llvmir.hierarchy.IRModule;
 import llvm2mlog.compiler.middleend.optim.MiddleEndOptimizer;
 import llvm2mlog.compiler.share.error.CompileError;
+import llvm2mlog.compiler.share.lang.MLOG;
 import llvm2mlog.console.Console;
 import llvm2mlog.console.error.ConsoleError;
 import llvm2mlog.debug.Log;
@@ -83,6 +84,10 @@ public class llvm2mlog {
         System.exit(0);
     }
 
+    static {
+        MLOG.setup();
+    }
+
     private static void errorHandle(Exception e) {
         if (e instanceof CompileError) {
             ((CompileError) e).tell();
@@ -95,7 +100,9 @@ public class llvm2mlog {
         }
     }
 
+
     public static void compile(InputStream code, PrintStream output) {
+
         IRBuilder IRBuilder = new IRBuilder();
 //        AsmExplainInst.ExplainShow = false;
         Log.setVerbose(Log.Verbose.off);

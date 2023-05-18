@@ -6,6 +6,7 @@ import llvm2mlog.compiler.middleend.llvmir.hierarchy.IRFunction;
 import llvm2mlog.compiler.middleend.llvmir.hierarchy.IRModule;
 import llvm2mlog.compiler.middleend.llvmir.inst.*;
 import llvm2mlog.compiler.middleend.llvmir.type.*;
+import llvm2mlog.compiler.middleend.rewrite.Rewriter;
 import llvm2mlog.compiler.share.error.InternalError;
 import llvm2mlog.debug.Log;
 import llvm2mlog.parser.LLVMIR.LLVMIRBaseVisitor;
@@ -299,7 +300,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             var context = iterator.next();
 
             if (context.funcDecl() != null) {
-                var irFunction = (IRFunction) visit(context.funcDecl());
+                var irFunction = (IRFunction) visitFuncDecl(context.funcDecl());
                 irFunction.entryBlock = new IRBlock(irFunction.name + '0', irFunction);
                 //funcDeclContexts.add(context.funcDecl());
                 // global map added in each visit
@@ -382,7 +383,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitFuncDecl(LLVMIRParser.FuncDeclContext ctx) {
-        return visit(ctx.funcHeader());
+        return visitFuncHeader(ctx.funcHeader());
     }
 
     @Override
@@ -1119,7 +1120,12 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
     public Value visitSelectInst(LLVMIRParser.SelectInstContext ctx) {//todo
 
 //        var inst = new IRPhiInst(branchData.type, null);
-        var inst = new IRURWInst(IRURWInst.InstType.SelectInst, null, null);
+        var inst = new IRURWInst() {
+            @Override
+            public void rewrite(Rewriter rewriter, int index, IRBlock curBlock, IRFunction curFunc) {
+                //todo
+            }
+        };
 
         inst.addData(visitTypeValue(ctx.typeValue(0)))
                 .addData(visitTypeValue(ctx.typeValue(1)))

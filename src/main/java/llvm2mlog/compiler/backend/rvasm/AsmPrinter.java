@@ -48,9 +48,10 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
         ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
 
         ps.println("\t# -- Start BuiltinFunction\n");
+
         module.builtinFunctions.forEach(function -> {
-            var x = MLOG.BuildinFunctionConfig.get(function.identifier);
-            if (!((boolean) x.get("inline"))) ps.println(x);
+//            var x = MLOG.BuildinFunctionConfig.get(function.identifier);
+            if (!function.inline) ps.println(function.getCode());
         });
         ps.println("\t# -- End BuiltinFunction\n");
 

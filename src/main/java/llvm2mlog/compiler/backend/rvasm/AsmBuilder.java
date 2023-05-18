@@ -1,5 +1,6 @@
 package llvm2mlog.compiler.backend.rvasm;
 
+import llvm2mlog.compiler.backend.rvasm.hierarchy.ASMBuildinFunction;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmModule;
@@ -68,8 +69,8 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
 
         for (IRFunction builtinFunc : irModule.builtinFunctions) {
-            AsmFunction function = new AsmFunction(builtinFunc.name);
-            function.inline = true;
+            ASMBuildinFunction function = ASMBuildinFunction.get(builtinFunc.name);
+//            function.inline = true;
             builtinFunc.asmOperand = function;
             for (int i = 0; i < ((IRFuncType) builtinFunc.type).argTypes.size(); i++) {
                 VirtualReg reg = new VirtualReg(builtinFunc.getArgType(i).size());
@@ -472,12 +473,8 @@ public class AsmBuilder implements IRModulePass, IRFuncPass, IRBlockPass, InstVi
 
         // callerArg space = max calleeArg space
         //cur.func.callerArgStackUse = max(cur.func.callerArgStackUse, callFunc.calleeArgStackUse);
-        if (callFunc.inline) {
-            new AsmInlineCallInst(callFunc, cur.block, inst.isTailCall);
-        } else {
-            new AsmCallInst(callFunc, cur.block, inst.isTailCall);
-        }
 
+        new AsmCallInst(callFunc, cur.block, inst.isTailCall);
 
         if (!inst.callFunc().isVoid()) {
             // return value

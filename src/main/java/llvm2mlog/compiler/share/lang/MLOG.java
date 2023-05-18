@@ -1,5 +1,7 @@
 package llvm2mlog.compiler.share.lang;
 
+import llvm2mlog.compiler.backend.rvasm.hierarchy.ASMBuildinFunction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,7 +35,8 @@ public static final String DefaultMemmory = "bank1";
 
 
     public static final ArrayList<String> FuncArgReg = new ArrayList<String>(List.of(
-            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"//FuncArgReg//FuncArgReg
+            "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"
+//            ,"a8", "a9", "a10"
 
     ));
     public static final int MaxArgRegNum = FuncArgReg.size();
@@ -106,24 +109,30 @@ public static final String DefaultMemmory = "bank1";
     public static final String MainFunctionIdentifier = "main";
 
     public static final HashMap<String, HashMap<String, Object>> BuildinFunctionConfig = new HashMap<>();
-    //set @counter ra
+
+
     public static int MaxMemory = 512;
 
-    static {
-        addBuildFunction("print", "print a0\n\tprintflush message1", true);
+    public static void setup() {
+        ASMBuildinFunction.BuildinFunctions.add(new ASMBuildinFunction("print")
+                .setInlineCode("print a0\n\tprintflush message1"));
 
     }
-
-    public static void addBuildFunction(String name, String code, boolean inline) {
-        var stringObjectHashMap = new HashMap<String, Object>();
-        if (inline) {
-            stringObjectHashMap.put("code", code);
-        } else {
-            stringObjectHashMap.put("code", name + "0:\n\t" + code + "\n\tset @counter ra");
-        }
-
-        stringObjectHashMap.put("inline", inline);
-        BuildinFunctionConfig.put(name, stringObjectHashMap);
-
-    }
+//    static {
+//        addBuildFunction("print", "\tprint a0\n\tprintflush message1", true);
+//
+//    }
+//
+//    public static void addBuildFunction(String name, String code, boolean inline) {
+//        var stringObjectHashMap = new HashMap<String, Object>();
+//        if (inline) {
+//            stringObjectHashMap.put("code", code);
+//        } else {
+//            stringObjectHashMap.put("code", name + "0:\n\t" + code + "\n\tset @counter ra");
+//        }
+//
+//        stringObjectHashMap.put("inline", inline);
+//        BuildinFunctionConfig.put(name, stringObjectHashMap);
+//
+//    }
 }
