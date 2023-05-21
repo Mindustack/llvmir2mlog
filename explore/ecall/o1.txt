@@ -1,0 +1,39 @@
+abc0:
+set cell1 bank1
+abc1:
+set id 233
+abc2:
+set mas 3
+abc3:
+op mul code @thisx @maph
+abc4:
+op add code code @thisy
+abc5:
+set ptr -1
+abc6:
+read a cell1 511
+abc7:
+jump abc6 notEqual a id
+abc8:
+write code cell1 510
+abc9:
+read b cell1 509
+abc10:
+jump abc9 lessThanEq b 0
+abc11:
+jump abc6 notEqual b code
+abc12:
+write mas cell1 507
+abc13:
+write ptr cell1 508
+abc14:
+jump abc17 greaterThanEq ptr 0
+abc15:
+read ptr cell1 508
+abc16:
+jump abc15 lessThan ptr 0
+abc17:
+printflush message1
+abc18:
+stop
+

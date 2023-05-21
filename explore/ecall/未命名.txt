@@ -1,0 +1,23 @@
+set r1 233
+set cell1 bank1
+write 0 cell1 510
+write 0 cell1 509
+write r1 cell1 511
+read i1 cell1 510
+jump 5 lessThanEq i1 0
+write 0 cell1 511
+write i1 cell1 509
+write 0 cell1 508
+read i2 cell1 508
+jump 10 equal i2 0
+jump 17 greaterThan i2 0
+read i3 cell1 507
+write i0 cell1 508
+set i2 i0
+op add i0 i0 i3
+set r1 i2
+print r1
+printflush message1
+
+
+
