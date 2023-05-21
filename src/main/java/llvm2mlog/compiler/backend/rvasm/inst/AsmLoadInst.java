@@ -5,6 +5,8 @@ import llvm2mlog.compiler.backend.rvasm.operand.Immediate;
 import llvm2mlog.compiler.backend.rvasm.operand.Register;
 import llvm2mlog.compiler.share.lang.MLOG;
 
+import java.util.Objects;
+
 public class AsmLoadInst extends AsmBaseInst {
     private final int byteWidth;
 
@@ -29,7 +31,7 @@ public class AsmLoadInst extends AsmBaseInst {
                     , rd, MLOG.DefaultMemmory, rs1);
         }
 
-        if (rs1.toString() == "zero") {
+        if (Objects.equals(rs1.toString(), "zero")) {
 
             return String.format("read %s %s %s",
 
@@ -37,9 +39,9 @@ public class AsmLoadInst extends AsmBaseInst {
                     //+ AsmTranslator.translateByteWidth(byteWidth)
                     rd, MLOG.DefaultMemmory, imm);
         } else {
-            return String.format("op add tf %s %s\n", imm, rs1) +
+            return String.format("op add b0 %s %s\n", imm, rs1) +
 
-                    String.format("\tread %s %s tf",
+                    String.format("read %s %s b0",
 
 
                             //+ AsmTranslator.translateByteWidth(byteWidth)

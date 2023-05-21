@@ -1,6 +1,7 @@
 package llvm2mlog.compiler.backend.rvasm.hierarchy;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 public class ASMBuildinFunction extends AsmFunction {
@@ -8,6 +9,8 @@ public class ASMBuildinFunction extends AsmFunction {
     public boolean inline = false;
     String inlineCode;
     String code;
+    public LinkedHashMap<String, Double> varInitMap = new LinkedHashMap<>();
+
     public ASMBuildinFunction(String identifier) {
         super(identifier);
     }
@@ -51,6 +54,11 @@ public class ASMBuildinFunction extends AsmFunction {
         }
         this.inline = true;
         this.inlineCode = inlineCode;
+        return this;
+    }
+
+    public ASMBuildinFunction init(String var, double value) {
+        this.varInitMap.put(var, value);
         return this;
     }
 }

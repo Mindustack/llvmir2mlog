@@ -388,7 +388,7 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
 
     @Override
     public Value visitFuncDef(LLVMIRParser.FuncDefContext ctx) {
-        IRFunction function = (IRFunction) visit(ctx.funcHeader());
+        IRFunction function = (IRFunction) visitFuncHeader(ctx.funcHeader());
         CurrentFunction = function;
         for (var blockCtx : ctx.funcBody().basicBlock()) {
             IRBlock block = (IRBlock) visit(blockCtx);

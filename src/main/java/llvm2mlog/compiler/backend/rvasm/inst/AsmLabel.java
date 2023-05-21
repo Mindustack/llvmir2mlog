@@ -4,7 +4,8 @@ import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
 
 public class AsmLabel extends AsmBaseInst {
 
-    private final String label;
+//    todo wtf
+private final String label;
 
     public AsmLabel(String label, AsmBlock parentBlock) {
         super(null, null, null, null, parentBlock);
@@ -18,6 +19,6 @@ public class AsmLabel extends AsmBaseInst {
 
     @Override
     public String format() {
-        return String.format("%s:", this.label);
+        return null;
     }
 }

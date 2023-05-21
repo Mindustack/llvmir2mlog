@@ -1,15 +1,20 @@
 package llvm2mlog.compiler.backend.rvasm;
 
+import llvm2mlog.compiler.backend.rvasm.hierarchy.ASMBuildinFunction;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
 import llvm2mlog.compiler.backend.rvasm.hierarchy.AsmModule;
+import llvm2mlog.compiler.backend.rvasm.operand.GlobalReg;
+import llvm2mlog.compiler.backend.rvasm.operand.PhysicalReg;
 import llvm2mlog.compiler.share.lang.MLOG;
+import llvm2mlog.compiler.share.misc.Pair;
 import llvm2mlog.compiler.share.pass.AsmBlockPass;
 import llvm2mlog.compiler.share.pass.AsmFuncPass;
 import llvm2mlog.compiler.share.pass.AsmModulePass;
 import llvm2mlog.debug.Log;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
@@ -24,70 +29,109 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     }
 
-    private void printBuildinFunction() {
-
-    }
-
     @Override
     public void runOnModule(AsmModule module) {
-        Log.info("Asm Printer Start Sucess");
 
-        ps.println("# compiled by @llvm2mlog");
+        ps.println("# compiled by @llvm2mlog\n");
 
+        ps.println("# init");
 
-        AsmFormatter.RegInitFormat().forEach(ps::println);
+        RegInitFormat().forEach(ps::println);
 
-        AsmFormatter.DataInitFormat(module.dataZone).forEach(ps::println);
-        ps.println("jump 0 strictEqual zero 0");
+        DataInitFormat(module.dataZone).forEach(ps::println);
+
+        BuildinFuncVarInitFormat(module.builtinFunctions).forEach(ps::println);
+
 
         module.globalVarSeg.forEach(globalVar -> {
-            AsmFormatter.globalVariableFormat(globalVar).forEach(ps::println);
+            globalVariableFormat(globalVar).forEach(ps::println);
             ps.println();
         });
 
-        ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
 
-        ps.println("\t# -- Start BuiltinFunction\n");
+        runOnFunc(module.mainFunction);
+        // ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
+        ps.println("stop");
+        module.functions.stream().filter(asmFunction -> !asmFunction.identifier.equals(MLOG.MainFunctionIdentifier)).forEach(this::runOnFunc);
+
+        ps.println("\n# BuiltinFunctions");
 
         module.builtinFunctions.forEach(function -> {
 //            var x = MLOG.BuildinFunctionConfig.get(function.identifier);
             if (!function.inline) ps.println(function.getCode());
         });
-        ps.println("\t# -- End BuiltinFunction\n");
 
-
-        runOnFunc(module.mainFunction);
 
         // ps.println("set @counter @counter");
 
-        module.functions.stream().filter(asmFunction -> !asmFunction.identifier.equals(MLOG.MainFunctionIdentifier)).forEach(this::runOnFunc);
-
 
         printCompileRecord();
+
         Log.info("Asm Print Sucess");
+    }
+
+    public static ArrayList<String> RegInitFormat() {
+        ArrayList<String> ret = new ArrayList<>();
+
+        ret.add(String.format("set %s %s", PhysicalReg.reg("fp"), MLOG.MaxMemory));//todo 512?
+        ret.add(String.format("set %s %s", PhysicalReg.reg("sp"), PhysicalReg.reg("fp")));
+        ret.add(String.format("set %s %s", PhysicalReg.reg("zero"), 0));
+
+        return ret;
+    }
+
+    public static ArrayList<String> DataInitFormat(ArrayList<Pair<Double, Integer>> value) {
+        ArrayList<String> ret = new ArrayList<>();//todo use map
+
+
+        for (Pair<Double, Integer> data : value) {
+
+            if (data.first() == 0) continue;
+            ret.add(String.format("%s %s cell %s", "write", data.first(), data.second()));//todo cell?
+        }
+        return ret;
+    }
+
+    public static ArrayList<String> BuildinFuncVarInitFormat(ArrayList<ASMBuildinFunction> builtinFunctions) {
+        ArrayList<String> ret = new ArrayList<>();
+
+        for (ASMBuildinFunction func : builtinFunctions) {
+
+            if (func.varInitMap.isEmpty()) continue;
+            func.varInitMap.forEach((name, value) -> ret.add(String.format("set %s %s", name, value)));
+            //todo cell?
+        }
+        return ret;
+
+    }
+
+    public static ArrayList<String> globalVariableFormat(GlobalReg globalReg) {
+
+        ArrayList<String> ret = new ArrayList<>();
+        ret.add("\t\t#globlvar " + globalReg.identifier);
+
+        return ret;
     }
 
     @Override
     public void runOnFunc(AsmFunction function) {
-
-        AsmFormatter.functionHeaderFormat(function).forEach(ps::println);
+        ps.println("\t\t\t\t\t\t\t\t\t\t# -- Start function " + function);
         function.blocks.forEach(this::runOnBlock);
         funcCounter++;
-        ps.println("\t\t# -- End function\n");
     }
 
     private void printCompileRecord() {
-        ps.println("\t\t\t\t\t# -- End Compile");
-        ps.println("\t\t\t\t\t#\t\t total func:" + funcCounter);
-        ps.println("\t\t\t\t\t#\t\t total block:" + blockCounter);
-        ps.println("\t\t\t\t\t#\t\t total inst:" + instructionCounter);
+        ps.println("#--End Compile");
+        ps.println("#----funcs:" + funcCounter);
+        ps.println("#----blocks:" + blockCounter);
+        ps.println("#----insts:" + instructionCounter);
     }
 
     @Override
     public void runOnBlock(AsmBlock block) {
-        ps.println(block.identifier + ":");
+        ps.printf("\t\t\t\t\t\t%s:\t#label%n", block.identifier);
         block.instructions.forEach(inst -> {
-            ps.println(AsmFormatter.instFormat(inst));
+            ps.println(inst.format());
             instructionCounter++;
         });
         blockCounter++;

@@ -115,11 +115,58 @@ public static final String DefaultMemmory = "bank1";
 
     public static void setup() {
         ASMBuildinFunction.BuildinFunctions.add(new ASMBuildinFunction("print")
-                .setInlineCode("print a0\n\tprintflush message1"));
-
+                .setInlineCode("print a0\n" +
+                        "printflush message1"));
+        ASMBuildinFunction.BuildinFunctions.add(new ASMBuildinFunction("IPCall")
+                .setCode("IPCall0:\n" +
+                        "write 0 bank2 510\n" +
+                        "write 0 bank2 509\n" +
+                        "write a1 bank2 511\n" +
+                        "IPCall5:\n" +
+                        "read a1 bank2 510\n" +
+                        "jump IPCall5 lessThanEq a1 0\n" +
+                        "write 0 bank2 511\n" +
+                        "write a1 bank2 509\n" +
+                        "write 0 bank2 508\n" +
+                        "IPCall10:\n" +
+                        "read a1 bank2 508\n" +
+                        "jump IPCall10 equal a1 0\n" +
+                        "jump IPCall16 greaterThan a1 0\n" +
+                        "read b0 bank2 507\n" +
+                        "write IPCall_head bank2 508\n" +
+                        "set a1 IPCall_head\n" +
+                        "op add IPCall_head IPCall_head b0\n" +
+                        "IPCall16:\n" +
+                        "set @counter ra")
+                .init("IPCall_head", 0)
+        );
+        ASMBuildinFunction.BuildinFunctions.add(new ASMBuildinFunction("IPAccept")
+                .setCode("IPAccept0:\n" +
+                        "set IPAccept_id a1\n" +
+                        "set IPAccept_space 3\n" +
+                        "op mul IPAccept_code @thisx @maph\n" +
+                        "op add IPAccept_code IPAccept_code @thisy\n" +
+                        "IPAccept6:\n" +
+                        "read b0 bank2 511\n" +
+                        "jump IPAccept6 notEqual b0 IPAccept_id\n" +
+                        "write IPAccept_code bank2 510\n" +
+                        "IPAccept9:\n" +
+                        "read b1 bank2 509\n" +
+                        "jump IPAccept9 lessThanEq b1 0\n" +
+                        "jump IPAccept6 notEqual b1 IPAccept_code\n" +
+                        "write IPAccept_space bank2 507\n" +
+                        "write IPAccept_ptr bank2 508\n" +
+                        "jump IPAccept17 greaterThanEq IPAccept_ptr 0\n" +
+                        "IPAccept15:\n" +
+                        "read IPAccept_ptr bank2 508\n" +
+                        "jump IPAccept15 lessThan IPAccept_ptr 0\n" +
+                        "IPAccept17:\n" +
+                        "set a1 IPAccept_ptr\n" +
+                        "set @counter ra")
+                .init("IPAccept_ptr", -1));
     }
 //    static {
-//        addBuildFunction("print", "\tprint a0\n\tprintflush message1", true);
+//        addBuildFunction("print", "print a0\nprintflush message1", true);
 //
 //    }
 //
@@ -128,7 +175,7 @@ public static final String DefaultMemmory = "bank1";
 //        if (inline) {
 //            stringObjectHashMap.put("code", code);
 //        } else {
-//            stringObjectHashMap.put("code", name + "0:\n\t" + code + "\n\tset @counter ra");
+//            stringObjectHashMap.put("code", name + "0:\n" + code + "\nset @counter ra");
 //        }
 //
 //        stringObjectHashMap.put("inline", inline);

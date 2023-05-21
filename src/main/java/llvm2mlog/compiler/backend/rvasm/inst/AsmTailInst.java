@@ -9,7 +9,7 @@ import llvm2mlog.compiler.share.lang.MLOG;
 import java.util.HashSet;
 
 public class AsmTailInst extends AsmBaseInst {
-
+//todo
     private final AsmFunction callFunc;
 
     public AsmTailInst(AsmFunction callFunc, AsmBlock parentBlock) {

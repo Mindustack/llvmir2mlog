@@ -19,8 +19,8 @@ public class CompileTest {
 
 
     @org.junit.jupiter.api.Test
-    void testFunctionCall() {
-        var file = "src/test/resources/test.ll";
+    void testBuildinFUnction() {
+        var file = "src/test/resources/ipac.ll";
         test(file);
     }
 

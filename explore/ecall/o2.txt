@@ -1,43 +1,22 @@
-abc0:
-set r1 233
-abc1:
-set cell1 bank1
-abc2:
-write 0 cell1 510
-abc3:
-write 0 cell1 509
-abc4:
-write r1 cell1 511
-abc5:
-read i1 cell1 510
-abc6:
-jump abc5 lessThanEq i1 0
-abc7:
-write 0 cell1 511
-abc8:
-write i1 cell1 509
-abc9:
-write 0 cell1 508
-abc10:
-read i2 cell1 508
-abc11:
-jump abc10 equal i2 0
-abc12:
-jump abc17 greaterThan i2 0
-abc13:
-read i3 cell1 507
-abc14:
-write i0 cell1 508
-abc15:
-set i2 i0
-abc16:
-op add i0 i0 i3
-abc17:
-set r1 i2
-abc18:
-print r1
-abc19:
-printflush message1
-
+IPCall0:
+write 0 bank2 510
+write 0 bank2 509
+write a1 bank2 511
+IPCall5:
+read a1 bank2 510
+jump IPCall5 lessThanEq a1 0
+write 0 bank2 511
+write a1 bank2 509
+write 0 bank2 508
+IPCall10:
+read a1 bank2 508
+jump IPCall10 equal a1 0
+jump IPCall16 greaterThan a1 0
+read b0 bank2 507
+write i0 bank2 508
+set a1 i0
+op add i0 i0 b0
+IPCall16:
+set @counter ra
 
 

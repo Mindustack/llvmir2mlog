@@ -44,7 +44,7 @@ public class AsmCallInst extends AsmBaseInst {
             return ((ASMBuildinFunction) callFunc).getInlineCode();
         } else {
             return
-                    String.format("op add ra @counter 1\n\tjump %s always", callFunc.entryBlock.identifier)
+                    String.format("op add ra @counter 1\njump %s always", callFunc.entryBlock.identifier)
                     ;
         }
 
