@@ -11,7 +11,7 @@ public class CompileTest {
         var file = "src/test/resources/test.ll";
         test(file);
     }
-    @BeforeClass
+    @org.junit.jupiter.api.BeforeAll
 public static void setUpClass() throws Exception {
 try {
 PrintStream out = new PrintStream(new FileOutputStream("output.txt",true));
