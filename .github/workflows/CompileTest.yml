@@ -24,8 +24,8 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Test with Maven
       run: mvn -B test --file pom.xml
-	- name: Upload Artifact
- 	 uses: actions/upload-artifact@v2
-	  with:
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
   	  name: output-file
  	   path: output.txt

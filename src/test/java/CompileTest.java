@@ -14,7 +14,7 @@ public class CompileTest {
     @BeforeClass
 public static void setUpClass() throws Exception {
 try {
-PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
+PrintStream out = new PrintStream(new FileOutputStream("output.txt",true));
 System.setOut(out);
 } catch (IOException e) {
 e.printStackTrace();
