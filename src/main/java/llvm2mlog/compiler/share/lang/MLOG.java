@@ -15,7 +15,7 @@ public class MLOG {
     public static final int MaxStackSize = Integer.MAX_VALUE;
     public static final int MaxDataZoneSize = 0x200;
 
-public static final String DefaultMemmory = "bank1";
+    public static final String DefaultMemmory = "bank1";
     // --- Register Related ---
 
 
@@ -39,7 +39,6 @@ public static final String DefaultMemmory = "bank1";
 //            ,"a8", "a9", "a10"
 
     ));
-    // b0 ba b2 ... will be used in buildin functions
     public static final int MaxArgRegNum = FuncArgReg.size();
 
     public static final ArrayList<String> RegCallerSaved = new ArrayList<String>(List.of(
@@ -91,10 +90,7 @@ public static final String DefaultMemmory = "bank1";
     public static final String GreaterEqualSuffix = "greaterThanEq";
     public static final String GreaterSuffix = "greaterThan";
     public static final String LessEqualSuffix = "lessThanEq";
-
-    //  public static final String GreaterThanSuffix ="greaterThan" ;
-
-
+    public static final String GreaterThanSuffix ="greaterThan" ;
     public static final String LessSuffix = "lessThan";
     public static final String EqualSuffix = "equal";
     public static final String NotEqualSuffix = "notEqual";
@@ -109,7 +105,6 @@ public static final String DefaultMemmory = "bank1";
     public static final String GPRegPrefix = "gp";
     public static final String MainFunctionIdentifier = "main";
 
-    public static final HashMap<String, HashMap<String, Object>> BuildinFunctionConfig = new HashMap<>();
 
 
     public static int MaxMemory = 512;
@@ -162,9 +157,8 @@ public static final String DefaultMemmory = "bank1";
                         "read IPAccept_ptr bank2 508\n" +
                         "jump IPAccept15 lessThan IPAccept_ptr 0\n" +
                         "IPAccept17:\n" +
-                        "set a1 IPAccept_ptr\n" +
+                        "set a0 IPAccept_ptr\n" +
                         "set @counter ra")
                 .init("IPAccept_ptr", -1));
     }
-
 }
