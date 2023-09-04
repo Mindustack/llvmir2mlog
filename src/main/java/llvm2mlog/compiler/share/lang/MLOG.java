@@ -39,6 +39,7 @@ public static final String DefaultMemmory = "bank1";
 //            ,"a8", "a9", "a10"
 
     ));
+    // b0 ba b2 ... will be used in buildin functions
     public static final int MaxArgRegNum = FuncArgReg.size();
 
     public static final ArrayList<String> RegCallerSaved = new ArrayList<String>(List.of(
@@ -165,21 +166,5 @@ public static final String DefaultMemmory = "bank1";
                         "set @counter ra")
                 .init("IPAccept_ptr", -1));
     }
-//    static {
-//        addBuildFunction("print", "print a0\nprintflush message1", true);
-//
-//    }
-//
-//    public static void addBuildFunction(String name, String code, boolean inline) {
-//        var stringObjectHashMap = new HashMap<String, Object>();
-//        if (inline) {
-//            stringObjectHashMap.put("code", code);
-//        } else {
-//            stringObjectHashMap.put("code", name + "0:\n" + code + "\nset @counter ra");
-//        }
-//
-//        stringObjectHashMap.put("inline", inline);
-//        BuildinFunctionConfig.put(name, stringObjectHashMap);
-//
-//    }
+
 }

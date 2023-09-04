@@ -6,3 +6,8 @@ extern "C"
 declare void @print(i32 %s)
 
 call void @print(i32 %2)
+
+git config --global https.proxy
+git config --global --unset  https.proxy
+
+

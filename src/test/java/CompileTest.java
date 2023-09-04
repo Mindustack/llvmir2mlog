@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 
 public class CompileTest {
     public static void main(String[] args) {
-        var file = "src/test/resources/test.ll";
-        test(file);
+
     }
 
     static void test(String file) {
