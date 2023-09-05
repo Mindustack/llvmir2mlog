@@ -7,7 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="llvmir2mlog" />
+        <module name="minterpreter" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="minterpreter (1) (org.mindustack)" target="11" />
+      <module name="minterpreter (2) (org.mindstack)" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

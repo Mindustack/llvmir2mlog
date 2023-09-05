@@ -1,0 +1,3 @@
+[submodule "Minterpreter"]
+	path = Minterpreter
+	url = https://github.com/Mindustack/Minterpreter.git
