@@ -7,7 +7,13 @@
     <groupId>io.github.mindustack</groupId>
     <artifactId>llvmir2mlog</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+<distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <name>snapshot</name>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </distributionManagement>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -28,11 +34,11 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>io.github.mindustack</groupId>
             <artifactId>minterpreter</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>

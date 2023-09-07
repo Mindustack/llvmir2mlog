@@ -10,7 +10,7 @@ public class CompileTest {
     @org.junit.jupiter.api.BeforeAll
     public static void setUpClass() throws Exception {
         try {
-            PrintStream out = new PrintStream(new FileOutputStream("output.txt", true));
+            PrintStream out = new PrintStream(new FileOutputStream("./explore/output.txt", true));
             System.setOut(out);
         } catch (IOException e) {
             e.printStackTrace();
