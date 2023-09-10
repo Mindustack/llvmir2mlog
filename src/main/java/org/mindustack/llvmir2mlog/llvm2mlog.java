@@ -15,6 +15,7 @@ import org.mindustack.llvmir2mlog.console.error.ConsoleError;
 import org.mindustack.llvmir2mlog.debug.Log;
 import org.mindustack.llvmir2mlog.debug.Statistics;
 import org.mindustack.llvmir2mlog.debug.Timer;
+import org.mindustack.minterpreter.Memory;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.io.FileNotFoundException;
@@ -120,6 +121,8 @@ public class llvm2mlog {
         IRModule module = IRBuilder.irModule;
 
 
+        
+        // new MiddleEndRewriter().runOnModule(module);
         new MiddleEndOptimizer().runOnModule(module);
 
 

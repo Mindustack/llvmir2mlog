@@ -73,7 +73,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
     public static ArrayList<String> RegInitFormat() {
         ArrayList<String> ret = new ArrayList<>();
 
-        ret.add(String.format("set %s %s", PhysicalReg.reg("fp"), MLOG.MaxMemory));//todo 512?
+        ret.add(String.format("set %s %s", PhysicalReg.reg("fp"), MLOG.MaxMemory-1));//todo 512?
         ret.add(String.format("set %s %s", PhysicalReg.reg("sp"), PhysicalReg.reg("fp")));
         ret.add(String.format("set %s %s", PhysicalReg.reg("zero"), 0));
 
@@ -129,7 +129,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     @Override
     public void runOnBlock(AsmBlock block) {
-        ps.printf("\t\t\t\t\t\t%s:\t#label%n", block.identifier);
+        ps.printf("\t\t\t\t\t\t%s:", block.identifier);
         block.instructions.forEach(inst -> {
             ps.println(inst.format());
             instructionCounter++;

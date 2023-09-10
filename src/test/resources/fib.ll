@@ -37,7 +37,7 @@ define dso_local noundef i32 @"?fib@@YAHH@Z"(i32 noundef %0) #0 {
 define dso_local noundef i32 @main() #1 {
   %1 = alloca i32, align 4
   store i32 0, ptr %1, align 4
-  %2 = call noundef i32 @"?fib@@YAHH@Z"(i32 noundef 8)
+  %2 = call noundef i32 @"?fib@@YAHH@Z"(i32 noundef 5)
   call void @print(i32 noundef %2)
   ret i32 0
 }

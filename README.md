@@ -8,5 +8,10 @@ thanks https://github.com/SiriusNEO/Masterball
 
 src/test/java/CompileTest.java
 
+update MinterPreter
+```
+mvn clean compile -U
+```
+
 ## under Construction ...
 

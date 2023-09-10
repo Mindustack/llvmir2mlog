@@ -2,6 +2,7 @@ package org.mindustack.llvmir2mlog.compiler.middleend.rewrite;
 
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.hierarchy.IRBlock;
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.hierarchy.IRFunction;
+import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.inst.IRBaseInst;
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.inst.IRURWInst;
 import org.mindustack.llvmir2mlog.compiler.share.pass.IRBlockPass;
 import org.mindustack.llvmir2mlog.compiler.share.pass.IRFuncPass;
@@ -14,7 +15,9 @@ public class Rewriter implements IRFuncPass, IRBlockPass {
 
     public void remove(IRBlock irBlock) {
         blocksToRemove.add(irBlock);
-
+    }
+    public void remove(IRBaseInst inst){
+        
     }
 
     @Override
