@@ -36,11 +36,17 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
         ps.println("# init");
 
+
+        ps.println("jump START always");
+        ps.println("stop");
+        ps.println("START:");
         RegInitFormat().forEach(ps::println);
 
         DataInitFormat(module.dataZone).forEach(ps::println);
 
         BuildinFuncVarInitFormat(module.builtinFunctions).forEach(ps::println);
+        
+        
 
 
         module.globalVarSeg.forEach(globalVar -> {
@@ -51,8 +57,9 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
         runOnFunc(module.mainFunction);
         // ps.println("jump " + module.mainFunction.entryBlock.identifier + " always");
-        ps.println("stop");
-        module.functions.stream().filter(asmFunction -> !asmFunction.identifier.equals(MLOG.MainFunctionIdentifier)).forEach(this::runOnFunc);
+        
+
+        module.functions.stream().filter(asmFunction -> !asmFunction.equals(module.mainFunction)).forEach(this::runOnFunc);
 
         ps.println("\n# BuiltinFunctions");
 
@@ -76,7 +83,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
         ret.add(String.format("set %s %s", PhysicalReg.reg("fp"), MLOG.MaxMemory-1));//todo 512?
         ret.add(String.format("set %s %s", PhysicalReg.reg("sp"), PhysicalReg.reg("fp")));
         ret.add(String.format("set %s %s", PhysicalReg.reg("zero"), 0));
-
+        ret.add(String.format("set %s %s", PhysicalReg.reg("ra"), 1));
         return ret;
     }
 
@@ -115,7 +122,7 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     @Override
     public void runOnFunc(AsmFunction function) {
-        ps.println("\t\t\t\t\t\t\t\t\t\t# -- Start function " + function);
+        ps.println("#-------------------------------------------------<function> " + function);
         function.blocks.forEach(this::runOnBlock);
         funcCounter++;
     }
@@ -129,7 +136,8 @@ public class AsmPrinter implements AsmModulePass, AsmFuncPass, AsmBlockPass {
 
     @Override
     public void runOnBlock(AsmBlock block) {
-        ps.printf("\t\t\t\t\t\t%s:", block.identifier);
+        ps.println("#----------------------<block>" + block.identifier);
+        ps.printf("%s:\n", block.identifier);
         block.instructions.forEach(inst -> {
             ps.println(inst.format());
             instructionCounter++;

@@ -51,7 +51,15 @@ public class StackAllocator implements AsmModulePass, AsmFuncPass {
                             );
                             break;
                         }
-                        case SpFromFp: {
+                        // case stackUse: {
+                        //     inst.imm = new Immediate(function.totalStackUse);
+                        //     break;
+                        // }
+                        case lowerSp: {
+                            inst.imm = new Immediate(-function.totalStackUse);
+                            break;
+                        }
+                        case raiseSp: {
                             inst.imm = new Immediate(function.totalStackUse);
                             break;
                         }

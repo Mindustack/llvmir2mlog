@@ -13,11 +13,17 @@
 # compiled by @llvm2mlog
 
 # init
+jump START always
+stop
+START:
 set fp 511
 set sp fp
 set zero 0
-										# -- Start function main
-						main0:op add sp sp -1
+set ra 1
+#-------------------------------------------------<function> main
+#----------------------<block>main0
+main0:
+op add sp sp -1
 write fp bank1 sp
 set fp sp
 op add b0 -1 fp
@@ -34,9 +40,10 @@ set a0 0
 op add b0 -1 fp
 read ra bank1 b0
 set @counter ra
-stop
-										# -- Start function ?fib@@YAHH@Z
-						?fib@@YAHH@Z0:op add sp sp -1
+#-------------------------------------------------<function> ?fib@@YAHH@Z
+#----------------------<block>?fib@@YAHH@Z0
+?fib@@YAHH@Z0:
+op add sp sp -1
 write fp bank1 sp
 set fp sp
 op add b0 -2 fp
@@ -50,7 +57,9 @@ op sub sp fp 4
 op add sp sp 1
 set t0 2
 jump ?fib@@YAHH@Z6 lessThan s0 t0
-						?fib@@YAHH@Z8:op add a0 s0 -1
+#----------------------<block>?fib@@YAHH@Z8
+?fib@@YAHH@Z8:
+op add a0 s0 -1
 op add ra @counter 1
 jump ?fib@@YAHH@Z0 always
 set s1 a0
@@ -58,7 +67,9 @@ op add a0 s0 -2
 op add ra @counter 1
 jump ?fib@@YAHH@Z0 always
 op add a0 s1 a0
-						?fib@@YAHH@Z16:op add b0 -2 fp
+#----------------------<block>?fib@@YAHH@Z16
+?fib@@YAHH@Z16:
+op add b0 -2 fp
 read s0 bank1 b0
 op add b0 -1 fp
 read s1 bank1 b0
@@ -67,7 +78,9 @@ read fp bank1 fp
 op add b0 -3 fp
 read ra bank1 b0
 set @counter ra
-						?fib@@YAHH@Z6:set a0 s0
+#----------------------<block>?fib@@YAHH@Z6
+?fib@@YAHH@Z6:
+set a0 s0
 jump ?fib@@YAHH@Z16 always
 
 # BuiltinFunctions

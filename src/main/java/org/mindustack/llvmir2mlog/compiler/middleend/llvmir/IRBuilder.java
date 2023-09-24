@@ -11,6 +11,7 @@ import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.inst.*;
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.type.*;
 import org.mindustack.llvmir2mlog.compiler.middleend.rewrite.Rewriter;
 import org.mindustack.llvmir2mlog.compiler.share.error.InternalError;
+import org.mindustack.llvmir2mlog.compiler.share.lang.LLVM;
 import org.mindustack.llvmir2mlog.debug.Log;
 import org.mindustack.llvmir2mlog.parser.LLVMIR.LLVMIRBaseVisitor;
 import org.mindustack.llvmir2mlog.parser.LLVMIR.LLVMIRLexer;
@@ -397,6 +398,10 @@ public class IRBuilder extends LLVMIRBaseVisitor<Value> {
             setNewValue(function, block.name, block);
             function.blocks.add(block);
         }
+       function. entryBlock = function.blocks.getFirst();
+
+       function. exitBlock = function.blocks.getLast();
+
 
         function.Source = ctx;
         return function;

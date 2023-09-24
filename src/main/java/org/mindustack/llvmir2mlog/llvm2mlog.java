@@ -123,7 +123,7 @@ public class llvm2mlog {
 
         
         // new MiddleEndRewriter().runOnModule(module);
-        new MiddleEndOptimizer().runOnModule(module);
+        // new MiddleEndOptimizer().runOnModule(module);
 
 
         // s = "E:\\WORKSPACE\\llvmir2mlog\\src\\main\\resources\\out";
@@ -147,9 +147,7 @@ public class llvm2mlog {
         new BackEndOptimizer().runOnModule(builder.module);
 
 
-        new AsmPrinter(
-
-                output).runOnModule(builder.module);
+        new AsmPrinter(output).runOnModule(builder.module);
 
 //import java.io.*;
 

@@ -32,9 +32,9 @@ public class IRFunction extends GlobalValue {
         // finished in IRBuilder
 
         super(name, funcType);
-        entryBlock = new IRBlock(LLVM.EntryBlockLabel, this);
+        // entryBlock = new IRBlock(LLVM.EntryBlockLabel, this);
 
-        exitBlock = new IRBlock(LLVM.ExitBlockLabel, this);
+        // exitBlock = new IRBlock(LLVM.ExitBlockLabel, this);
 
         entryBlock.parentFunction = this;
 

@@ -36,22 +36,38 @@ public class CompileTest {
             out.close();
             throw new RuntimeException(e);
         }
+        File ofile2;
+        PrintStream out2;
+        out.close();
+
+        try {
+            ofile2 = new File(base + "output/" + filename + ".rlog");
+            ofile2.createNewFile();
+            out2 = new PrintStream(ofile2);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            throw new RuntimeException(e);
+
+        }
         int test = 1;
         try {
-            test = Minterpreter.test(new FileInputStream(ofile), expect, limit, System.out);
+            test = Minterpreter.test(new FileInputStream(ofile), expect, limit, out2);
+
+            out2.close();
 
         } catch (FileNotFoundException e) {
 
             throw new RuntimeException(e);
         }
-        assertEquals(test, 0);
+        assertEquals(0, test);
 
     }
 
     @org.junit.jupiter.api.Test
     void testRecursion() {
 
-        test("fib",1024,8);
+        test("foo", 5000, 15);
 
     }
 

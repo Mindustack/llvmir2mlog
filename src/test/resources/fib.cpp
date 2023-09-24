@@ -7,6 +7,6 @@ int fib(int n) {
 }
 
 int main(){
-print(fib(8));
+print(fib(5));
 return 0;
 }
