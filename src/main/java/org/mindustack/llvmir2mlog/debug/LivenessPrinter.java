@@ -1,7 +1,7 @@
 package org.mindustack.llvmir2mlog.debug;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.Register;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.Register;
 
 import java.util.HashMap;
 import java.util.HashSet;

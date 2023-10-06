@@ -1,8 +1,8 @@
 package org.mindustack.llvmir2mlog.compiler.backend.optim;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmJmpInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmJmpInst;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmFuncPass;
 
 import java.util.ArrayList;

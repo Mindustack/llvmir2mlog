@@ -1,11 +1,11 @@
 package org.mindustack.llvmir2mlog.compiler.backend.regalloc;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmModule;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmBaseInst;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.Immediate;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.RawStackOffset;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmModule;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmBaseInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.Immediate;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.RawStackOffset;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmFuncPass;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmModulePass;
 

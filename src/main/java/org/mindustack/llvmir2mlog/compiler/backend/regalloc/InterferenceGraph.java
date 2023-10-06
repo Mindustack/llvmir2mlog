@@ -1,7 +1,7 @@
 package org.mindustack.llvmir2mlog.compiler.backend.regalloc;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmMoveInst;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.Register;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmMoveInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.Register;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

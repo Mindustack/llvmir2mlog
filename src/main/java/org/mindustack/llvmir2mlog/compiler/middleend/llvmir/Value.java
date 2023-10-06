@@ -1,6 +1,6 @@
 package org.mindustack.llvmir2mlog.compiler.middleend.llvmir;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.BaseOperand;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.BaseOperand;
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.inst.IRMoveInst;
 import org.mindustack.llvmir2mlog.compiler.middleend.llvmir.type.IRBaseType;
 import org.mindustack.llvmir2mlog.compiler.share.lang.LLVM;

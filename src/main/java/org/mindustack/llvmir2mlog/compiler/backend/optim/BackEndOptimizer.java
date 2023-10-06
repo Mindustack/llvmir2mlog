@@ -1,7 +1,7 @@
 package org.mindustack.llvmir2mlog.compiler.backend.optim;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmModule;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmModule;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmModulePass;
 
 public class BackEndOptimizer implements AsmModulePass {

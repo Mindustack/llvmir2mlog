@@ -1,10 +1,10 @@
 package org.mindustack.llvmir2mlog.compiler.backend.optim;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmALUInst;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmBaseInst;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.PhysicalReg;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmALUInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmBaseInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.PhysicalReg;
 import org.mindustack.llvmir2mlog.compiler.share.lang.MLOG;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmFuncPass;
 

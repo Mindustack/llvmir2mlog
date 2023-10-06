@@ -1,9 +1,9 @@
 package org.mindustack.llvmir2mlog.compiler.backend.analyzer;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmBaseInst;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.operand.Register;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmBaseInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.operand.Register;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmFuncPass;
 
 import java.util.*;

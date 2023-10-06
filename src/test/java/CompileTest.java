@@ -1,9 +1,13 @@
+import org.junit.jupiter.api.Test;
 import org.mindustack.llvmir2mlog.llvm2mlog;
 import org.mindustack.minterpreter.Minterpreter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
-import java.io.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompileTest {
 
@@ -28,7 +32,7 @@ public class CompileTest {
 
         }
 
-        out.println("#\n#\n#\n#\n#\n#------" + filename + "\n#\n#\n#\n#\n#\n#");
+        out.println("#" + filename + "\n#");
 
         try {
             llvm2mlog.compile(new FileInputStream(base + filename + ".ll"), out);
@@ -71,6 +75,10 @@ public class CompileTest {
 
     }
 
+    @Test
+    void test(){
+        test("foa",1000,0);
+    }
     @org.junit.jupiter.api.Test
     void testBuildinFUnction() {
         // var file = "src/test/resources/ipac.ll";

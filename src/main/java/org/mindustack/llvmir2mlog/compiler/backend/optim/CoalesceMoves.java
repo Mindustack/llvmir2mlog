@@ -1,8 +1,8 @@
 package org.mindustack.llvmir2mlog.compiler.backend.optim;
 
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmBlock;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.hierarchy.AsmFunction;
-import org.mindustack.llvmir2mlog.compiler.backend.rvasm.inst.AsmMoveInst;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmBlock;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.hierarchy.AsmFunction;
+import org.mindustack.llvmir2mlog.compiler.backend.mlog.inst.AsmMoveInst;
 import org.mindustack.llvmir2mlog.compiler.share.pass.AsmFuncPass;
 
 public class CoalesceMoves implements AsmFuncPass {

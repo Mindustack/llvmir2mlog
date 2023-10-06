@@ -1,14 +1,4 @@
-#
-#
-#
-#
-#
-#------foo
-#
-#
-#
-#
-#
+#foo
 #
 # compiled by @llvm2mlog
 
@@ -16,21 +6,16 @@
 jump START always
 stop
 START:
-set fp 511
-set sp fp
+set sp 511
 set zero 0
 set ra 1
 #-------------------------------------------------<function> main
 #----------------------<block>main0
 main0:
-op add sp sp -1
-write fp bank1 sp
-set fp sp
-op add b0 -2 fp
+op add sp sp -3
+op add b0 -2 sp
 write ra bank1 b0
-op sub sp fp 3
-op add sp sp 1
-op add b0 -1 fp
+op add b0 -1 sp
 write zero bank1 b0
 set a0 1
 op add ra @counter 1
@@ -38,48 +23,43 @@ jump foo0 always
 print a0
 printflush message1
 set a0 0
-set sp fp
-read fp bank1 fp
-op add b0 -2 fp
+op add sp sp 3
+op add b0 -2 sp
 read ra bank1 b0
 set @counter ra
 #-------------------------------------------------<function> foo
 #----------------------<block>foo0
 foo0:
-op add sp sp -1
-write fp bank1 sp
-set fp sp
-op sub sp fp 3
-op add sp sp 1
-op add b0 -2 fp
+op add sp sp -3
+op add b0 -2 sp
 write a0 bank1 b0
 set t0 1
-op add b0 -2 fp
+op add b0 -2 sp
 write t0 bank1 b0
 jump foo4 notEqual t0 zero
+jump foo5 always
+op add sp sp 3
+#----------------------<block>foo4
+foo4:
+set t0 1
+op add b0 -1 sp
+write t0 bank1 b0
+#----------------------<block>foo11
+foo11:
+op add b0 -1 sp
+read a0 bank1 b0
+set @counter ra
 #----------------------<block>foo5
 foo5:
-op add b0 -2 fp
+op add b0 -2 sp
 read t0 bank1 b0
 op add a0 t0 -1
 op add ra @counter 1
 jump foo0 always
-op add b0 -2 fp
+op add b0 -2 sp
 read t0 bank1 b0
 op add t0 a0 t0
-op add b0 -1 fp
-write t0 bank1 b0
-#----------------------<block>foo11
-foo11:
-op add b0 -1 fp
-read a0 bank1 b0
-set sp fp
-read fp bank1 fp
-set @counter ra
-#----------------------<block>foo4
-foo4:
-set t0 1
-op add b0 -1 fp
+op add b0 -1 sp
 write t0 bank1 b0
 jump foo11 always
 
@@ -87,4 +67,4 @@ jump foo11 always
 #--End Compile
 #----funcs:2
 #----blocks:5
-#----insts:37
+#----insts:28
